@@ -1,0 +1,38 @@
+$font-stack: "Roboto Condensed", sans-serif;
+$white: #e9e9e9;
+$salmon: #ff717c;
+$light-purple: #7338d2;
+$text: #363f47;
+$other-purple: #c637a0;
+$gray-line: rgb(219, 218, 218);
+$lightp: rgb(174, 149, 184);
+$lightb: rgb(161, 201, 219);
+$darkp: rgb(14, 8, 37);
+$oj: #e46f16;
+$grey: #333;
+$bgwhite: #f8fafc;
+$purple: #5D01B6;
+$magenta: #030303;
+$dashgrey: #B7B7B7;
+$intgreen: #008F1B;
+$waitblue: #00070e;
+$shgreen: #96bf4888;
+$profbg: #333;
+$decred: #F21C1B;
+$yell: #F0F21B;
+$turq: #95cfbc;
+$toOj: invert(48%) sepia(71%) saturate(779%) hue-rotate(351deg) brightness(94%) contrast(91%);
+$mandaRed: #dd3737;
+$bronze: #CD7F32;
+$silver: #C0C0C0;
+$gold: #FFD700;
+$rrblue: #1e55bf;
+$rrdblue: #0b2575;
+
+
+@mixin flexbox($flex-direction, $justify-content, $align-items) {
+  display: flex;
+  flex-direction: $flex-direction;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}

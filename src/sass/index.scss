@@ -1,0 +1,11 @@
+@import './helpers.scss';
+
+.order-list-item {
+  background-color: $rrblue;
+  color: white;
+  padding: 12px;
+  @include flexbox(row, space-around, center);
+  .order-pricing-summary {
+    @include flexbox(row, space-between, center);
+  }
+}
