@@ -15,6 +15,7 @@ const UnassignedOrderList = () => {
     try {
       const res = await axios(GET_UNASSIGNED);
       console.log(res);
+      console.log();
     } catch(er) {
       console.error(er);
     }
