@@ -8,14 +8,35 @@ import { CreateFormProvider } from 'context/CreateFormContext';
 import { Button } from 'react-bootstrap';
 
 const init = {
-  driver: '',
-  revenue: '',
-  cost: '',
-  start_time: '',
-  end_time: '',
+  driver_name: '',
+  revenue: 0,
+  cost: 0,
+  start_time: new Date().toJSON().slice(0, 16),
+  end_time: new Date().toJSON().slice(0, 16),
   description: '',
-  supplier: '',
-  customer: '',
+  supplier_name: '',
+  customer_name: '',
+  cust_fname: '',
+  cust_lname: '',
+  supp_fname: '',
+  supp_lname: '',
+  driverId: 0,
+  supplierId: 0,
+  customerId: 0,
+  supplierChecked: false,
+  customerChecked: false,
+  supp_address: '',
+  supp_city: '',
+  supp_postal: '',
+  supp_country: '',
+  supp_state: '',
+  cust_address: '',
+  cust_city: '',
+  cust_postal: '',
+  cust_country: '',
+  cust_state: '',
+
+  
 
 };
 
@@ -24,6 +45,7 @@ const OrderView = () => {
   const [show, setShow] = useState(false)
 
   const {
+    appData,
     createModal
   } = useContext(AppContext);
   const promptToClose = () => {
@@ -36,9 +58,11 @@ const OrderView = () => {
   }
 
   return (
-    <>
-      <OrderList />
-      <UnassignedOrderList />
+    <div className='order-layout'>
+      <OrderList 
+      list={appData.orders.unassigned.list}
+      />
+      {/* <UnassignedOrderList /> */}
       <Button
         onClick={() => setShow(true)}
       >Create</Button>
@@ -53,7 +77,7 @@ const OrderView = () => {
           <CreateOrderForm />
         </Modal>
       </CreateFormProvider>
-    </>
+    </div>
   )
 }
 export default OrderView;

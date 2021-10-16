@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { AppProvider } from 'context/AppContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'sass/custombs.scss';
+import 'sass/layouts.scss'
+
 ReactDOM.render(
   <React.StrictMode>
     <AppProvider>

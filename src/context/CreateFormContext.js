@@ -7,14 +7,18 @@ export const CreateFormProvider = ({ children, init}) => {
 
   const {
     createForm,
-    handleCreateFormChange
+    handleCreateFormChange,
+    resetCreateForm,
+    setCreateForm
   } = useCreateForm(init);
 
   return (
     <CreateFormContext.Provider value={{
       // useCreateForm
       createForm,
-      handleCreateFormChange
+      handleCreateFormChange,
+      resetCreateForm,
+      setCreateForm
 
     }}>
       {children}

@@ -1,16 +1,24 @@
 import OrderListItem from './OrderListItem';
 
-const OrderList = () => {
+const OrderList = ({ list = [] }) => {
 
-  return (
-    <div 
-    style={{
-      position:'relative'
-    }}
-    >
+  if (!list.length)
+    return (
 
-    <OrderListItem />
-    </div>
+      <div
+        style={{
+          position: 'relative'
+        }}
+      >
+        <OrderListItem />
+      </div>
+    )
+
+  const parsedList = list.map(order =>
+    <OrderListItem
+      {...order}
+    />
   )
+  return parsedList;
 }
 export default OrderList;

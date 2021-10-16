@@ -14,7 +14,7 @@ const init = {
   year: ''
 };
 
-const DriverView = () => {
+const DriverView = ({}) => {
 
   const [show, setShow] = useState(false);
 
@@ -44,8 +44,9 @@ const DriverView = () => {
     // createError('hi')
   }, [])
   return (
-    <div>
-      <OrderList />
+    <div className='driver-layout'>
+      <OrderList 
+      />
       <div style={{
         border: '1px solid red',
         width: 300,
@@ -66,7 +67,9 @@ const DriverView = () => {
           onHide={promptToClose}
           modalTitle='Create a Driver'
         >
-          <CreateDriverForm />
+          <CreateDriverForm 
+            forceClose={() => setShow(false)}
+          />
         </Modal>
       </CreateFormProvider>
       <Button

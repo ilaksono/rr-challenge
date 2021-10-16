@@ -1,9 +1,14 @@
+import OrderView from 'views/OrderView'
+import DriverView from 'views/DriverView';
+
 const MainView = () => {
 
 
   return (
-    <div>
-      I am main view
+    <div className='main-layout'>
+      <OrderView/>
+      <DriverView />
+      <DriverView />
     </div>
   )
 }

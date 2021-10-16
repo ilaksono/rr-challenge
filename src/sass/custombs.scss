@@ -1,5 +1,8 @@
+@import './helpers.scss';
 .toast.show {
-  position: initial;
+  position: fixed;
+  top: 200px;
+  right: 36px;
   button {
     width: 50px;
     height: 50px;
@@ -8,5 +11,18 @@
   .toast-header {
     width:100%;
     justify-content: space-between;
+  }
+}
+.template-alert-wrapper {
+  .fade.alert.show {
+    position: fixed;
+    top: 24%;
+    right: 36px;
+    width: 225px;
+  
+    @include flexbox(column, space-around, center);
+    div {
+      text-align: center;
+    }
   }
 }

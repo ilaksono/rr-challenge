@@ -11,17 +11,19 @@ const yearsArr = () => {
   return arr;
 }
 
-const CreateDriverForm = () => {
+const CreateDriverForm = ({forceClose}) => {
 
   const {
     createError,
     addDriverToList,
     showLoadModal,
-    hideLoadModal
+    hideLoadModal,
+    createAlert
   } = useContext(AppContext);
   const {
     createForm,
-    handleCreateFormChange
+    handleCreateFormChange,
+    resetCreateForm
   } = useContext(CreateFormContext);
   const [yearOptions, setYearOptions] = useState(() => yearsArr());
 
@@ -39,6 +41,9 @@ const CreateDriverForm = () => {
       console.log(res);
       if (res) {
         addDriverToList(res[0]);
+        resetCreateForm()
+        forceClose();
+        createAlert();
       }
     } catch (er) {
       // console.log(er.message);

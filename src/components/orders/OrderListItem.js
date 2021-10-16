@@ -14,9 +14,18 @@ const OrderListItem = (props) => {
    onDrop={handleDrag}
    >
      <div>
-       Bar Icon
+       <div 
+       style={{
+         backgroundImage: "url(/images/drag.png)",
+         backgroundSize: 'cover',
+         height: 50,
+         width: 50
+       }}
+      //  alt="Drag"
+      //  src='/images/drag.png'
+       ></div>
      </div>
-     <div>Toronto to Barries</div>
+     <div>Toronto to Barrie</div>
      <div className='order-pricing-summary'>
        <div>$100.00</div>
        <div>$100.00</div>

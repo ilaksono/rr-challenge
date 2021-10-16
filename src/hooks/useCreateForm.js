@@ -6,7 +6,7 @@ import { useState } from 'react';
 const useCreateForm = (init) => {
 
   const [createForm, setCreateForm] = useState(init);
-  
+
   const handleCreateFormChange = (e) => {
     const {
       name,
@@ -18,10 +18,15 @@ const useCreateForm = (init) => {
       [name]: value
     }));
   }
+  const resetCreateForm = () => {
+    setCreateForm(init);
+  }
 
   return {
     createForm,
-    handleCreateFormChange
+    handleCreateFormChange,
+    resetCreateForm,
+    setCreateForm
   }
 
 }

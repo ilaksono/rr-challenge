@@ -123,7 +123,8 @@ const seedOrders = async () => {
         description,
         revenue_cents,
         customer_id,
-        supplier_id
+        supplier_id,
+        driver_id
         ) VALUES (
           $1,
           $2,
@@ -131,7 +132,8 @@ const seedOrders = async () => {
           $4,
           $5,
           $6,
-          $7
+          $7,
+          $8
         ) 
         RETURNING *;`;
       const qpOrder = [
@@ -141,25 +143,26 @@ const seedOrders = async () => {
         order.description,
         order.revenue,
         customerId,
-        supplierId
+        supplierId,
+        driverId
       ];
       const resOrder = await pool.query({text: qsOrder, values: qpOrder});
       const orderId = resOrder.rows[0]?.id;
 
-      const qsDriverOrder = `
-        INSERT INTO driver_order (
-          driver_id,
-          order_id
-        ) VALUES (  
-          $1,
-          $2
-        ) RETURNING *;`;
-      const qpDriverOrder = [
-        driverId,
-        orderId
-      ];
-      const resDriverOrder = await pool.query({text: qsDriverOrder, values: qpDriverOrder});
-      console.log(resDriverOrder.rows);
+      // const qsDriverOrder = `
+      //   INSERT INTO driver_order (
+      //     driver_id,
+      //     order_id
+      //   ) VALUES (  
+      //     $1,
+      //     $2
+      //   ) RETURNING *;`;
+      // const qpDriverOrder = [
+      //   driverId,
+      //   orderId
+      // ];
+      // const resDriverOrder = await pool.query({text: qsDriverOrder, values: qpDriverOrder});
+      console.log(orderId);
 
     }
   } catch (er) {

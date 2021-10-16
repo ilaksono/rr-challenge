@@ -1,7 +1,10 @@
 import { useReducer } from 'react';
 import axios, {
   GET_UNASSIGNED,
-  GET_ALL_DRIVERS
+  GET_ALL_DRIVERS,
+  GET_ALL_SUPPLIERS,
+  GET_ALL_CUSTOMERS,
+  GET_ALL_ADDRESSES
 } from 'ax';
 import { useEffect } from 'react';
 
@@ -44,6 +47,17 @@ const init = {
   drivers: {
     list: [],
     hash: {}
+  },
+  suppliers: {
+    list: [],
+    hash: {}
+  },
+  customers: {
+    list: [],
+    hash: {}
+  },
+  addresses: {
+    list: []
   }
 }
 
@@ -51,6 +65,12 @@ const useAppData = () => {
 
   const [appData, dispatch] = useReducer(reducer, init)
 
+  const {
+   drivers,
+   orders,
+   suppliers,
+   customers
+  } = appData
   const fetchUnassignedOrders = async () => {
 
     try {
@@ -73,8 +93,8 @@ const useAppData = () => {
   }
 
   const addDriverToList = (driver) => {
-    const cpy = [driver,...appData.drivers.list];
-    dispatch({type: SET_WILD_PROPS, par: 'drivers', child: 'list', payload: cpy});
+    const cpy = [driver, ...drivers.list];
+    dispatch({ type: SET_WILD_PROPS, par: 'drivers', child: 'list', payload: cpy });
   }
 
   const fetchDrivers = async () => {
@@ -89,8 +109,41 @@ const useAppData = () => {
       console.error(er);
     }
   }
+  const fetchSuppliers = async () => {
+    try {
+      const res = await axios(GET_ALL_SUPPLIERS)
+      console.log(res);
+      if (res) {
+        dispatch({ type: SET_WILD_PROPS, par: 'suppliers', child: 'list', payload: res })
+      }
+    } catch (er) {
+      console.error(er);
+    }
+  }
+  const fetchCustomers = async () => {
+    try {
+      const res = await axios(GET_ALL_CUSTOMERS)
+      console.log(res);
+      if (res) {
+        dispatch({ type: SET_WILD_PROPS, par: 'customers', child: 'list', payload: res })
+      }
+    } catch (er) {
+      console.error(er);
+    }
+  }
+  const fetchAddresses = async () => {
+    try {
+      const res = await axios(GET_ALL_ADDRESSES)
+      console.log(res);
+      if (res) {
+        dispatch({ type: SET_WILD_PROPS, par: 'addresses', child: 'list', payload: res })
+      }
+    } catch (er) {
+      console.error(er);
+    }
+  }
   const updateDriversHash = () => {
-    const payload = appData.drivers.list?.reduce(
+    const payload = drivers.list?.reduce(
       (acc, driver) => {
         acc[driver.id] = driver;
         return acc;
@@ -99,15 +152,48 @@ const useAppData = () => {
     )
     dispatch({ type: SET_WILD_PROPS, par: 'drivers', child: 'hash', payload });
   }
+  const updateSuppliersHash = () => {
+    const payload = suppliers.list?.reduce(
+      (acc, supplier) => {
+        acc[supplier.id] = supplier;
+        return acc;
+      },
+      {}
+    )
+    dispatch({ type: SET_WILD_PROPS, par: 'suppliers', child: 'hash', payload });
+  }
+  const updateCustomersHash = () => {
+    const payload = customers.list?.reduce(
+      (acc, customer) => {
+        acc[customer.id] = customer;
+        return acc;
+      },
+      {}
+    )
+    dispatch({ type: SET_WILD_PROPS, par: 'customers', child: 'hash', payload });
+  }
   useEffect(() => {
     fetchDrivers();
+    fetchSuppliers();
+    fetchCustomers();
+    fetchAddresses();
   }, [])
 
   useEffect(() => {
-    updateDriversHash();
-
+    if (drivers.list.length)
+      updateDriversHash();
     // eslint-disable-next-line
-  }, [appData.drivers.list])
+  }, [drivers.list])
+  useEffect(() => {
+    if (suppliers.list.length)
+      updateSuppliersHash();
+    // eslint-disable-next-line
+  }, [suppliers.list])
+  useEffect(() => {
+    if (customers.list.length)
+      updateCustomersHash();
+    // eslint-disable-next-line
+  }, [customers.list])
 
   return {
     appData,

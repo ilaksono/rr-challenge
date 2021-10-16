@@ -1,6 +1,7 @@
 @import "./helpers.scss";
 
 .order-list-item {
+  cursor: pointer;
   background-color: $rrblue;
   color: white;
   padding: 12px;
@@ -10,13 +11,16 @@
   }
   // position: absolute;
 }
-.create-driver-form {
+.create-driver-form,
+.create-order-form {
   padding-top: 36px;
 }
+
 form {
   fieldset {
     // -webkit-border
     border-width: 2px;
+    // position: relative;
     border-style: groove;
     border-color: grey;
     border-image: initial;
@@ -47,8 +51,51 @@ form {
   button[type="submit"] {
     margin: 0 auto;
     display: inherit;
-    margin-top:36px;
+    margin-top: 36px;
   }
+}
+.create-order-form {
+  fieldset {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+  .input-group {
+    max-height: 38px;
+  }
+}
+.display-container {
+  overflow-x: auto;
+  max-width: 60%;
+  min-width: 60%;
+  @include flexbox(row, flex-start, center);
+  white-space: nowrap;
+  border: 1px solid $rrblue;
+  padding: 12px;
+}
+
+.display-item {
+  border-radius: 16px;
+  margin: 2px;
+  margin-right: 16px;
+  box-shadow: 0 4px 8px 2px grey;
+  padding: 7px 5px;
+  @include flexbox(row, space-between, center);
+  &:hover {
+    border: 1px solid $rrblue;
+    margin: 1px;
+    margin-right: 15px;
+  }
+  img {
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+}
+.display-item.selected {
+  border: 2px solid $rrblue;
+  margin: 0;
+  margin-right: 14px;
 }
 
 @media screen and (max-width: 991px) {
@@ -63,5 +110,20 @@ form {
         width: 95%;
       }
     }
+  }
+  .display-container {
+    max-width: 100%;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .manual-check {
+    position: absolute;
+    bottom: 12px;
+    left: 32px;
+    white-space: nowrap;
+  }
+  .input-group {
+    min-width: 222px;
   }
 }

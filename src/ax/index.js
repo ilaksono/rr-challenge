@@ -1,8 +1,18 @@
 import axios from 'axios';
 
+
 export const GET_UNASSIGNED = '/api/orders?type=unassigned';
 export const GET_ALL_DRIVERS = '/api/drivers?type=all'
 export const CREATE_DRIVER = '/api/drivers?type=create';
+export const CREATE_ORDER = '/api/orders?type=create';
+export const GET_ALL_SUPPLIERS = '/api/suppliers?type=all'
+export const CREATE_SUPPLIER = '/api/suppliers?type=create';
+export const GET_ALL_CUSTOMERS = '/api/customers?type=all'
+export const CREATE_CUSTOMER = '/api/customers?type=create';
+export const GET_ALL_ADDRESSES = '/api/addresses?type=all'
+export const CREATE_ADDRESS = '/api/addresses?type=create';
+
+
 
 const isValidResponse = (res) => {
   if (res.data.data || (!res.data.msg && (res.data.status === 'success')))
