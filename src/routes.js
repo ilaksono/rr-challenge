@@ -1,6 +1,6 @@
 import MainView from 'views/MainView';
 import OrderView from 'views/OrderView';
-
+import DriverView from 'views/DriverView';
 const routes = [
   {
     name: 'Main',
@@ -12,6 +12,11 @@ const routes = [
     name: 'Orders',
     path: '/orders',
     component: OrderView
+  },
+  {
+    name: 'Drivers',
+    path:'/drivers',
+    component: DriverView
   }
 ]
 

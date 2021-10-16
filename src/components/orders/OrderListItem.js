@@ -1,8 +1,18 @@
+import {useState} from 'react';
+
 const OrderListItem = (props) => {
+  const handleDrag = (e) => {
+    console.log(e, 'from item');
+  }
   const {
   } = props;
   return (
-   <div className='order-list-item'>
+   <div className='order-list-item'
+   onDragStart={handleDrag}
+   onDragEnd={handleDrag}
+   draggable={true}
+   onDrop={handleDrag}
+   >
      <div>
        Bar Icon
      </div>

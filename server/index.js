@@ -2,14 +2,21 @@
 
 require('dotenv').config();
 const app = require('express')();
-const db = require('./utils/db');
-const { pool } = require('./utils/pool');
-const { seedOrders } = require('./db/seeds');
-const orderUtils = require('./utils/orderUtils')();
+// const db = require('./utils/db');
+// const { pool } = require('./utils/pool');
+// const { seedOrders } = require('./db/seeds');
+const orderUtils = require('./utils/orderUtils');
+const driverUtils = require('./utils/driverUtils');
 const { done, errorResponse } = require('./utils/globalSettings');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
 const {
   PORT
 } = process.env
+
+app.use(cors());
+app.use(bodyParser.json());
 
 
 const ordersController = async (req, res) => {
@@ -19,11 +26,32 @@ const ordersController = async (req, res) => {
 
   switch (type) {
     case 'unassigned':
-      await orderUtils.getUnassignedOrder(req, res);
+      await orderUtils.getUnassignedOrders(req, res);
+      break;
+    case 'create':
+      await orderUtils.makeOrder(req, res);
       break;
 
     default:
-      return errorResponse(res, 'Invalid order requesst type')
+      return errorResponse(res, 'Invalid order request type')
+  }
+}
+
+const driversController = async (req, res) => {
+
+  const {
+    type
+  } = req.query;
+
+  switch (type) {
+    case 'all':
+      await driverUtils.getAllDrivers(req, res);
+      break;
+    case 'create':
+      await driverUtils.makeDriver(req, res);
+      break;
+    default:
+      return errorResponse(res, 'Invalid driver request type')
   }
 }
 
@@ -31,6 +59,14 @@ app.get('/api/orders', async (req, res) => {
   await ordersController(req, res);
 })
 
+
+app.post('/api/drivers', async (req, res) => {
+  await driversController(req, res);
+})
+
+app.get('/api/drivers', async (req, res) => {
+  await driversController(req, res);
+})
 
 
 // Port to listen 

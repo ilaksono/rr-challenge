@@ -3,6 +3,7 @@ import './App.css';
 import {Switch, BrowserRouter as Router, Route} from 'react-router-dom';
 import ErrorBoundary from 'ErrorBoundary';
 import routes from 'routes'
+import Updates from 'components/general/Updates';
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Switch>
           {parsedRoutes}
         </Switch>
+        <Updates/>
       </Router>
 
       

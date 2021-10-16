@@ -1,3 +1,4 @@
+// order queries
 const queryAssignedOrders = `
 select * from driver_order 
 JOIN orders 
@@ -7,6 +8,28 @@ WHERE NOT EXISTS (
   where id=driver_id
   );`
 
-  module.exports = {
-    queryAssignedOrders
-  };
+
+// driver queries
+const queryAllDrivers = `
+SELECT * FROM drivers;`;
+
+const queryMakeDriver = `
+INSERT INTO drivers (
+  driver_fname, 
+  driver_lname, 
+  vehicle_make, 
+  vehicle_model, 
+  vehicle_year
+  ) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5
+    ) RETURNING *;`;
+
+module.exports = {
+  queryAssignedOrders,
+  queryAllDrivers,
+  queryMakeDriver
+};

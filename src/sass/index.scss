@@ -1,4 +1,4 @@
-@import './helpers.scss';
+@import "./helpers.scss";
 
 .order-list-item {
   background-color: $rrblue;
@@ -7,5 +7,61 @@
   @include flexbox(row, space-around, center);
   .order-pricing-summary {
     @include flexbox(row, space-between, center);
+  }
+  // position: absolute;
+}
+.create-driver-form {
+  padding-top: 36px;
+}
+form {
+  fieldset {
+    // -webkit-border
+    border-width: 2px;
+    border-style: groove;
+    border-color: grey;
+    border-image: initial;
+    position: relative;
+    margin-top: 24px;
+    padding: 12px;
+    padding-top: 48px;
+    .input-group {
+      width: 30%;
+    }
+  }
+  legend {
+    background-color: $rrblue;
+    color: #fff;
+    top: -20px;
+    padding: 3px 6px;
+    margin-left: 12px;
+
+    position: absolute;
+    width: min-content;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  button[type="submit"] {
+    margin: 0 auto;
+    display: inherit;
+    margin-top:36px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  form {
+    .form-row {
+      flex-direction: column;
+    }
+  }
+  form {
+    fieldset {
+      .input-group {
+        width: 95%;
+      }
+    }
   }
 }
