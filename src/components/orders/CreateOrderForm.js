@@ -64,12 +64,12 @@ const handleCreateCustomer = async (createForm) => {
 const numMsUTCtoEST = 14400000
 
 const compareObjects = (raw, model) => {
-  for(const [key, value] of Object.entries(raw)) {
-    if(value === model[key])
+  for (const [key, value] of Object.entries(raw)) {
+    if (value === model[key])
       delete raw[key];
-    else if(['start_time', 'end_time'].includes(key)) {
+    else if (['start_time', 'end_time'].includes(key)) {
       // console.log(new Date(value).getTime(), new Date(model[key]).getTime())
-      if((new Date(value).getTime() - numMsUTCtoEST) === new Date(model[key]).getTime()) {
+      if ((new Date(value).getTime() - numMsUTCtoEST) === new Date(model[key]).getTime()) {
         delete raw[key];
       }
     }
@@ -91,14 +91,19 @@ const handleCreateAddress = async (payload) => {
 
 }
 
-const CreateOrderForm = () => {
+const CreateOrderForm = (props) => {
+
+  const {
+    forceClose
+  } = props;
 
   const {
     createError,
     showLoadModal,
     hideLoadModal,
     appData,
-    addOrderToList
+    addOrderToList,
+    createAlert
   } = useContext(AppContext);
   const {
     createForm,
@@ -111,8 +116,7 @@ const CreateOrderForm = () => {
       new Date(createForm.end_time).getTime() >= new Date(createForm.start_time).getTime()
     )
   }, [createForm])
-  const handleSubmitEdit = useCallback(async(source_address_id, destination_address_id) => {
-
+  const handleSubmitEdit = useCallback(async (source_address_id, destination_address_id) => {
     console.log('editting');
     try {
       const payload = {
@@ -128,43 +132,52 @@ const CreateOrderForm = () => {
       }
       const json = compareObjects(payload, appData.orders.hash[createForm.id])
       console.log(json);
-    }catch(er) {
+    } catch (er) {
       createError(er.message);
     }
     hideLoadModal()
-  }, [createForm])
+  }, [createForm, addOrderToList])
 
+  const isBooked = createForm.driverId
+    && hf.isDriverBooked(
+      appData.orders.assigned.list.filter(order => order.driver_id === createForm.driverId),
+      createForm
+    )
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
+    if(isBooked)
+      return createError('This driver is booked, please select another');
     if (!createForm.supp_city || !createForm.cust_city)
       return createError('Please add city information');
-      try {
-        showLoadModal();
-        
-        const resSupplierAddressId = await handleCreateSupplier(createForm);
-        const resCustomerAddressId = await handleCreateCustomer(createForm);
-        
-        if (createForm.id)
+    try {
+      showLoadModal();
+
+      const resSupplierAddressId = await handleCreateSupplier(createForm);
+      const resCustomerAddressId = await handleCreateCustomer(createForm);
+
+      if (createForm.id)
         return handleSubmitEdit(resSupplierAddressId, resCustomerAddressId);
-        const res = await ax(
-          CREATE_ORDER,
-          'post', 
-          {
-            ...createForm,
-            resSupplierAddressId,
-            resCustomerAddressId
-          }
-        );
-        if (res) {
-          addOrderToList(res[0]);
-          // addDriverToList(res[0]);
+      const res = await ax(
+        CREATE_ORDER,
+        'post',
+        {
+          ...createForm,
+          resSupplierAddressId,
+          resCustomerAddressId
         }
-      } catch (er) {
-        // console.log(er.message);
-        createError(er.message);
+      );
+      if (res) {
+        addOrderToList(res[0]);
+        forceClose();
+        createAlert();
+
       }
+    } catch (er) {
+      // console.log(er.message);
+      createError(er.message);
+    }
     hideLoadModal();
-  }, [createForm]);
+  }, [createForm, addOrderToList]);
 
 
   const handleFilterList = (list = [], str = '') => {
@@ -178,6 +191,7 @@ const CreateOrderForm = () => {
           || reg.test(driverFullName);
       });
   }
+  
 
   const handleClickSupplier = (supplier_name, supplierId, address_id) => {
     if (createForm.source_address_id === address_id) {
@@ -365,6 +379,9 @@ const CreateOrderForm = () => {
           placeholder='Add a description'
         />
         <fieldset
+          style={{
+            border: isBooked ? '2px solid red' : ''
+          }}
 
         >
           <legend>Driver</legend>
@@ -382,6 +399,7 @@ const CreateOrderForm = () => {
                 name='driver_name'
                 placeholder='Type a name'
               />
+              {!!isBooked && 'This driver is not available at these times'}
 
 
             </InputGroup>
@@ -412,7 +430,7 @@ const CreateOrderForm = () => {
                 :
                 <>
                   <InputGroup className="mb-2 flex"
-                  
+
                   >
                     {/* <InputGroup.Prepend> */}
                     <InputGroup.Text
@@ -448,7 +466,7 @@ const CreateOrderForm = () => {
                 ...prev,
                 supplierChecked: !prev.supplierChecked
               }))}
-              onChange={() => {}}
+              onChange={() => { }}
               checked={createForm.supplierChecked}
             />
           </Form.Label>
@@ -496,8 +514,8 @@ const CreateOrderForm = () => {
             }
           </div>
           <Form.Label
-          className='manual-check'
-            
+            className='manual-check'
+
           >
             Manual input
             <Form.Check
@@ -505,7 +523,7 @@ const CreateOrderForm = () => {
                 ...prev,
                 customerChecked: !prev.customerChecked
               }))}
-              onChange={() => {}}
+              onChange={() => { }}
               checked={createForm.customerChecked}
             />
           </Form.Label>

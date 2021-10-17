@@ -1,7 +1,7 @@
 // Server is used as an API - transferring data from 
 
 require('dotenv').config();
-const app = require('./middleware');
+const app = require('./app');
 const { seedOrders, seedSupplierCustomerAddresses } = require('./db/seeds');
 
 // seeder route

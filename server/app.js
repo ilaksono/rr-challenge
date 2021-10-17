@@ -1,6 +1,7 @@
 // use express and 
 
-const app = require('express')();
+const express = require('express')();
+const app = require('./middleware')(express);
 const {
   ordersController,
   driversController,

@@ -103,8 +103,13 @@ export const isDriverBooked = (driverOrders = [], order) => {
     if (candidateEnd >= start && candidateStart <= end)
       return true;
   }
+  return false
 }
 
 export const transformDateFormat = (d) => {
   return new Date(d).toJSON().slice(0, 16);
+}
+export const formatOrderDate = (d) => {
+  const da = new Date(d).toTimeString().slice(0, 5);
+  return da;
 }

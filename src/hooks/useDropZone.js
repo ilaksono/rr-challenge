@@ -6,27 +6,28 @@ const init = {
   type: 'driver',
   id: 0
 }
+const initDrag = {
+  hide: false
+}
+
 const useDropZone = () => {
 
   const [dropZone, setDropZone] = useState(init)
+  const [drag, setDrag] = useState(initDrag);
+
 
   const handleDragDropZone = (e, type, id) => {
-    // e.preventDefault()
-    console.log(e);
-    // if(e.type === 'dragenter')
     if (e.buttons) {
-      // console.log(e, type)
       setDropZone(prev => ({
-        // ...prev,
         on: e.type === 'dragenter' ? true : false,
         type,
         id
       }))
-
     }
   }
 
   const handleDragOverZone = (e, type, id) => {
+    e.preventDefault()
     if (dropZone.on)
       return;
     setDropZone(() => ({
@@ -39,7 +40,9 @@ const useDropZone = () => {
   return {
     dropZone,
     handleDragDropZone,
-    handleDragOverZone
+    handleDragOverZone,
+    drag,
+    setDrag
   }
 
 }

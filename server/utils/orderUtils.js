@@ -3,7 +3,8 @@ const { done, errorResponse } = require('./globalSettings');
 const { queryUnassignedOrders,
   queryMakeOrder,
   queryUpdateTable,
-queryAssignedOrders } = require('./sqlQueries');
+  queryUnassignOrder,
+  queryAssignedOrders } = require('./sqlQueries');
 const errorMessages = require('./errorMessages');
 
 const getUnassignedOrders = async (req, res) => {
@@ -59,13 +60,32 @@ const makeOrder = async (req, res) => {
     destination_address_id || resCustomerAddressId,
     source_address_id || resSupplierAddressId,
   ];
-  if(driverId)
+  if (driverId)
     values.push(driverId);
   console.log(values);
-    try {
+  try {
     const resq = await pool.query({
-      text: queryMakeOrder({driverId}),
+      text: queryMakeOrder({ driverId }),
       values
+    });
+    if (resq?.rows)
+      return done(res, resq.rows);
+    return errorResponse(res, errorMessages.queryFailed)
+  } catch (er) {
+    console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+
+  }
+}
+const setOrderUnassigned = async (req, res) => {
+
+  const {
+    driver_id
+  } = req.body
+  try {
+    const resq = await pool.query({
+      text: queryUnassignOrder,
+      values: [driver_id]
     });
     if (resq?.rows)
       return done(res, resq.rows);
@@ -86,9 +106,10 @@ const updateOrder = async (req, res) => {
     source_address_id,
     destination_address_id,
     start_time,
-    end_time
+    end_time,
+    id
   } = req.body;
-  
+
   const params = Object.entries({
     description,
     driver_id,
@@ -99,16 +120,17 @@ const updateOrder = async (req, res) => {
     start_time,
     end_time
   }).filter(([key, value]) => value)
-  .reduce((acc, each) => {
-    acc[each[0]] = each[1];
-    return acc;
-  }, {});
+    .reduce((acc, each) => {
+      acc[each[0]] = each[1];
+      return acc;
+    }, {});
 
   console.log(params);
 
   try {
     const resq = await pool.query({
-      text: queryUpdateTable(params, 'orders')
+      text: queryUpdateTable(params, 'orders'),
+      values: Object.values(params).concat(id)
     });
     if (resq?.rows)
       return done(res, resq.rows);
@@ -125,5 +147,6 @@ module.exports = {
   getUnassignedOrders,
   makeOrder,
   getAssignedOrders,
-  updateOrder
+  updateOrder,
+  setOrderUnassigned
 }

@@ -27,6 +27,10 @@ const ordersController = async (req, res) => {
       await orderUtils
         .updateOrder(req, res);
       break;
+    case 'unassignedOrder':
+      await orderUtils
+        .setOrderUnassigned(req, res)
+      break;
 
     default:
       return errorResponse(res, 'Invalid order request type')

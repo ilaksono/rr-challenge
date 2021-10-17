@@ -14,7 +14,10 @@ export const AppProvider = ({ children }) => {
     appData,
     fetchUnassignedOrders,
     addDriverToList,
-    addOrderToList
+    addOrderToList,
+    moveOrderToList,
+    modifyDriverView,
+    deleteOrderThenAdd
   } = useAppData();
   const {
     loadModal,
@@ -47,7 +50,9 @@ export const AppProvider = ({ children }) => {
   const {
     dropZone,
     handleDragDropZone,
-    handleDragOverZone
+    handleDragOverZone,
+    drag, 
+    setDrag
   } = useDropZone();
 
   return (
@@ -57,6 +62,9 @@ export const AppProvider = ({ children }) => {
       fetchUnassignedOrders,
       addDriverToList,
       addOrderToList,
+      moveOrderToList,
+      modifyDriverView,
+      deleteOrderThenAdd,
 
       // updates - useAlertData, useConfirmModal, useErrorToast
       alert,
@@ -77,7 +85,9 @@ export const AppProvider = ({ children }) => {
       // useDropZone
       dropZone,
       handleDragDropZone,
-      handleDragOverZone
+      handleDragOverZone,
+      drag,
+      setDrag
 
     }}>
       {children}

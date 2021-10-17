@@ -56,7 +56,13 @@ INSERT INTO orders (
       $5,
       $6,
       $7
-    ) RETURNING *;`}
+    ) RETURNING *;`
+  }
+const queryUnassignOrder = `
+UPDATE orders SET driver_id=null
+WHERE id=$1
+RETURNING *;
+`;
 
 const queryUpdateTable = (params = {}, tableName = 'orders') => {
 
@@ -69,7 +75,7 @@ const queryUpdateTable = (params = {}, tableName = 'orders') => {
       query += ',';
     query += ` ${key}=$${count++}`
   }
-  query += ` WHERE id=$${count}`;
+  query += ` WHERE id=$${count} RETURNING *`;
 
   return query;
 }
@@ -175,5 +181,6 @@ module.exports = {
   queryMakeCustomer,
   queryAllAddresses,
   queryMakeAddress,
-  queryUpdateTable
+  queryUpdateTable,
+  queryUnassignOrder
 };

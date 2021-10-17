@@ -5,7 +5,8 @@ import axios from 'axios';
 export const GET_UNASSIGNED = '/api/orders?type=unassigned';
 export const CREATE_ORDER = '/api/orders?type=create';
 export const GET_ASSIGNED_ORDERS = '/api/orders?type=assigned'
-export const UPDATE_ORDER = '/api/orders?'
+export const UPDATE_ORDER = '/api/orders?type=update'
+export const UNASSIGN_ORDER = '/api/orders?type=unassign'
 
 // driver api routes
 export const GET_ALL_DRIVERS = '/api/drivers?type=all'
@@ -32,8 +33,7 @@ const isValidResponse = (res) => {
 
 const axiosWrapper = async (url, method = 'get', body = {}, headers = {}) => {
   try {
-    const axiosMethod = method === 'get'
-      ? axios.get : axios.post;
+    const axiosMethod = axios[method];
 
     const res = await axiosMethod(url, body, headers);
     if(!isValidResponse(res)) {

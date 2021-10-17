@@ -9,6 +9,11 @@ const OrderList = ({ list = [] }) => {
       {...order}
     />
   )
-  return parsedList;
+  return (
+    <div className='order-list'>
+      {parsedList}
+
+    </div>
+  )
 }
 export default OrderList;

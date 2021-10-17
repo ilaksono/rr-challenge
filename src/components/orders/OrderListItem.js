@@ -1,36 +1,70 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useCallback } from 'react';
 import CreateFormContext from 'context/CreateFormContext';
 import AppContext from 'context/AppContext';
 import * as hf from 'utils/helperFuncs';
-const init = {
-  hide: false
-}
+import ax, { UNASSIGN_ORDER, UPDATE_ORDER } from 'ax';
+
 
 const OrderListItem = (props) => {
+
 
   const {
     source_address_id,
     destination_address_id,
     revenue_cents,
-    cost_cents
+    cost_cents,
+    isNew,
+    id
   } = props;
 
-  const [drag, setDrag] = useState(init)
+  // const [drag, setDrag] = useState(init)
   const {
     setShow,
     initCreateForm,
   } = useContext(CreateFormContext);
 
   const {
+    drag,
+    setDrag,
     appData,
-    dropZone
-
+    dropZone,
+    createError,
+    moveOrderToList,
+    deleteOrderThenAdd,
   } = useContext(AppContext);
+
+  const handleAssignToDriver = useCallback(async (driver_id) => {
+    const isBooked = hf.isDriverBooked(
+      appData.orders.assigned.list.filter(order => order.driver_id === dropZone.id),
+      props
+    )
+    if (isBooked)
+      return createError('The driver is booked during that order');
+
+    try {
+      const res = await ax(UPDATE_ORDER, 'put', {
+        id: props.id,
+        driver_id
+      })
+      console.log(res);
+      if (res?.length) {
+        if (!props.driver_id)
+          moveOrderToList(res[0])
+        else if (props.driver_id)
+          deleteOrderThenAdd(res[0])
+      }
+
+    } catch (er) {
+      createError(er.message);
+    }
+  }, [props])
+  // const handleUnassign 
 
   const handleDragStart = (e) => {
     setDrag(prev => ({
       ...prev,
-      hide: true
+      hide: true,
+      id
     }))
     console.log(e, 'from item');
   }
@@ -39,9 +73,11 @@ const OrderListItem = (props) => {
       ...prev,
       hide: false
     }));
-    if (dropZone.id && dropZone.on) {
+    if (dropZone.id && dropZone.on && dropZone.type === 'driver') {
+      handleAssignToDriver(dropZone.id)
+
       console.log('do the thing with', dropZone.id, dropZone.type)
-      
+
     }
     console.log(e, 'from item');
   }
@@ -52,11 +88,13 @@ const OrderListItem = (props) => {
       hf.determineOrderInformation(props, appData)
     );
   }
-  const {
-  } = props;
+
   const containerClassList = ['order-list-item'];
-  if (drag.hide)
+  if (drag.hide && drag.id === id)
     containerClassList.push('partial-hide')
+
+  if (isNew)
+    containerClassList.push('grow-animation')
 
   const sourceAddress = appData.addresses.hash[source_address_id] || {};
   const destinationAddress = appData.addresses.hash[destination_address_id] || {};
@@ -70,13 +108,17 @@ const OrderListItem = (props) => {
     >
       <div>
         <div
-        className='bg-image'
+          className='bg-image'
           style={{
             backgroundImage: "url(/images/drag.png)",
-        }}
+          }}
         ></div>
       </div>
-      <div>{sourceAddress.city || 'Toronto'} to {destinationAddress.city || 'Barrie'}</div>
+      <div>
+
+        <div>{sourceAddress.city || 'Toronto'} to {destinationAddress.city || 'Barrie'}</div>
+        <div className='light-color-text'>{hf.formatOrderDate(props.start_time)} - {hf.formatOrderDate(props.end_time)}</div>
+      </div>
       <div className='order-pricing-summary light-color-text'
       >
         $&nbsp;
@@ -84,7 +126,7 @@ const OrderListItem = (props) => {
         &nbsp;|&nbsp;$&nbsp;
         <div className='red-color-text'>{(cost_cents / 100).toFixed(2)}</div>
       </div>
-      <div className='thumbnail'>
+      <div className='thumbnail align-start'>
         <img
           src='/images/pencil.png'
           alt='Edit'

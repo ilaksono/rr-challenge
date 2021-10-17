@@ -10,6 +10,7 @@ import axios, {
 import { useEffect } from 'react';
 
 const SET_WILD_PROPS = 'SET_PROPERTIES_CUSTOM';
+const UPDATE_ORDERS = 'UPDATE_ORDERS_OBJECT'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -25,6 +26,15 @@ const reducer = (state, action) => {
           ...state[par],
           [child]: payload
         }
+      }
+    }
+    case UPDATE_ORDERS: {
+      const {
+        orders
+      } = action;
+      return {
+        ...state,
+        orders
       }
     }
 
@@ -61,6 +71,9 @@ const init = {
   addresses: {
     list: [],
     hash: {}
+  },
+  view: {
+    drivers: [1,2]
   }
 }
 
@@ -73,7 +86,8 @@ const useAppData = () => {
     orders,
     suppliers,
     customers,
-    addresses
+    addresses,
+    view
   } = appData
   const fetchUnassignedOrders = async () => {
 
@@ -208,7 +222,7 @@ const useAppData = () => {
 
   const addOrderToList = order => {
 
-    if (order.driver_id) {
+    if (!order.driver_id) {
       const payload = {
         list: [order, ...orders.unassigned.list]
       };
@@ -242,7 +256,48 @@ const useAppData = () => {
       {}
     )
     dispatch({ type: SET_WILD_PROPS, par: 'orders', child: 'hash', payload });
+  }
 
+  const moveOrderToList = (newOrder,
+    old = 'unassigned',
+    dest = 'assigned') => {
+    const oldList = [...orders[old].list]
+    const oldIdx = oldList.findIndex(order => order.id === newOrder.id);
+    oldList.splice(oldIdx, 1);
+    const payloadA = {
+      list: oldList
+    }
+    newOrder.isNew = true;
+    const newList = [newOrder, ...orders[dest].list];
+    const payloadB = {
+      list: newList
+    };
+    dispatch({ type: UPDATE_ORDERS, orders: { [old]: payloadA, [dest]: payloadB } })
+  }
+
+  const deleteOrderThenAdd = newOrder => {
+    const oldList = [...orders.assigned.list]
+    const oldIdx = oldList.findIndex(order => order.id === newOrder.id);
+    oldList.splice(oldIdx, 1);
+    const payload = {
+      list: oldList
+    }
+    dispatch({type: SET_WILD_PROPS, par:'orders', child: 'assigned', payload});
+    setTimeout(() => {
+      newOrder.isNew = true;
+      const newList = [newOrder, ...oldList];
+      const payloadB = {
+        list: newList
+      };
+      dispatch({type: SET_WILD_PROPS, par:'orders', child: 'assigned', payload: payloadB});
+    }, 400)
+
+  }
+
+  const modifyDriverView = (index, value) => {
+    const payload = [...view.drivers];
+    payload[index] = Number(value);
+    dispatch({type: SET_WILD_PROPS, par: 'view', child: 'drivers', payload})
   }
 
   useEffect(() => {
@@ -286,7 +341,10 @@ const useAppData = () => {
     appData,
     fetchUnassignedOrders,
     addDriverToList,
-    addOrderToList
+    addOrderToList,
+    moveOrderToList,
+    modifyDriverView,
+    deleteOrderThenAdd
   }
 
 }

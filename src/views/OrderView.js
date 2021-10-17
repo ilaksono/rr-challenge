@@ -1,6 +1,6 @@
 import OrderList from 'components/orders/OrderList';
 import CreateOrderForm from 'components/orders/CreateOrderForm';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import AppContext from 'context/AppContext';
 import Modal from 'components/Modal';
 import { CreateFormProvider } from 'context/CreateFormContext';
@@ -11,12 +11,15 @@ import { initOrderForm as init } from 'utils/initStates';
 const OrderView = ({ id }) => {
 
   const [show, setShow] = useState(false)
+  const [classList, setClassList] = useState(['order-layout']);
 
   const {
+    drag,
     appData,
     createModal,
     handleDragDropZone,
-    handleDragOverZone
+    handleDragOverZone,
+    dropZone
   } = useContext(AppContext);
   const promptToClose = () => {
     createModal(
@@ -26,12 +29,30 @@ const OrderView = ({ id }) => {
       'Exit'
     );
   }
+  
+  const handleDragEvents = (e) => {
+    e.preventDefault();
+    if (classList.length < 2) {
+      if (e.type === 'dragenter')
+        setClassList(['order-layout', 'selected'])
+    } else if(dropZone.on && e.type === 'dragleave' && e.target.id == ('qwe' + id)) {
+      setClassList(['order-layout', 'unselected'])
+    } else if(
+      e.type === 'dragenter' && classList[1] === 'unselected'
+    ) setClassList(['order-layout', 'selected'])
+    handleDragDropZone(e, 'order', id)
+  }
 
+  useEffect(() => {
+    if(!drag.hide) 
+      setClassList(['driver-layout', 'unselected'])
+  }, [drag])
   return (
-    <div className='order-layout'
-      onDragLeave={e => handleDragDropZone(e, 'order', id)}
-      onDragEnter={e => handleDragDropZone(e, 'order', id)}
+    <div className={classList.join(' ')}
+      onDragLeave={handleDragEvents}
+      onDragEnter={handleDragEvents}
       onDragOver={e => handleDragOverZone(e, 'order', id)}
+      id={'qwe' + id}
     >
       <div className='view-header'>
         Unassigned Orders
@@ -53,13 +74,15 @@ const OrderView = ({ id }) => {
         />
         <Button
           onClick={() => setShow(true)}
-        >Create</Button>
+        >Create Order</Button>
         <Modal
           show={show}
           onHide={promptToClose}
-          modalTitle='Create an Order'
+          modalTitle='Order Builder'
         >
-          <CreateOrderForm />
+          <CreateOrderForm 
+          forceClose={() => setShow(false)}
+          />
         </Modal>
       </CreateFormProvider>
     </div>
