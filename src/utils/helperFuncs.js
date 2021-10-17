@@ -1,4 +1,5 @@
 export const formatDate = (date) => {
+  if (!date) return '';
   const time = new Date(date).getTime();
   let diff = (new Date().getTime() - time) / 1000;
   let unit;
@@ -94,7 +95,7 @@ export const formatFullName = (fname = '', lname = '') =>
 
 export const isDriverBooked = (driverOrders = [], order) => {
   for (const assigned of driverOrders) {
-    if(assigned.id === order.id)
+    if (assigned.id === order.id)
       continue;
     const start = new Date(assigned.start_time).getTime();
     const end = new Date(assigned.end_time).getTime();
@@ -109,9 +110,11 @@ export const isDriverBooked = (driverOrders = [], order) => {
 }
 
 export const transformDateFormat = (d) => {
+  if (!d) return ''
   return new Date(d).toJSON().slice(0, 16);
 }
 export const formatOrderDate = (d) => {
+  if(!d) return '';
   const da = new Date(d).toTimeString().slice(0, 5);
   return da;
 }

@@ -159,7 +159,7 @@ const CreateOrderForm = (props) => {
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (isBooked)
-      return createError('This driver is booked, please select another driver');
+      return createError('This driver is booked - please select another driver, or modify the start/end times.');
     if (!createForm.supp_city || !createForm.cust_city)
       return createError('Please add city information');
     try {

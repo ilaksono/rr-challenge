@@ -102,7 +102,6 @@ const DriverView = ({ id, driverIndex, fullName }) => {
         <br />
         <Form.Control
           as='select'
-          // defaultValue={fullName}
           onChange={e => modifyDriverView(driverIndex, e.target.value)}
         >{driverOptions}
         </Form.Control>
@@ -124,7 +123,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
         <Modal
           show={show}
           onHide={promptToClose}
-          modalTitle='Create a Driver'
+          modalTitle='Driver Builder'
         >
           <CreateDriverForm
             forceClose={() => setShow(false)}

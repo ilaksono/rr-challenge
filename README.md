@@ -4,10 +4,22 @@
 
 # Start Instructions:
   - Start FE: `npm start`
-  - connect to psql database
-  `sudo psql -U postgres`
   - Start BE: `cd server && npm start` 
 
+# Database Instructions:  
+  - install postgres on mac - 
+  in the command line, run `brew install psql`
+  - connect to psql database
+  `sudo psql -U postgres`
+  - when it prompts to type in a password `password: ` enter your computer password
+  - run sql command `CREATE DATABASE rr;`
+  - move on to `Dev Environment Instructions`
+
+# Dev Envrionment Instructions
+  - copy the contents `.env.example` file in folder `/server` in the repo 
+  - paste the contents in a new file and save it as `.env` inside `/server`
+  - in the command line, change directory to `/server` and run `npm start`
+  - open a new command line tab and cd to the root of the project - run `npm start`
 
 # Technologies used:
   - FE: React, Bootstrap
@@ -21,19 +33,23 @@
   3. Added Addresses entity
 
 
-# Assumptions Made:
-  1. Each Order consists of 1 Supplier, 1 Customer, and 1 Driver (1 to Many relationships)
+# Database Model:
+## There are 5 entities - Database  ERD:
+!["Data ERD"](https://github.com/ilaksono/rr-challenge/blob/main/docs/db-erd.png)  
+
+  1. Each Order consists of 1 Supplier Address, 1 Customer Address, and 1 Driver (each 1 to Many relationships)
   2. Each Order can have many Drivers
   3. A Driver handles many orders, but 1 at a time
   4. Each Driver drives only 1 vehicle
   5. A Supplier can have many Addresses
-  6. A Customer can have many Adresses
+  6. A Customer can have many Addresses
   7. Each Address includes a street address, city, country, postal, timezone offset (calculated), and customer/supplier
 
 # Bugs/Improvements to make:
   - modify Driver <> Vehicle relationship to handle: 1 to Many || Many to Many
   - add data pagination on backend for slicing large lists
-  - adding invoicing and remit-to (payable) addresses on invoices
+  - adding payments + invoicing and remit-to (payable) additional addresses on invoices
+  - Adding UI elements - such as maps/geolocaiton apis for easier location selection
 
 # Challenges:
   - 2021-10-16:
@@ -47,8 +63,8 @@
     - Accounting for timezones (all are currently in UTC) - when calculating the driver's availability for updating an order to a driver
 
 # Screenshots and Demos
-  !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/master/docs/video-demo.mov)
+  !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/video-demo.mov)
 
   ----
 
-!["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/master/docs/driver-form.png)  
+!["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png)  
