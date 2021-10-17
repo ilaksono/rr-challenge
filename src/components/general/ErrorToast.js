@@ -9,10 +9,6 @@ const ErrorToast = ({ show, handleClose, body, time }) => {
       show={show}
       delay={7000}
       autohide
-      style={{
-        minWidth: 250,
-        position: 'block'
-      }}
     >
       <Toast.Header>
         <strong className="mr-auto">Notice</strong>

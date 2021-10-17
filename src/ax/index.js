@@ -1,17 +1,27 @@
 import axios from 'axios';
 
 
+// order api routes
 export const GET_UNASSIGNED = '/api/orders?type=unassigned';
+export const CREATE_ORDER = '/api/orders?type=create';
+export const GET_ASSIGNED_ORDERS = '/api/orders?type=assigned'
+export const UPDATE_ORDER = '/api/orders?'
+
+// driver api routes
 export const GET_ALL_DRIVERS = '/api/drivers?type=all'
 export const CREATE_DRIVER = '/api/drivers?type=create';
-export const CREATE_ORDER = '/api/orders?type=create';
+
+// supplier api routes
 export const GET_ALL_SUPPLIERS = '/api/suppliers?type=all'
 export const CREATE_SUPPLIER = '/api/suppliers?type=create';
+
+// customer api routes
 export const GET_ALL_CUSTOMERS = '/api/customers?type=all'
 export const CREATE_CUSTOMER = '/api/customers?type=create';
+
+// address api routes
 export const GET_ALL_ADDRESSES = '/api/addresses?type=all'
 export const CREATE_ADDRESS = '/api/addresses?type=create';
-
 
 
 const isValidResponse = (res) => {

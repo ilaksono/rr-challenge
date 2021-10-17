@@ -1,63 +1,171 @@
 import { Form, InputGroup, Col, Container, Row, Button } from 'react-bootstrap';
 import CreateFormContext from 'context/CreateFormContext';
 import { useContext, useRef, useState, useCallback } from 'react';
-import ax, { CREATE_DRIVER } from 'ax';
+import ax, {
+  CREATE_ORDER,
+  CREATE_SUPPLIER,
+  CREATE_CUSTOMER,
+  CREATE_ADDRESS
+} from 'ax';
 import AppContext from 'context/AppContext';
 import DriverDisplayItem from 'components/drivers/DriverDisplayItem';
 import SupplierDisplayItem from 'components/suppliers/SupplierDisplayItem';
 import SupplierFormElements from 'components/suppliers/SupplierFormElements';
+import * as hf from 'utils/helperFuncs';
 
-const yearsArr = () => {
-  const arr = [];
-  for (let i = 2021; i > 1900; i--) {
-    arr.push(i);
+const handleCreateSupplier = async (createForm) => {
+
+  if (createForm.supplierId && createForm.source_address_id && !createForm.supplierChecked)
+    return createForm.source_address_id;
+  try {
+    if (!createForm.supp_city)
+      throw new Error('Please add the Supplier city');
+    const res = await ax(CREATE_SUPPLIER, 'post', createForm);
+    console.log(res);
+    if (res) {
+      const addressJson = {
+        address: createForm.supp_address,
+        city: createForm.supp_city,
+        postal: createForm.supp_postal,
+        state: createForm.supp_state,
+        country: createForm.supp_country,
+        supplier_id: res[0].id,
+      }
+      return handleCreateAddress(addressJson)
+    }
+  } catch (er) {
+    throw new Error('Please select a supplier or add supplier details');
   }
-  return arr;
+}
+const handleCreateCustomer = async (createForm) => {
+  if (createForm.customerId && createForm.destination_address_id && !createForm.customerChecked)
+    return createForm.destination_address_id;
+  try {
+    if (!createForm.cust_city)
+      throw new Error('Please add the Customer city');
+    const res = await ax(CREATE_CUSTOMER, 'post', createForm);
+    console.log(res);
+    if (res) {
+      const addressJson = {
+        address: createForm.cust_address,
+        city: createForm.cust_city,
+        postal: createForm.cust_postal,
+        state: createForm.cust_state,
+        country: createForm.cust_country,
+        customer_id: res[0].id,
+      }
+      return handleCreateAddress(addressJson)
+
+    }
+  } catch (er) {
+    throw new Error('Could not create customer');
+  }
+}
+const numMsUTCtoEST = 14400000
+
+const compareObjects = (raw, model) => {
+  for(const [key, value] of Object.entries(raw)) {
+    if(value === model[key])
+      delete raw[key];
+    else if(['start_time', 'end_time'].includes(key)) {
+      // console.log(new Date(value).getTime(), new Date(model[key]).getTime())
+      if((new Date(value).getTime() - numMsUTCtoEST) === new Date(model[key]).getTime()) {
+        delete raw[key];
+      }
+    }
+
+  }
+  return raw;
+}
+
+//payload format: {address,city,state,postal,country,supplier_id,customer_id}
+
+const handleCreateAddress = async (payload) => {
+  try {
+    const res = await ax(CREATE_ADDRESS, 'post', payload)
+    if (res)
+      return res[0].id
+  } catch (er) {
+    throw new Error('Could not create address')
+  }
+
 }
 
 const CreateOrderForm = () => {
 
   const {
     createError,
-    addDriverToList,
     showLoadModal,
     hideLoadModal,
-    appData
+    appData,
+    addOrderToList
   } = useContext(AppContext);
   const {
     createForm,
     setCreateForm,
     handleCreateFormChange
   } = useContext(CreateFormContext);
-  const [yearOptions, setYearOptions] = useState(() => yearsArr());
 
   const validateTimes = useCallback(() => {
     return (
       new Date(createForm.end_time).getTime() >= new Date(createForm.start_time).getTime()
     )
   }, [createForm])
-  console.log(validateTimes());
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    console.log(createForm);
+  const handleSubmitEdit = useCallback(async(source_address_id, destination_address_id) => {
 
+    console.log('editting');
     try {
-      showLoadModal();
-      const res = await ax(
-        CREATE_DRIVER,
-        'post',
-        createForm
-      );
-      console.log(res);
-      if (res) {
-        addDriverToList(res[0]);
+      const payload = {
+        cost_cents: createForm.cost * 100,
+        revenue_cents: createForm.revenue * 100,
+        description: createForm.description,
+        start_time: createForm.start_time,
+        end_time: createForm.end_time,
+        // start_time: createForm.start_time,
+        source_address_id,
+        destination_address_id,
+        driver_id: createForm.driverId
       }
-    } catch (er) {
-      // console.log(er.message);
+      const json = compareObjects(payload, appData.orders.hash[createForm.id])
+      console.log(json);
+    }catch(er) {
       createError(er.message);
     }
+    hideLoadModal()
+  }, [createForm])
+
+  const handleSubmit = useCallback(async (e) => {
+    e.preventDefault();
+    if (!createForm.supp_city || !createForm.cust_city)
+      return createError('Please add city information');
+      try {
+        showLoadModal();
+        
+        const resSupplierAddressId = await handleCreateSupplier(createForm);
+        const resCustomerAddressId = await handleCreateCustomer(createForm);
+        
+        if (createForm.id)
+        return handleSubmitEdit(resSupplierAddressId, resCustomerAddressId);
+        const res = await ax(
+          CREATE_ORDER,
+          'post', 
+          {
+            ...createForm,
+            resSupplierAddressId,
+            resCustomerAddressId
+          }
+        );
+        if (res) {
+          addOrderToList(res[0]);
+          // addDriverToList(res[0]);
+        }
+      } catch (er) {
+        // console.log(er.message);
+        createError(er.message);
+      }
     hideLoadModal();
   }, [createForm]);
+
 
   const handleFilterList = (list = [], str = '') => {
     if (!str)
@@ -68,10 +176,84 @@ const CreateOrderForm = () => {
         const driverFullName = `${item.driver_fname || item.supp_fname || item.cust_fname} ${item.driver_lname || item.supp_lname || item.cust_lname}`;
         return Object.values(item).some(value => reg.test(value))
           || reg.test(driverFullName);
-
-
       });
+  }
 
+  const handleClickSupplier = (supplier_name, supplierId, address_id) => {
+    if (createForm.source_address_id === address_id) {
+      return setCreateForm(prev => ({
+        ...prev,
+        supplier_name: '',
+        supplierId: 0,
+        supp_address: '',
+        supp_city: '',
+        supp_country: '',
+        supp_postal: '',
+        supp_state: '',
+        source_address_id: 0,
+      }))
+    }
+    console.log(appData.addresses.hash,
+      address_id,
+      supplier_name,
+      supplierId)
+    const address = appData.addresses.hash[address_id] || {}
+    // .find(address => address.supplier_id === supplierId) || {}
+    setCreateForm(prev => ({
+      ...prev,
+      supplier_name,
+      supplierId,
+      supp_address: address.address,
+      supp_city: address.city,
+      supp_country: address.country,
+      supp_postal: address.postal,
+      supp_state: address.state,
+      source_address_id: address_id,
+
+    }))
+  }
+  const handleClickDriver = (driver_name, driverId) => {
+    if (createForm.driver_name === driver_name) {
+      return setCreateForm(prev => ({
+        ...prev,
+        driver_name: '',
+        driverId: 0
+      }))
+    }
+    setCreateForm(prev => ({
+      ...prev,
+      driver_name,
+      driverId
+    }))
+  }
+
+  const handleClickCustomer = (customer_name, customerId, address_id) => {
+    if (createForm.customer_name === customer_name) {
+      return setCreateForm(prev => ({
+        ...prev,
+        customer_name: '',
+        customerId: 0,
+        cust_address: '',
+        cust_city: '',
+        cust_country: '',
+        cust_postal: '',
+        cust_state: '',
+        destination_address_id: 0,
+      }))
+    }
+    const address = appData.addresses.hash[address_id] || {}
+
+    setCreateForm(prev => ({
+      ...prev,
+      customer_name,
+      customerId,
+      cust_address: address.address,
+      cust_city: address.city,
+      cust_country: address.country,
+      cust_postal: address.postal,
+      cust_state: address.state,
+      destination_address_id: address_id,
+    }))
   }
   const timesValid = validateTimes();
   const parsedDrivers = handleFilterList(
@@ -90,10 +272,9 @@ const CreateOrderForm = () => {
     appData.suppliers.list,
     createForm.supplier_name
   ).map(supplier => {
-    const supplierFullName = `${supplier.supp_fname} ${supplier.supp_lname}`;
     return <SupplierDisplayItem
       key={supplier.id}
-      handleClick={() => handleClickSupplier(supplierFullName, supplier.id)}
+      handleClick={handleClickSupplier}
       selected={createForm.supplierId && (createForm.supplierId === supplier.id)}
       {...supplier}
     />
@@ -103,59 +284,14 @@ const CreateOrderForm = () => {
     appData.customers.list,
     createForm.customer_name
   ).map(customer => {
-    const customerFullName = `${customer.cust_fname} ${customer.cust_lname}`;
     return <SupplierDisplayItem
       key={customer.id}
-      handleClick={() => handleClickCustomer(customerFullName, customer.id)}
+      handleClick={handleClickCustomer}
       selected={createForm.customerId && (createForm.customerId === customer.id)}
       {...customer}
+      type='customer'
     />
   });
-
-  const handleClickDriver = (driver_name, driverId) => {
-    if (createForm.driver_name === driver_name) {
-      return setCreateForm(prev => ({
-        ...prev,
-        driver_name: '',
-        driverId: 0
-      }))
-    }
-    setCreateForm(prev => ({
-      ...prev,
-      driver_name,
-      driverId
-    }))
-  }
-  const handleClickSupplier = (supplier_name, supplierId) => {
-    if (createForm.supplier_name === supplier_name) {
-      return setCreateForm(prev => ({
-        ...prev,
-        supplier_name: '',
-        supplierId: 0
-      }))
-    }
-    setCreateForm(prev => ({
-      ...prev,
-      supplier_name,
-      supplierId
-    }))
-  }
-  const handleClickCustomer = (customer_name, customerId) => {
-    if (createForm.customer_name === customer_name) {
-      return setCreateForm(prev => ({
-        ...prev,
-        customer_name: '',
-        customerId: 0
-      }))
-    }
-    setCreateForm(prev => ({
-      ...prev,
-      customer_name,
-      customerId
-    }))
-  }
-
-
 
   return (
     <Form
@@ -221,6 +357,13 @@ const CreateOrderForm = () => {
             />
           </InputGroup>
         </div>
+        <Form.Control
+          value={createForm.description}
+          type='text'
+          name='description'
+          onChange={handleCreateFormChange}
+          placeholder='Add a description'
+        />
         <fieldset
 
         >
@@ -268,10 +411,8 @@ const CreateOrderForm = () => {
                 />
                 :
                 <>
-                  <InputGroup className="mb-2"
-                    style={{
-                      display: 'flex'
-                    }}
+                  <InputGroup className="mb-2 flex"
+                  
                   >
                     {/* <InputGroup.Prepend> */}
                     <InputGroup.Text
@@ -307,6 +448,7 @@ const CreateOrderForm = () => {
                 ...prev,
                 supplierChecked: !prev.supplierChecked
               }))}
+              onChange={() => {}}
               checked={createForm.supplierChecked}
             />
           </Form.Label>
@@ -328,10 +470,7 @@ const CreateOrderForm = () => {
                   prefix='cust_'
                 />
                 : <>
-                  <InputGroup className="mb-2"
-                    style={{
-                      display: 'flex'
-                    }}
+                  <InputGroup className="mb-2 flex"
                   >
                     {/* <InputGroup.Prepend> */}
                     <InputGroup.Text
@@ -357,12 +496,8 @@ const CreateOrderForm = () => {
             }
           </div>
           <Form.Label
-            style={{
-              position: 'absolute',
-              bottom: 12,
-              left: 32,
-              whiteSpace: 'nowrap'
-            }}
+          className='manual-check'
+            
           >
             Manual input
             <Form.Check
@@ -370,6 +505,7 @@ const CreateOrderForm = () => {
                 ...prev,
                 customerChecked: !prev.customerChecked
               }))}
+              onChange={() => {}}
               checked={createForm.customerChecked}
             />
           </Form.Label>

@@ -1,74 +1,59 @@
 import OrderList from 'components/orders/OrderList';
-import UnassignedOrderList from 'components/orders/UnassignedOrderList';
 import CreateOrderForm from 'components/orders/CreateOrderForm';
 import { useState, useContext } from 'react';
 import AppContext from 'context/AppContext';
 import Modal from 'components/Modal';
 import { CreateFormProvider } from 'context/CreateFormContext';
 import { Button } from 'react-bootstrap';
+import HomeBanner from 'components/general/HomeBanner'
+import { initOrderForm as init } from 'utils/initStates';
 
-const init = {
-  driver_name: '',
-  revenue: 0,
-  cost: 0,
-  start_time: new Date().toJSON().slice(0, 16),
-  end_time: new Date().toJSON().slice(0, 16),
-  description: '',
-  supplier_name: '',
-  customer_name: '',
-  cust_fname: '',
-  cust_lname: '',
-  supp_fname: '',
-  supp_lname: '',
-  driverId: 0,
-  supplierId: 0,
-  customerId: 0,
-  supplierChecked: false,
-  customerChecked: false,
-  supp_address: '',
-  supp_city: '',
-  supp_postal: '',
-  supp_country: '',
-  supp_state: '',
-  cust_address: '',
-  cust_city: '',
-  cust_postal: '',
-  cust_country: '',
-  cust_state: '',
-
-  
-
-};
-
-const OrderView = () => {
+const OrderView = ({ id }) => {
 
   const [show, setShow] = useState(false)
 
   const {
     appData,
-    createModal
+    createModal,
+    handleDragDropZone,
+    handleDragOverZone
   } = useContext(AppContext);
   const promptToClose = () => {
     createModal(
-      'Exit',
       'Exit order builder?',
+      'Exit',
       () => setShow(false),
       'Exit'
     );
   }
 
   return (
-    <div className='order-layout'>
-      <OrderList 
-      list={appData.orders.unassigned.list}
-      />
-      {/* <UnassignedOrderList /> */}
-      <Button
-        onClick={() => setShow(true)}
-      >Create</Button>
+    <div className='order-layout'
+      onDragLeave={e => handleDragDropZone(e, 'order', id)}
+      onDragEnter={e => handleDragDropZone(e, 'order', id)}
+      onDragOver={e => handleDragOverZone(e, 'order', id)}
+    >
+      <div className='view-header'>
+        Unassigned Orders
+      </div>
+      <div className='view-header rr-flex-row'>
+        <div>
+          Source to Destination 
+          </div>
+          <div>Revenue | Cost</div>
+      </div>
       <CreateFormProvider
         init={init}
+        show={show}
+        setShow={setShow}
       >
+        <OrderList
+          list={appData.orders.unassigned.list}
+
+        />
+        <Button
+          onClick={() => setShow(true)}
+        >Create</Button>
         <Modal
           show={show}
           onHide={promptToClose}

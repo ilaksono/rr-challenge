@@ -72,7 +72,7 @@ const seedOrders = async () => {
       start_time: '2021-10-11 09:30:00',
       end_time: '2021-10-12 13:30:00'
     }, {
-      driverFname: 'Steve',
+      driverFname: 'Alex',
       revenue: 420000,
       cost: 10000,
       description: 'Rose Rocket Swag Shirts',
@@ -83,34 +83,32 @@ const seedOrders = async () => {
 
   try {
     for (const order of exampleOrders) {
-      console.log(order);
       const qsDriver = `
       SELECT * FROM drivers WHERE driver_fname=$1::text
       `;
       const qp = [order.driverFname];
-      console.log(qp);
-      const qsCustomer = `
-      SELECT * FROM customers`;
-      const qsSupplier = `
-      SELECT * FROM suppliers`;
+      const qsCustomerAddress = `
+      SELECT * FROM addresses
+      WHERE customer_id IS NOT NULL;`;
+      const qsSupplierAddress = `
+      SELECT * FROM addresses
+      WHERE supplier_id IS NOT NULL;
+      `;
 
       const resDriver = await pool.query({
-          text: qsDriver,
-          values: qp
-        });
+        text: qsDriver,
+        values: qp
+      });
 
-      console.log(resDriver.rows);
       const driverId = resDriver.rows[0].id;
-      console.log(driverId);
       const resCustomer = await pool.query({
-        text: qsCustomer,
+        text: qsCustomerAddress,
         // values: []
       });
-      console.log(resCustomer);
-      const resSupplier = await pool.query({text: qsSupplier, 
+      const resSupplier = await pool.query({
+        text: qsSupplierAddress,
         // values: []
       });
-      console.log(resSupplier, 'supp')
 
       const customerId = resCustomer.rows[0].id;
       const supplierId = resSupplier.rows[0].id;
@@ -122,8 +120,8 @@ const seedOrders = async () => {
         cost_cents,
         description,
         revenue_cents,
-        customer_id,
-        supplier_id,
+        destination_address_id,
+        source_address_id,
         driver_id
         ) VALUES (
           $1,
@@ -146,7 +144,8 @@ const seedOrders = async () => {
         supplierId,
         driverId
       ];
-      const resOrder = await pool.query({text: qsOrder, values: qpOrder});
+      console.log(qpOrder);
+      const resOrder = await pool.query({ text: qsOrder, values: qpOrder });
       const orderId = resOrder.rows[0]?.id;
 
       // const qsDriverOrder = `
@@ -166,9 +165,86 @@ const seedOrders = async () => {
 
     }
   } catch (er) {
-    console.error(er, 1);
+    throw new Error(er.message);
   }
 }
+
+const seedSupplierCustomerAddresses = async () => {
+
+  try {
+
+    const qsCustomer = `
+  SELECT * FROM customers;`;
+    const customerRows = await pool.query({
+      text: qsCustomer
+    });
+    const customerId = customerRows.rows[0].id
+
+    const qsSupplier = `
+  SELECT * FROM suppliers;`;
+    const supplierRows = await pool.query({
+      text: qsSupplier
+    });
+    const supplierId = supplierRows.rows[0].id
+
+    for (const { id } of supplierRows.rows) {
+
+      const qsAddressSupplier = `
+    INSERT INTO addresses (
+      supplier_id,
+      address,
+      city,
+      state,
+      postal,
+      country
+      ) VALUES (
+        $1,
+        '${id * 100} Rain st.',
+        'Toronto',
+        'Ontario',
+        'D4F 2G3',
+        'Canada'
+        );`;
+
+
+      const addressRowsB = await pool.query({
+        text: qsAddressSupplier,
+        values: [id]
+      });
+
+      console.log(addressRowsB)
+    }
+
+    for (const { id } of customerRows.rows) {
+
+      const qsAddressCustomer = `
+        INSERT INTO addresses (
+          customer_id,
+          address,
+          city,
+          state,
+          postal,
+          country
+        ) VALUES (
+          $1,
+          '${id * 100} Main st.',
+          'Barrie',
+          'Ontario',
+          'A1B 2C3',
+          'Canada'
+        );`;
+      const addressRowsA = await pool.query({
+        text: qsAddressCustomer,
+        values: [id]
+      });
+      console.log(addressRowsA);
+    }
+  } catch (er) {
+    throw new Error(er.message)
+  }
+
+}
 module.exports = {
-  seedOrders
+  seedOrders,
+  seedSupplierCustomerAddresses
 }

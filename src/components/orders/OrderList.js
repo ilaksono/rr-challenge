@@ -2,20 +2,10 @@ import OrderListItem from './OrderListItem';
 
 const OrderList = ({ list = [] }) => {
 
-  if (!list.length)
-    return (
-
-      <div
-        style={{
-          position: 'relative'
-        }}
-      >
-        <OrderListItem />
-      </div>
-    )
-
+ 
   const parsedList = list.map(order =>
     <OrderListItem
+    key={order.id}
       {...order}
     />
   )

@@ -4,15 +4,10 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
   return (
     <>
       {/* <div className='form-row'> */}
-      <div style={{
-        minHeight:180
-      }}>
+      <div className='supplier-form-container'>
         <InputGroup
-          style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-          className="mb-2">
+          
+          className="mb-2 flex">
           <InputGroup.Text
           >First Name
           </InputGroup.Text>
@@ -39,11 +34,8 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
       </div>
       <div>
         <InputGroup
-          style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-          className="mb-2">
+         
+          className="mb-2 flex">
           <InputGroup.Text
           >Address
           </InputGroup.Text>
@@ -82,11 +74,8 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
       </div>
       <div>
         <InputGroup
-          style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-          className="mb-2">
+         
+          className="mb-2 flex">
           <InputGroup.Text
           >Postal
           </InputGroup.Text>
@@ -105,10 +94,11 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
           <Form.Control
             value={createForm[prefix + 'country'] || ''}
             onChange={handleCreateFormChange}
-            type='text'
+            as='select'
             name={prefix + 'country'}
-            placeholder='United States'
-          />
+          >
+            {['', 'Canada', 'United States'].map(each => <option key={each}>{each}</option>)}
+          </Form.Control>
         </InputGroup>
       </div>
 

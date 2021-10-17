@@ -22,11 +22,16 @@ const useCreateForm = (init) => {
     setCreateForm(init);
   }
 
+  const initCreateForm = (json) => {
+    setCreateForm(json);
+  }
+
   return {
     createForm,
     handleCreateFormChange,
     resetCreateForm,
-    setCreateForm
+    setCreateForm,
+    initCreateForm
   }
 
 }

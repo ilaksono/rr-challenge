@@ -1,4 +1,6 @@
 
+// use uniform response body - data: object | any, status: string, msg: string
+// done = successful request response
 const done = (res, data) => {
   return res.json({
     data,
@@ -6,6 +8,7 @@ const done = (res, data) => {
     msg: ''
   })
 }
+
 const errorResponse = (res, type) => {
   return res.json({
     data: null,
@@ -13,6 +16,7 @@ const errorResponse = (res, type) => {
     msg: type
   })
 }
+
 module.exports = {
   done,
   errorResponse

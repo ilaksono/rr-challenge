@@ -29,7 +29,6 @@ const CreateDriverForm = ({forceClose}) => {
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    console.log(createForm);
 
     try {
       showLoadModal();
@@ -38,7 +37,6 @@ const CreateDriverForm = ({forceClose}) => {
         'post', 
         createForm
         );
-      console.log(res);
       if (res) {
         addDriverToList(res[0]);
         resetCreateForm()
@@ -46,7 +44,6 @@ const CreateDriverForm = ({forceClose}) => {
         createAlert();
       }
     } catch (er) {
-      // console.log(er.message);
       createError(er.message);
     }
     hideLoadModal();
@@ -124,7 +121,7 @@ const CreateDriverForm = ({forceClose}) => {
                 as='select'
                 name='year'
                 placeholder='Wheels'
-              >{yearOptions.map(each => <option>{each}</option>)}
+              >{yearOptions.map(each => <option key={each}>{each}</option>)}
               </Form.Control>
             </InputGroup>
           </div>

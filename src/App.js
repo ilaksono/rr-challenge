@@ -8,7 +8,9 @@ import Updates from 'components/general/Updates';
 function App() {
 
   const parsedRoutes = routes.map(each => 
-    <Route {...each}/>)
+    <Route 
+    key={each.path}
+    {...each}/>)
   return (
     <ErrorBoundary>
       <Router>

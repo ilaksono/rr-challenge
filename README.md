@@ -1,8 +1,13 @@
 # Environment Requirements:
   - Node >14.17
+  - local psql > 9.x
 
 # Start Instructions:
-  - npm start
+  - Start FE: `npm start`
+  - connect to psql database
+  `sudo psql -U postgres`
+  - Start BE: `cd server && npm start` 
+
 
 # Technologies used:
   - FE: React, Bootstrap
@@ -37,4 +42,6 @@
     - Deciding whether to keep Customers and Suppliers in one table called Contacts - or keep them separate
       - Decided to keep them separate because only suppliers have a payable address
       - customers are linked to accounts receivable/debtors/sales orders
-      - suppliers are linked to accounts payable/creditors/purchase orders  
+      - suppliers are linked to accounts payable/creditors/purchase orders 
+  - 2021-10-17:
+    - Accounting for timezones (all are currently in UTC) - when calculating the driver's availability for updating an order to a driver

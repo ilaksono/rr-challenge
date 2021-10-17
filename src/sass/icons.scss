@@ -1,0 +1,12 @@
+@import './helpers.scss';
+.thumbnail {
+  background-color: transparent !important;
+  cursor: pointer;
+  img {
+    max-height: 28px;
+    max-width:28px;
+    &:hover {
+      filter: $toBlue;
+    }
+  }
+}

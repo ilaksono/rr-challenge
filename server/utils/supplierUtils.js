@@ -14,23 +14,25 @@ const getAllSuppliers = async (req, res) => {
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+
   }
 }
 
 const makeSupplier = async (req, res) => {
   try {
     const {
-      fname, 
-      lname
+      supp_fname, 
+      supp_lname
     } = req.body
-    console.log(fname);
-    if(!fname) {
-      console.log('no fname')
-      return errorResponse(res, 'Please add a driver name');
+    console.log(supp_fname);
+    if(!supp_fname) {
+      console.log('no supp_fname')
+      return errorResponse(res, 'Please add a supplier name');
     }
     const resq = await pool.query({
-      text: queryMakeSupplier({fname, lname}),
-      values: [fname, lname].filter(each => each)
+      text: queryMakeSupplier,
+      values: [supp_fname || 'Example', supp_lname || 'Supplier']
     });
     if (resq?.rows)
       return done(res, resq.rows);
@@ -38,6 +40,7 @@ const makeSupplier = async (req, res) => {
 
   } catch (er) {
     console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
 
   }
 }

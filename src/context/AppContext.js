@@ -4,6 +4,7 @@ import useAlertData from 'hooks/useAlertData';
 import useConfirmModal from 'hooks/useConfirmModal';
 import useErrorToast from 'hooks/useErrorToast';
 import useLoadingModal from 'hooks/useLoadingModal';
+import useDropZone from 'hooks/useDropZone';
 
 const AppContext = React.createContext();
 
@@ -12,7 +13,8 @@ export const AppProvider = ({ children }) => {
   const {
     appData,
     fetchUnassignedOrders,
-    addDriverToList
+    addDriverToList,
+    addOrderToList
   } = useAppData();
   const {
     loadModal,
@@ -27,6 +29,8 @@ export const AppProvider = ({ children }) => {
     createAlert
   } = useAlertData();
 
+
+
   const {
     conMod,
     resetConfirmModal,
@@ -40,15 +44,21 @@ export const AppProvider = ({ children }) => {
     removeError,
   } = useErrorToast();
 
+  const {
+    dropZone,
+    handleDragDropZone,
+    handleDragOverZone
+  } = useDropZone();
+
   return (
     <AppContext.Provider value={{
       // useAppData
       appData,
       fetchUnassignedOrders,
       addDriverToList,
+      addOrderToList,
 
       // updates - useAlertData, useConfirmModal, useErrorToast
-
       alert,
       setShowAlert,
       resetAlert,
@@ -62,7 +72,12 @@ export const AppProvider = ({ children }) => {
       removeError,
       loadModal,
       showLoadModal,
-      hideLoadModal
+      hideLoadModal,
+
+      // useDropZone
+      dropZone,
+      handleDragDropZone,
+      handleDragOverZone
 
     }}>
       {children}

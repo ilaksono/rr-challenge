@@ -9,7 +9,7 @@ const ModalTemplate = (props) => {
     size = 'lg',
     modalStyle,
     modalTitle = 'asd',
-    bodyStyle,
+    bodyStyle = {},
     children = 'asd'
   } = props;
   return (
@@ -26,23 +26,16 @@ const ModalTemplate = (props) => {
       }}
     >
       <Modal.Header
-        style={{
-          backgroundColor: con.rrBlue,
-          color: 'white',
-          fontSize: '1.2em'
-        }}>
+      className='rr-modal-header'
+        >
         <Modal.Title id="contained-modal-title-vcenter">
           {modalTitle}
         </Modal.Title>
         <ModalCloseButton onHide={onHide} />
       </Modal.Header>
       <Modal.Body
-        style={bodyStyle || {
-          height: '100%',
-          maxHeight: '100%',
-          minHeight: 540,
-          overflowY: 'auto'
-        }}>
+      className='rr-modal-body'
+        style={bodyStyle}>
         {children}
       </Modal.Body>
     </Modal>

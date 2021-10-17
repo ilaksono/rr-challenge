@@ -7,6 +7,7 @@ import { AppProvider } from 'context/AppContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'sass/custombs.scss';
 import 'sass/layouts.scss'
+import 'sass/icons.scss'
 
 ReactDOM.render(
   <React.StrictMode>

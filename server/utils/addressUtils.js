@@ -14,23 +14,37 @@ const getAllAddresses = async (req, res) => {
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+
   }
 }
 
 const makeAddress = async (req, res) => {
   try {
     const {
-      fname,
-      lname
+      address,
+      city,
+      state,
+      country,
+      postal,
+      customer_id,
+      supplier_id
     } = req.body
-    console.log(fname);
-    if (!fname) {
-      console.log('no fname')
-      return errorResponse(res, 'Please add a driver name');
-    }
+    const values = [
+      address,
+      city,
+      state,
+      postal,
+      country,
+      supplier_id || customer_id,
+    ]
+    console.log(values);
+    // if (!supplier_id) {
+    //   return errorResponse(res, 'Please add a driver name');
+    // }
     const resq = await pool.query({
-      text: queryMakeAddress({ fname, lname }),
-      values: [fname, lname].filter(each => each)
+      text: queryMakeAddress({ customer_id, supplier_id }),
+      values
     });
     if (resq?.rows)
       return done(res, resq.rows);
@@ -38,7 +52,7 @@ const makeAddress = async (req, res) => {
 
   } catch (er) {
     console.error(er);
-
+    return errorResponse(res, errorMessages.queryFailed)
   }
 }
 

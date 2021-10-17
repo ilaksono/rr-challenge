@@ -2,8 +2,13 @@
 
 .order-list-item {
   cursor: pointer;
-  background-color: $rrblue;
-  color: white;
+  // background-color: $rrblue;
+  // color: white;
+  margin-bottom: 8px;
+  min-width: 280px;
+  border: 2px inset $rrblue;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0.5px $rrblue;
   padding: 12px;
   @include flexbox(row, space-around, center);
   .order-pricing-summary {
@@ -14,6 +19,20 @@
 .create-driver-form,
 .create-order-form {
   padding-top: 36px;
+}
+.view-header {
+  text-align: center;
+  color: #5D5D5D;
+  margin-bottom: 12px;
+}
+.form-label .flex {
+  display: flex;
+}
+.partial-hide {
+  opacity: 0.4;
+}
+.rr-flex-row {
+  @include flexbox(row, space-around, center);
 }
 
 form {
@@ -96,6 +115,24 @@ form {
   border: 2px solid $rrblue;
   margin: 0;
   margin-right: 14px;
+}
+.supplier-form-container {
+  min-height: 180px;
+}
+.light-color-text {
+  color: #5D5D5D;
+}
+.green-color-text {
+  color: green;
+}
+.red-color-text {
+  color: red;
+}
+
+.bg-image {
+  background-size: cover;
+  height: 50px;
+  width: 50px;
 }
 
 @media screen and (max-width: 991px) {

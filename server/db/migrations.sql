@@ -25,18 +25,6 @@ CREATE TABLE drivers (
   vehicle_year SMALLINT,
   created_at TIMESTAMP NOT NULL DEFAULT Now()
 );
-CREATE TABLE orders (
-  id SERIAL PRIMARY KEY NOT NULL,
-  start_time TIMESTAMP,
-  end_time TIMESTAMP,
-  cost_cents INTEGER,
-  description VARCHAR(191),
-  revenue_cents INTEGER,
-  customer_id INTEGER REFERENCES customers(id) ON DELETE CASCADE,
-  supplier_id INTEGER REFERENCES suppliers(id) ON DELETE CASCADE,
-  driver_id INTEGER REFERENCES drivers(id) ON DELETE CASCADE,
-  created_at TIMESTAMP NOT NULL DEFAULT Now()
-);
 
 CREATE TABLE addresses (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -48,6 +36,19 @@ CREATE TABLE addresses (
   postal VARCHAR(20),
   country VARCHAR(50),
   timezone_offset SMALLINT,
+  created_at TIMESTAMP NOT NULL DEFAULT Now()
+);
+
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY NOT NULL,
+  start_time TIMESTAMP,
+  end_time TIMESTAMP,
+  cost_cents INTEGER,
+  description VARCHAR(191),
+  revenue_cents INTEGER,
+  source_address_id INTEGER REFERENCES addresses(id) ON DELETE CASCADE,
+  destination_address_id INTEGER REFERENCES addresses(id) ON DELETE CASCADE,
+  driver_id INTEGER REFERENCES drivers(id) ON DELETE CASCADE,
   created_at TIMESTAMP NOT NULL DEFAULT Now()
 );
 

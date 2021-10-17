@@ -1,22 +1,32 @@
+// Module exports the api queries used to SELECT, INSERT, UPDATE 
+// the 5 tables in the app: Orders, Suppliers, Drivers, Customers, Addresses 
+
 // order queries
-const queryAssignedOrders = `
-select * from driver_order 
-JOIN orders 
-ON driver_order.order_id=orders.id 
+const queryUnassignedOrders = `
+select * from orders 
 WHERE NOT EXISTS (
   select * from drivers 
-  where id=driver_id
+  where drivers.id=orders.driver_id
   );`
+const queryAssignedOrders = `
+  select * from orders 
+  WHERE EXISTS (
+    select * from drivers 
+    where drivers.id=orders.driver_id
+    );`
 
-const queryMakeOrder = `
+const queryMakeOrder = (params = {}) => {
+
+  if (params.driverId)
+    return `
 INSERT INTO orders (
   cost_cents, 
   revenue_cents, 
   start_time, 
   end_time, 
   description,
-  customer_id,
-  supplier_id,
+  destination_address_id,
+  source_address_id,
   driver_id
   ) VALUES (
     $1,
@@ -27,8 +37,42 @@ INSERT INTO orders (
     $6,
     $7,
     $8
-  ) RETURNING *;
-`
+  ) RETURNING *;`
+
+  return `
+  INSERT INTO orders (
+    cost_cents, 
+    revenue_cents, 
+    start_time, 
+    end_time, 
+    description,
+    destination_address_id,
+    source_address_id
+    ) VALUES (
+      $1,
+      $2,
+      $3,
+      $4,
+      $5,
+      $6,
+      $7
+    ) RETURNING *;`}
+
+const queryUpdateTable = (params = {}, tableName = 'orders') => {
+
+  // [[key, value], ...]
+  const paramsArr = Object.keys(params);
+  let query = `UPDATE ${tableName} SET `;
+  let count = 1;
+  for (const key of paramsArr) {
+    if (count !== 1)
+      query += ',';
+    query += ` ${key}=$${count++}`
+  }
+  query += ` WHERE id=$${count}`;
+
+  return query;
+}
 
 // driver queries
 const queryAllDrivers = `
@@ -53,53 +97,27 @@ INSERT INTO drivers (
 const queryAllSuppliers = `
 SELECT * FROM suppliers;`;
 
-const queryMakeSupplier = (params = {}) => {
-  let ph1, ph2 = Symbol('default');
-
-  if (params.fname)
-    ph1 = Symbol('$1');
-  if (params.lname) {
-    if (params.fname)
-      ph2 = Symbol('$2');
-    else ph2 = Symbol('$1');
-  }
-
-  return `
+const queryMakeSupplier = `
   INSERT INTO suppliers (
     supp_fname, 
-    supp_lname, 
+    supp_lname
     ) VALUES (
-      ${ph1},
-      ${ph2},
+      $1::text,
+      $2
   ) RETURNING *;`;
-
-}
 
 // customer queries
 const queryAllCustomers = `
 SELECT * FROM customers;`;
 
-const queryMakeCustomer = (params = {}) => {
-  let ph1, ph2 = Symbol('default');
-
-  if (params.fname)
-    ph1 = Symbol('$1');
-  if (params.lname) {
-    if (params.fname)
-      ph2 = Symbol('$2');
-    else ph2 = Symbol('$1');
-  }
-
-  return `
+const queryMakeCustomer = `
   INSERT INTO customers (
     cust_fname, 
-    cust_lname, 
+    cust_lname 
     ) VALUES (
-      ${ph1},
-      ${ph2},
+      $1::text,
+      $2
   ) RETURNING *;`;
-
-}
 
 // address queries
 
@@ -107,15 +125,24 @@ const queryAllAddresses = `
 SELECT * FROM addresses;`;
 
 const queryMakeAddress = (params = {}) => {
-  let ph1, ph2 = Symbol('null');
 
   if (params.supplier_id)
-    ph1 = Symbol('$6');
-  if (params.lname) {
-    if (params.supplier_id)
-      ph2 = Symbol('$7');
-    else ph2 = Symbol('$6');
-  }
+    return `
+  INSERT INTO addresses (
+    address, 
+    city,
+    state,
+    postal,
+    country,
+    supplier_id
+    ) VALUES (
+      $1,
+      $2,
+      $3,
+      $4,
+      $5,
+      $6
+  ) RETURNING *;`;
 
   return `
   INSERT INTO addresses (
@@ -124,7 +151,6 @@ const queryMakeAddress = (params = {}) => {
     state,
     postal,
     country,
-    supplier_id,
     customer_id
     ) VALUES (
       $1,
@@ -132,13 +158,13 @@ const queryMakeAddress = (params = {}) => {
       $3,
       $4,
       $5,
-      ${ph1},
-      ${ph2}
+      $6
   ) RETURNING *;`;
 
 }
 
 module.exports = {
+  queryUnassignedOrders,
   queryAssignedOrders,
   queryAllDrivers,
   queryMakeDriver,
@@ -148,5 +174,6 @@ module.exports = {
   queryAllCustomers,
   queryMakeCustomer,
   queryAllAddresses,
-  queryMakeAddress
+  queryMakeAddress,
+  queryUpdateTable
 };

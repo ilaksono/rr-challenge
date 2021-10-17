@@ -14,23 +14,25 @@ const getAllCustomers = async (req, res) => {
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+
   }
 }
 
 const makeCustomer = async (req, res) => {
   try {
     const {
-      fname, 
-      lname
+      cust_fname, 
+      cust_lname
     } = req.body
-    console.log(fname);
-    if(!fname) {
-      console.log('no fname')
+    console.log(cust_fname);
+    if(!cust_fname) {
+      console.log('no cust_fname')
       return errorResponse(res, 'Please add a driver name');
     }
     const resq = await pool.query({
-      text: queryMakeCustomer({fname, lname}),
-      values: [fname, lname].filter(each => each)
+      text: queryMakeCustomer,
+      values: [cust_fname || 'Example', cust_lname || 'Supplier']
     });
     if (resq?.rows)
       return done(res, resq.rows);
@@ -38,6 +40,8 @@ const makeCustomer = async (req, res) => {
 
   } catch (er) {
     console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+
 
   }
 }

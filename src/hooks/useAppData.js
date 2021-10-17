@@ -4,7 +4,8 @@ import axios, {
   GET_ALL_DRIVERS,
   GET_ALL_SUPPLIERS,
   GET_ALL_CUSTOMERS,
-  GET_ALL_ADDRESSES
+  GET_ALL_ADDRESSES,
+  GET_ASSIGNED_ORDERS
 } from 'ax';
 import { useEffect } from 'react';
 
@@ -42,7 +43,8 @@ const init = {
     // assigned orders in format {[driver_id]: [Order Model]}
     assigned: {
       list: []
-    }
+    },
+    hash: {}
   },
   drivers: {
     list: [],
@@ -57,7 +59,8 @@ const init = {
     hash: {}
   },
   addresses: {
-    list: []
+    list: [],
+    hash: {}
   }
 }
 
@@ -66,25 +69,45 @@ const useAppData = () => {
   const [appData, dispatch] = useReducer(reducer, init)
 
   const {
-   drivers,
-   orders,
-   suppliers,
-   customers
+    drivers,
+    orders,
+    suppliers,
+    customers,
+    addresses
   } = appData
   const fetchUnassignedOrders = async () => {
 
     try {
       const res = await axios(GET_UNASSIGNED);
-      // console.log(res);
+      // ;
       if (res && Array.isArray(res)) {
-        const data = {
+        const payload = {
           list: res,
         }
         dispatch({
           type: SET_WILD_PROPS,
           par: 'orders',
           child: 'unassigned',
-          data
+          payload
+        })
+      }
+    } catch (er) {
+      console.error(er);
+    }
+  }
+  const fetchAssignedOrders = async () => {
+    try {
+      const res = await axios(GET_ASSIGNED_ORDERS);
+      console.log(res)
+      if (res && Array.isArray(res)) {
+        const payload = {
+          list: res,
+        }
+        dispatch({
+          type: SET_WILD_PROPS,
+          par: 'orders',
+          child: 'assigned',
+          payload
         })
       }
     } catch (er) {
@@ -100,7 +123,7 @@ const useAppData = () => {
   const fetchDrivers = async () => {
     try {
       const res = await axios(GET_ALL_DRIVERS)
-      console.log(res);
+        ;
       if (res) {
 
         dispatch({ type: SET_WILD_PROPS, par: 'drivers', child: 'list', payload: res })
@@ -112,7 +135,7 @@ const useAppData = () => {
   const fetchSuppliers = async () => {
     try {
       const res = await axios(GET_ALL_SUPPLIERS)
-      console.log(res);
+        ;
       if (res) {
         dispatch({ type: SET_WILD_PROPS, par: 'suppliers', child: 'list', payload: res })
       }
@@ -123,7 +146,7 @@ const useAppData = () => {
   const fetchCustomers = async () => {
     try {
       const res = await axios(GET_ALL_CUSTOMERS)
-      console.log(res);
+        ;
       if (res) {
         dispatch({ type: SET_WILD_PROPS, par: 'customers', child: 'list', payload: res })
       }
@@ -134,7 +157,7 @@ const useAppData = () => {
   const fetchAddresses = async () => {
     try {
       const res = await axios(GET_ALL_ADDRESSES)
-      console.log(res);
+        ;
       if (res) {
         dispatch({ type: SET_WILD_PROPS, par: 'addresses', child: 'list', payload: res })
       }
@@ -172,11 +195,63 @@ const useAppData = () => {
     )
     dispatch({ type: SET_WILD_PROPS, par: 'customers', child: 'hash', payload });
   }
+  const updateAddressesHash = () => {
+    const payload = addresses.list?.reduce(
+      (acc, address) => {
+        acc[address.id] = address;
+        return acc;
+      },
+      {}
+    )
+    dispatch({ type: SET_WILD_PROPS, par: 'addresses', child: 'hash', payload });
+  }
+
+  const addOrderToList = order => {
+
+    if (order.driver_id) {
+      const payload = {
+        list: [order, ...orders.unassigned.list]
+      };
+      return dispatch({
+        type: SET_WILD_PROPS,
+        par: 'orders',
+        child: 'unassigned',
+        payload
+      })
+    } else {
+      const payload = {
+        list: [order, ...orders.assigned.list]
+      }
+      return dispatch({
+        type: SET_WILD_PROPS,
+        par: 'orders',
+        child: 'assigned',
+        payload
+      })
+    }
+  }
+  const updateOrdersHash = () => {
+    const combinedArray = orders.assigned.list
+      .concat(orders.unassigned.list);
+
+    const payload = combinedArray.reduce(
+      (acc, order) => {
+        acc[order.id] = order;
+        return acc;
+      },
+      {}
+    )
+    dispatch({ type: SET_WILD_PROPS, par: 'orders', child: 'hash', payload });
+
+  }
+
   useEffect(() => {
+    fetchUnassignedOrders();
     fetchDrivers();
     fetchSuppliers();
     fetchCustomers();
     fetchAddresses();
+    fetchAssignedOrders();
   }, [])
 
   useEffect(() => {
@@ -194,11 +269,24 @@ const useAppData = () => {
       updateCustomersHash();
     // eslint-disable-next-line
   }, [customers.list])
+  useEffect(() => {
+    if (addresses.list.length)
+      updateAddressesHash();
+    // eslint-disable-next-line
+  }, [addresses.list])
+
+
+  useEffect(() => {
+    if (orders.assigned.list.length || orders.unassigned.list.length)
+      updateOrdersHash();
+    // eslint-disable-next-line
+  }, [orders.assigned.list, orders.unassigned.list])
 
   return {
     appData,
     fetchUnassignedOrders,
-    addDriverToList
+    addDriverToList,
+    addOrderToList
   }
 
 }

@@ -38,12 +38,7 @@ const Updates = () => {
       }
       {
         errors.length > 0 &&
-        <div style={{
-          position: 'fixed',
-          left: 'calc(50vw - 125px)',
-          top: '45vh',
-          zIndex: 10000
-        }}>
+        <div className='error-toasts-wrapper'>
           {
             errors.map((each, i) => <ErrorToast
               key={i}

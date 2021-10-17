@@ -5,7 +5,7 @@ import Modal from 'components/Modal';
 import { CreateFormProvider } from 'context/CreateFormContext';
 import CreateDriverForm from 'components/drivers/CreateDriverForm';
 import { Button } from 'react-bootstrap';
-
+import CreateOrderForm from 'components/orders/CreateOrderForm';
 const init = {
   fname: '',
   lname: '',
@@ -14,13 +14,22 @@ const init = {
   year: ''
 };
 
-const DriverView = ({}) => {
+const initDrag = {
+
+}
+
+const DriverView = ({ id }) => {
 
   const [show, setShow] = useState(false);
-
+  // const [drag, setDrag] = useState(false)
+  const [showOrder, setShowOrder] = useState(false);
   const {
     createError,
-    createModal
+    createModal,
+    appData,
+    dropZone,
+    handleDragDropZone,
+    handleDragOverZone
   } = useContext(AppContext);
 
   const promptToClose = () => {
@@ -31,44 +40,60 @@ const DriverView = ({}) => {
       'Exit'
     );
   }
+  const promptToCloseOrder = () => {
+    createModal(
+      'Exit order builder?',
+      'Exit',
+      () => setShowOrder(false),
+      'Exit'
+    );
+  }
   const handleEvent = (e, type) => {
-    e.preventDefault()
-    // console.log(e.buttons);
-    if (e.buttons) {
-      console.log(e, type)
 
-    }
   }
 
   useEffect(() => {
     // createError('hi')
   }, [])
-  return (
-    <div className='driver-layout'>
-      <OrderList 
-      />
-      <div style={{
-        border: '1px solid red',
-        width: 300,
-        height: 300
-      }}
-        onDragLeave={e => handleEvent(e, 'drag leave')}
-        onDragEnter={e => handleEvent(e, 'drag over')}
-        onDrop={e => handleEvent(e, 'drop')}
-      // draggable={true}
-      >
 
+  const driver = appData.drivers.hash[id] || {};
+
+  const containerClassList = ['driver-layout'];
+  // if()
+  return (
+    <div className='driver-layout'
+      onDragLeave={e => handleDragDropZone(e, 'driver', id)}
+      onDragEnter={e => handleDragDropZone(e, 'driver', id)}
+      onDragOver={e => handleDragOverZone(e, 'driver', id)}
+    >
+      <div className='view-header'>
+        Driver - {driver.driver_fname} {driver.driver_lname}
       </div>
       <CreateFormProvider
         init={init}
+        show={showOrder}
+        setShow={setShowOrder}
       >
+        <OrderList
+          list={appData.orders.assigned?.list?.filter(order => order.driver_id === id)}
+        />
         <Modal
           show={show}
           onHide={promptToClose}
           modalTitle='Create a Driver'
         >
-          <CreateDriverForm 
+          <CreateDriverForm
             forceClose={() => setShow(false)}
+          />
+        </Modal>
+        <Modal
+          show={showOrder}
+          onHide={promptToCloseOrder}
+          modalTitle='Create an Order'
+        >
+          <CreateOrderForm
+            forceClose={() => setShowOrder(false)}
+            // {...}
           />
         </Modal>
       </CreateFormProvider>
