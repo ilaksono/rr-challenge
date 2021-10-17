@@ -58,7 +58,20 @@ const OrderListItem = (props) => {
       createError(er.message);
     }
   }, [props])
-  // const handleUnassign 
+  const handleUnassignOrder = useCallback(async () => {
+    try {
+      const res = await ax(UNASSIGN_ORDER, 'put', {
+        order_id: props.id,
+      })
+      console.log(res);
+      if (res?.length) {
+        moveOrderToList(res[0], 'assigned', 'unassigned')
+      }
+
+    } catch (er) {
+      createError(er.message);
+    }
+  }, [props])
 
   const handleDragStart = (e) => {
     setDrag(prev => ({
@@ -75,11 +88,10 @@ const OrderListItem = (props) => {
     }));
     if (dropZone.id && dropZone.on && dropZone.type === 'driver') {
       handleAssignToDriver(dropZone.id)
-
       console.log('do the thing with', dropZone.id, dropZone.type)
-
-    }
-    console.log(e, 'from item');
+    } else if (dropZone.on && dropZone.type === 'order')
+      handleUnassignOrder();
+    // console.log(e, 'from item');
   }
 
   const handleClick = () => {
@@ -119,20 +131,29 @@ const OrderListItem = (props) => {
         <div>{sourceAddress.city || 'Toronto'} to {destinationAddress.city || 'Barrie'}</div>
         <div className='light-color-text'>{hf.formatOrderDate(props.start_time)} - {hf.formatOrderDate(props.end_time)}</div>
       </div>
-      <div className='order-pricing-summary light-color-text'
+      <table className='order-pricing-summary light-color-text'
       >
-        $&nbsp;
-        <div className='green-color-text'>{(revenue_cents / 100).toFixed(2)}</div>
-        &nbsp;|&nbsp;$&nbsp;
-        <div className='red-color-text'>{(cost_cents / 100).toFixed(2)}</div>
-      </div>
+        <tr>
+          <td>
+            $
+          </td>
+          <td>
+            <div className='green-color-text'>{(revenue_cents / 100).toFixed(2)}</div>
+          </td>
+        </tr>
+        <tr>
+          <td>$</td>
+          <td>
+            <div className='red-color-text'>{(cost_cents / 100).toFixed(2)}</div>
+          </td>
+        </tr>
+      </table>
       <div className='thumbnail align-start'>
         <img
           src='/images/pencil.png'
           alt='Edit'
           onClick={handleClick}
         />
-
       </div>
     </div>
 

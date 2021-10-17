@@ -89,11 +89,13 @@ export const determineOrderInformation = (order, appData) => {
   console.log(json);
   return json;
 }
-export const formatFullName = (fname, lname) =>
+export const formatFullName = (fname = '', lname = '') =>
   `${fname} ${lname}`
 
 export const isDriverBooked = (driverOrders = [], order) => {
   for (const assigned of driverOrders) {
+    if(assigned.id === order.id)
+      continue;
     const start = new Date(assigned.start_time).getTime();
     const end = new Date(assigned.end_time).getTime();
     const candidateStart = new Date(order.start_time).getTime();

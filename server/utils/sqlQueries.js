@@ -57,7 +57,7 @@ INSERT INTO orders (
       $6,
       $7
     ) RETURNING *;`
-  }
+}
 const queryUnassignOrder = `
 UPDATE orders SET driver_id=null
 WHERE id=$1
@@ -75,7 +75,8 @@ const queryUpdateTable = (params = {}, tableName = 'orders') => {
       query += ',';
     query += ` ${key}=$${count++}`
   }
-  query += ` WHERE id=$${count} RETURNING *`;
+  query += ` WHERE id=$${count}
+  RETURNING *`;
 
   return query;
 }

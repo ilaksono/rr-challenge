@@ -45,7 +45,7 @@ const OrderView = ({ id }) => {
 
   useEffect(() => {
     if(!drag.hide) 
-      setClassList(['driver-layout', 'unselected'])
+      setClassList(['order-layout', 'unselected'])
   }, [drag])
   return (
     <div className={classList.join(' ')}

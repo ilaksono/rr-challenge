@@ -80,12 +80,12 @@ const makeOrder = async (req, res) => {
 const setOrderUnassigned = async (req, res) => {
 
   const {
-    driver_id
+    order_id
   } = req.body
   try {
     const resq = await pool.query({
       text: queryUnassignOrder,
-      values: [driver_id]
+      values: [order_id]
     });
     if (resq?.rows)
       return done(res, resq.rows);
@@ -110,7 +110,7 @@ const updateOrder = async (req, res) => {
     id
   } = req.body;
 
-  const params = Object.entries({
+  const paramsArr = Object.entries({
     description,
     driver_id,
     cost_cents,
@@ -120,6 +120,9 @@ const updateOrder = async (req, res) => {
     start_time,
     end_time
   }).filter(([key, value]) => value)
+  if (!paramsArr.length)
+    return done(res, []);
+  const params = paramsArr
     .reduce((acc, each) => {
       acc[each[0]] = each[1];
       return acc;

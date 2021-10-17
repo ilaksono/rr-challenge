@@ -13,6 +13,7 @@
   width: 100%;
   height: calc(100vh - 48px);
   padding: 24px;
+  height: fit-content;
   .driver-layout {
     width: 24%;
     padding: 8px;
@@ -49,7 +50,7 @@
   }
   .order-layout.unselected,
   .driver-layout.unselected {
-    transform:scale(1);
+    transform: scale(1);
     // animation: animGrow 1s reverse;
   }
 }
@@ -64,7 +65,6 @@
 }
 @keyframes animShrink {
   from {
-
   }
   to {
     transform: scale(0.95);
@@ -73,16 +73,25 @@
 
 @media screen and (max-width: 992px) {
   .main-layout {
-    @include flexbox(column, flex-start, stretch);
+    padding: 0;
+    @include flexbox(column, flex-start, center);
     .order-layout {
-      width: 100%;
+      width: calc(100% - 16px - 4px);
       margin: 8px;
       margin-top: 36px;
       max-width: 100%;
     }
     .driver-layout {
-      width: 100%;
+      width: calc(100% - 16px - 4px);
       margin: 8px;
+      min-width: 30%;
+    }
+  }
+}
+@media screen and (max-width: 325px) {
+  .main-layout {
+    .driver-layout {
+      min-width: 30%;
     }
   }
 }

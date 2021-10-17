@@ -52,20 +52,17 @@ const DriverView = ({ id, driverIndex, fullName }) => {
       'Exit'
     );
   }
-  
 
-  useEffect(() => {
-    if(!drag.hide) 
-      setClassList(['driver-layout', 'unselected'])
-  }, [drag])
+
+
   const handleDragEvents = (e) => {
     e.preventDefault();
     if (classList.length < 2) {
       if (e.type === 'dragenter')
         setClassList(['driver-layout', 'selected'])
-    } else if(dropZone.on && e.type === 'dragleave' && e.target.id == ('asd' + id)) {
+    } else if (dropZone.on && e.type === 'dragleave' && e.target.id == ('asd' + id)) {
       setClassList(['driver-layout', 'unselected'])
-    } else if(
+    } else if (
       e.type === 'dragenter' && classList[1] === 'unselected'
     ) setClassList(['driver-layout', 'selected'])
     handleDragDropZone(e, 'driver', id)
@@ -87,6 +84,12 @@ const DriverView = ({ id, driverIndex, fullName }) => {
       selected={driver.id === id}
     >{hf.formatFullName(driver.driver_fname, driver.driver_lname)}
     </option>)
+  const filteredList = appData.orders.assigned?.list?.filter(order => order.driver_id === id)
+
+  useEffect(() => {
+    if (!drag.hide)
+      setClassList(['driver-layout', 'unselected'])
+  }, [drag])
   return (
     <div className={classList.join(' ')}
       onDragLeave={handleDragEvents}
@@ -104,13 +107,19 @@ const DriverView = ({ id, driverIndex, fullName }) => {
         >{driverOptions}
         </Form.Control>
       </div>
+      <div className='view-header rr-flex-row'>
+        <div>
+          Source to Destination 
+          </div>
+          <div>Revenue | Cost</div>
+      </div>
       <CreateFormProvider
         init={init}
         show={showOrder}
         setShow={setShowOrder}
       >
         <OrderList
-          list={appData.orders.assigned?.list?.filter(order => order.driver_id === id)}
+          list={filteredList}
         />
         <Modal
           show={show}
@@ -137,6 +146,18 @@ const DriverView = ({ id, driverIndex, fullName }) => {
       >
         Create a Driver
       </Button>
+      <div className='revenue-cost-summary'>
+        Total Revenue: $&nbsp;
+        <span className='green-color-text'>
+          {(filteredList.reduce((acc, order) => acc + order.revenue_cents, 0) / 100).toFixed(2)}
+        </span>
+      </div>
+      <div>
+        Total Cost: $&nbsp;
+        <span className='red-color-text'>
+          {(filteredList.reduce((acc, order) => acc + order.cost_cents, 0) / 100).toFixed(2)}
+        </span>
+      </div>
     </div>
   )
 }

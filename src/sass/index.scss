@@ -1,9 +1,9 @@
 @import "./helpers.scss";
 
 .order-list {
-  max-height: 500px;
+  max-height: 436px;
   padding: 2px;
-  width:100%;
+  width: 100%;
   overflow-y: auto;
 }
 .order-list-item {
@@ -18,6 +18,9 @@
   padding: 12px;
   @include flexbox(row, space-around, center);
   .order-pricing-summary {
+    tr {
+      padding-left:4px;
+    }
     @include flexbox(row, space-between, center);
   }
   // position: absolute;
@@ -146,7 +149,9 @@ form {
 .grow-animation {
   animation: growIn 1s forwards;
 }
-
+.revenue-cost-summary {
+  margin-top: 12px;
+}
 @keyframes growIn {
   from {
     transform: scale(0);
@@ -174,6 +179,7 @@ form {
   }
 }
 
+
 @media screen and (min-width: 992px) {
   .manual-check {
     position: absolute;
@@ -183,5 +189,18 @@ form {
   }
   .input-group {
     min-width: 222px;
+  }
+}
+
+@media screen and (max-width: 481px) {
+  .order-list {
+    max-height:none;
+    overflow-y:hidden;
+  }
+}
+
+@media screen and (max-width: 325px) {
+  .order-list-item {
+    min-width: 75vw;
   }
 }

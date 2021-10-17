@@ -5,7 +5,7 @@ const HomeBanner = () => {
     <div className='home-banner'>
       <div
        className='title'
-      >OnlyTrans - the driving force
+      >OnlyTrans &nbsp;|&nbsp; Manage your drivers
       </div>
     </div>
   )

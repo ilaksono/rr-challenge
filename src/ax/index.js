@@ -6,7 +6,7 @@ export const GET_UNASSIGNED = '/api/orders?type=unassigned';
 export const CREATE_ORDER = '/api/orders?type=create';
 export const GET_ASSIGNED_ORDERS = '/api/orders?type=assigned'
 export const UPDATE_ORDER = '/api/orders?type=update'
-export const UNASSIGN_ORDER = '/api/orders?type=unassign'
+export const UNASSIGN_ORDER = '/api/orders?type=unassignOrder'
 
 // driver api routes
 export const GET_ALL_DRIVERS = '/api/drivers?type=all'

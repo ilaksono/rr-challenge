@@ -73,7 +73,7 @@ const init = {
     hash: {}
   },
   view: {
-    drivers: [1,2]
+    drivers: [1, 2]
   }
 }
 
@@ -275,29 +275,30 @@ const useAppData = () => {
     dispatch({ type: UPDATE_ORDERS, orders: { [old]: payloadA, [dest]: payloadB } })
   }
 
-  const deleteOrderThenAdd = newOrder => {
-    const oldList = [...orders.assigned.list]
+  const deleteOrderThenAdd = (newOrder, key = 'assigned') => {
+    const oldList = [...orders[key].list]
     const oldIdx = oldList.findIndex(order => order.id === newOrder.id);
+    if (oldIdx < 0) return;
     oldList.splice(oldIdx, 1);
     const payload = {
       list: oldList
     }
-    dispatch({type: SET_WILD_PROPS, par:'orders', child: 'assigned', payload});
-    setTimeout(() => {
-      newOrder.isNew = true;
-      const newList = [newOrder, ...oldList];
-      const payloadB = {
-        list: newList
-      };
-      dispatch({type: SET_WILD_PROPS, par:'orders', child: 'assigned', payload: payloadB});
-    }, 400)
-
+    dispatch({ type: SET_WILD_PROPS, par: 'orders', child: 'assigned', payload });
+    // setTimeout(() => {
+    newOrder.isNew = true;
+    const newList = [newOrder, ...oldList];
+    const payloadB = {
+      list: newList
+    };
+    dispatch({ type: SET_WILD_PROPS, par: 'orders', child: 'assigned', payload: payloadB });
+    // }, 400)
+    return true;
   }
 
   const modifyDriverView = (index, value) => {
     const payload = [...view.drivers];
     payload[index] = Number(value);
-    dispatch({type: SET_WILD_PROPS, par: 'view', child: 'drivers', payload})
+    dispatch({ type: SET_WILD_PROPS, par: 'view', child: 'drivers', payload })
   }
 
   useEffect(() => {

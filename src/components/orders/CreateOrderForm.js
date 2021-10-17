@@ -5,7 +5,8 @@ import ax, {
   CREATE_ORDER,
   CREATE_SUPPLIER,
   CREATE_CUSTOMER,
-  CREATE_ADDRESS
+  CREATE_ADDRESS,
+  UPDATE_ORDER
 } from 'ax';
 import AppContext from 'context/AppContext';
 import DriverDisplayItem from 'components/drivers/DriverDisplayItem';
@@ -103,10 +104,12 @@ const CreateOrderForm = (props) => {
     hideLoadModal,
     appData,
     addOrderToList,
-    createAlert
+    createAlert,
+    deleteOrderThenAdd
   } = useContext(AppContext);
   const {
     createForm,
+    resetCreateForm,
     setCreateForm,
     handleCreateFormChange
   } = useContext(CreateFormContext);
@@ -131,7 +134,17 @@ const CreateOrderForm = (props) => {
         driver_id: createForm.driverId
       }
       const json = compareObjects(payload, appData.orders.hash[createForm.id])
+      json.id = createForm.id
       console.log(json);
+      const res = await ax(UPDATE_ORDER, 'put', payload);
+      console.log(res);
+      if (res?.length) {
+        if (!deleteOrderThenAdd(res[0]))
+          deleteOrderThenAdd('unassigned')
+        createAlert();
+      }
+      resetCreateForm();
+      forceClose();
     } catch (er) {
       createError(er.message);
     }
@@ -145,8 +158,8 @@ const CreateOrderForm = (props) => {
     )
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    if(isBooked)
-      return createError('This driver is booked, please select another');
+    if (isBooked)
+      return createError('This driver is booked, please select another driver');
     if (!createForm.supp_city || !createForm.cust_city)
       return createError('Please add city information');
     try {
@@ -169,8 +182,8 @@ const CreateOrderForm = (props) => {
       if (res) {
         addOrderToList(res[0]);
         forceClose();
+        resetCreateForm()
         createAlert();
-
       }
     } catch (er) {
       // console.log(er.message);
@@ -191,7 +204,7 @@ const CreateOrderForm = (props) => {
           || reg.test(driverFullName);
       });
   }
-  
+
 
   const handleClickSupplier = (supplier_name, supplierId, address_id) => {
     if (createForm.source_address_id === address_id) {
@@ -348,7 +361,7 @@ const CreateOrderForm = (props) => {
         >
           <InputGroup className="m-1">
             <InputGroup.Text
-            >Start Time
+            >Start
             </InputGroup.Text>
             <Form.Control
               value={createForm.start_time || ''}
@@ -360,7 +373,7 @@ const CreateOrderForm = (props) => {
           </InputGroup>
           <InputGroup className="m-1">
             <InputGroup.Text
-            >End Time
+            >End
             </InputGroup.Text>
             <Form.Control
               value={createForm.end_time || ''}

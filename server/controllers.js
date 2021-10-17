@@ -27,7 +27,7 @@ const ordersController = async (req, res) => {
       await orderUtils
         .updateOrder(req, res);
       break;
-    case 'unassignedOrder':
+    case 'unassignOrder':
       await orderUtils
         .setOrderUnassigned(req, res)
       break;
