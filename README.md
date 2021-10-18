@@ -161,3 +161,4 @@
     - Fixed by passing a ref to the callback instead of using state
   - 2021-10-19:
     - The Drag and Drop event handlers not triggering in Safari and FireFox 93
+    - onDragLeave handlers is different between 

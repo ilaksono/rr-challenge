@@ -37,7 +37,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
 
 
   const handleDragEvents = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     if (classList.length < 2) {
       if (e.type === 'dragenter')
         setClassList(['driver-layout', 'selected'])
@@ -46,6 +46,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
     } else if (
       e.type === 'dragenter' && classList[1] === 'unselected'
     ) setClassList(['driver-layout', 'selected'])
+    
     handleDragDropZone(e, 'driver', id)
   }
 

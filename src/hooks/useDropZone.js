@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import {
+  useEffect,
+  useState,
+  useRef
+} from 'react';
 
 
 const init = {
@@ -14,20 +18,31 @@ const useDropZone = () => {
 
   const [dropZone, setDropZone] = useState(init)
   const [drag, setDrag] = useState(initDrag);
+  const [ready, setReady] = useState(true);
 
+  const timeRef = useRef();
+  useEffect(() => {
+    if (!ready) {
+      timeRef.current = setTimeout(() => {
+        setReady(true);
+      }, 20)
+    }
+    return () => clearTimeout(timeRef.current)
+  }, [ready])
 
   const handleDragDropZone = (e, type, id) => {
-    if (e.buttons) {
-      setDropZone(prev => ({
-        on: e.type === 'dragenter' ? true : false,
-        type,
-        id
-      }))
-    }
+    e.preventDefault();
+    setDropZone(prev => ({
+      on: e.type === 'dragenter' ? true : false,
+      type,
+      id
+    }))
   }
 
   const handleDragOverZone = (e, type, id) => {
     e.preventDefault()
+    // console.log('over');
+    if (!ready) return;
     if (dropZone.on)
       return;
     setDropZone(() => ({
@@ -35,6 +50,7 @@ const useDropZone = () => {
       type,
       id
     }))
+    // setReady(false);
   }
 
   return {

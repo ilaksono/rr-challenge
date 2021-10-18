@@ -148,6 +148,7 @@ const OrderListItem = (props) => {
     <div className={containerClassList.join(' ')}
       onDragStart={handleDragStart}
       // onDragEnd={handleDragEnd}
+      onMouseUp={() => console.log('mouse up')}
       draggable={true}
       onDragEndCapture={handleDragEnd}
       onDragOver={(e) => e.preventDefault()}
