@@ -1,4 +1,4 @@
-import { Toast, Button } from 'react-bootstrap';
+import { Toast } from 'react-bootstrap';
 import { formatDate } from 'utils/helperFuncs';
 
 const ErrorToast = ({ show, handleClose, body, time }) => {

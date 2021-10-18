@@ -67,6 +67,7 @@
   - adding payments + invoicing and remit-to (payable) additional addresses on invoices
   - Adding UI elements - such as maps/geolocaiton apis for easier location selection
   - The Drag and Drop events do not work in iOS Safari
+  - Performs well on Google Chrome 
 
 # Screenshots and Demos
   !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
@@ -158,3 +159,5 @@
     - Had some issues with stale state and dispatch for useAppData in websocket handler
     - tried using ref callbacks but failed
     - Fixed by passing a ref to the callback instead of using state
+  - 2021-10-19:
+    - The Drag and Drop event handlers not triggering in Safari and FireFox 93

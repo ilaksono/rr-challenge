@@ -7,7 +7,7 @@ const {
 const connectionString = DATABASE_URL || `postgresql://${DB_HOST}/${DB_NAME}`
 const pool = new Pool({
   connectionString,
-  ssl: {
+  ssl: DB_NAME ? undefined :{
     rejectUnauthorized: false
   }
 })

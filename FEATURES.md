@@ -69,6 +69,8 @@
 
 12. `Deploy the app somewhere / containerize it`
   - Netlify link: https://rr-challenge-il.netlify.app/  
+  - Heroku server (for api routes) idles for ~10 seconds
+
 
 13. `Anything else you can think of!`    
   - Added supplier, customer, address entities
