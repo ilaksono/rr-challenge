@@ -72,7 +72,8 @@
     - Accounting for timezones (all are currently in UTC) - when calculating the driver's availability for updating an order to a driver
 
 # Screenshots and Demos
-  !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/video-demo.mov)
+  !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
+  <video src='/docs/rr-video-demo.mov' width=180/>
 
   ----
 
