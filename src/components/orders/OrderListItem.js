@@ -2,10 +2,11 @@ import { useState, useContext, useCallback } from 'react';
 import CreateFormContext from 'context/CreateFormContext';
 import AppContext from 'context/AppContext';
 import * as hf from 'utils/helperFuncs';
-import ax, { 
-  UNASSIGN_ORDER, 
-  UPDATE_ORDER, 
-  DELETE_ORDER } from 'ax';
+import ax, {
+  UNASSIGN_ORDER,
+  UPDATE_ORDER,
+  DELETE_ORDER
+} from 'ax';
 import DeleteIcon from 'components/general/DeleteIcon';
 
 const OrderListItem = (props) => {
@@ -35,22 +36,32 @@ const OrderListItem = (props) => {
     createError,
     moveOrderToList,
     deleteOrderThenAdd,
-    deleteOrder
+    deleteOrder,
+    createModal
   } = useContext(AppContext);
 
+
+  const promptDelete = () => {
+    createModal(
+      'Delete order?',
+      'Delete',
+      handleClickDelete,
+      'Confirm'
+    );
+  }
 
   const handleClickDelete = async () => {
     try {
       const res = await ax(DELETE_ORDER, 'put', {
         order_id: id
       });
-      if(res?.length) {
+      if (res?.length) {
         deleteOrder(
           res[0].id,
           driver_id ? 'assigned' : 'unassigned'
         )
       }
-    } catch(er) {
+    } catch (er) {
       createError('Order not deleted')
     }
   }
@@ -101,7 +112,6 @@ const OrderListItem = (props) => {
       hide: true,
       id
     }))
-    console.log(e, 'from item');
   }
   const handleDragEnd = (e) => {
     setDrag(prev => ({
@@ -109,7 +119,7 @@ const OrderListItem = (props) => {
       hide: false
     }));
     if (dropZone.id && dropZone.on && dropZone.type === 'driver') {
-      if (dropZone.id === driver_id)
+      if (dropZone.id == driver_id)
         return;
       handleAssignToDriver(dropZone.id)
       console.log('do the thing with', dropZone.id, dropZone.type)
@@ -140,8 +150,9 @@ const OrderListItem = (props) => {
   return (
     <div className={containerClassList.join(' ')}
       onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+      // onDragEnd={handleDragEnd}
       draggable={true}
+      onDragEndCapture={handleDragEnd}
       onDragOver={(e) => e.preventDefault()}
     >
       <div className='order-id light-color-text'>or_{id}</div>
@@ -192,8 +203,8 @@ const OrderListItem = (props) => {
             onClick={handleClick}
           />
         </a>
-        <DeleteIcon 
-        handleClickDelete={handleClickDelete}
+        <DeleteIcon
+          handleClickDelete={promptDelete}
         />
       </div>
     </div>

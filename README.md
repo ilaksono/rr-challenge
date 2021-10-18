@@ -58,6 +58,7 @@
   - add data pagination on backend for slicing large lists
   - adding payments + invoicing and remit-to (payable) additional addresses on invoices
   - Adding UI elements - such as maps/geolocaiton apis for easier location selection
+  - The Drag and Drop events do not work in iOS Safari
 
 # Challenges:
   - 2021-10-16:
@@ -135,7 +136,7 @@
     - stores `on` state - true if dragged item is inside boundary, false if outside
     - `id` number represents the driver_id
     - `type` string =`'driver'` | `'order'`
-    
+
   - `useErrorToast`: controls error popup text and display
     - main trigger:
       - createError(

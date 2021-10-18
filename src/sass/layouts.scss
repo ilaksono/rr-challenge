@@ -46,7 +46,8 @@
     max-width: 50%;
     border-radius: 4px;
     height:84vh;
-    transition: transform 1s, width 1s, max-height 1s;
+    min-height: fit-content;
+    transition: all 1s;
     button {
       display: inherit;
       margin: 16px auto;
@@ -80,6 +81,14 @@
       min-width: 30%;
       height:fit-content;
 
+    }
+  }
+}
+@media screen and (max-height: 700px) {
+  .main-layout {
+    .order-layout{
+      min-height: fit-content;
+      height: auto;
     }
   }
 }

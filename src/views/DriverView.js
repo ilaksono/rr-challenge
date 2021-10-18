@@ -38,6 +38,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
 
   const handleDragEvents = (e) => {
     e.preventDefault();
+    console.log('driver view', e);
     if (classList.length < 2) {
       if (e.type === 'dragenter')
         setClassList(['driver-layout', 'selected'])

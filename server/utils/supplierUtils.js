@@ -34,9 +34,10 @@ const makeSupplier = async (req, res) => {
       text: queryMakeSupplier,
       values: [supp_fname || 'Example', supp_lname || 'Supplier']
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
-    return errorResponse(res, errorMessages.queryFailed)
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows; 
+    }return errorResponse(res, errorMessages.queryFailed)
 
   } catch (er) {
     console.error(er);

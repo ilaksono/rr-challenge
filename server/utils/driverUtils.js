@@ -30,7 +30,7 @@ const makeDriver = async (req, res) => {
       year
     } = req.body
     console.log(fname);
-    if(!fname) {
+    if (!fname) {
       console.log('no fname')
       return errorResponse(res, 'Please add a driver name');
     }
@@ -38,8 +38,10 @@ const makeDriver = async (req, res) => {
       text: queryMakeDriver,
       values: [fname, lname, make, model, Number(year)]
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows;
+    }
     return errorResponse(res, errorMessages.queryFailed)
 
   } catch (er) {
@@ -50,7 +52,7 @@ const makeDriver = async (req, res) => {
   }
 }
 const deleteDriver = async (req, res) => {
-  
+
   const {
     driver_id
   } = req.body
@@ -60,9 +62,10 @@ const deleteDriver = async (req, res) => {
       text: queryDeleteDriver,
       values: [driver_id]
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
-    return errorResponse(res, errorMessages.queryFailed)
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows;
+    } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
     return errorResponse(res, errorMessages.queryFailed)

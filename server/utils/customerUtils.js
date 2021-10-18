@@ -34,8 +34,10 @@ const makeCustomer = async (req, res) => {
       text: queryMakeCustomer,
       values: [cust_fname || 'Example', cust_lname || 'Customer']
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows; 
+    }
     return errorResponse(res, errorMessages.queryFailed)
 
   } catch (er) {

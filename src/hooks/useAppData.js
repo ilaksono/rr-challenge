@@ -59,9 +59,28 @@ const reducer = (state, action) => {
 const useAppData = () => {
 
   const [appData, dispatch] = useReducer(reducer, init)
-  const cbRef = useRef({
-    updateOrders: () => { }
+  const dataRef = useRef({
+    suppliers: {
+      list: [],
+      hash: {}
+    },
+    customers: {
+      list: [],
+      hash: {}
+    },
+    addresses: {
+      list: [],
+      hash: {}
+    },
+    drivers: {
+      list: [],
+      hash: {}
+    },
   })
+
+
+  dataRef.current = appData;
+
   const {
     drivers,
     orders,
@@ -162,8 +181,9 @@ const useAppData = () => {
   }
   const updateDriversHash = () => {
     const payload = drivers.list?.reduce(
-      (acc, driver) => {
+      (acc, driver, idx) => {
         acc[driver.id] = driver;
+        acc[driver.id].index = idx;
         return acc;
       },
       {}
@@ -172,8 +192,9 @@ const useAppData = () => {
   }
   const updateSuppliersHash = () => {
     const payload = suppliers.list?.reduce(
-      (acc, supplier) => {
+      (acc, supplier, idx) => {
         acc[supplier.id] = supplier;
+        acc[supplier.id].index = idx;
         return acc;
       },
       {}
@@ -182,8 +203,9 @@ const useAppData = () => {
   }
   const updateCustomersHash = () => {
     const payload = customers.list?.reduce(
-      (acc, customer) => {
+      (acc, customer, idx) => {
         acc[customer.id] = customer;
+        acc[customer.id].index = idx;
         return acc;
       },
       {}
@@ -192,8 +214,9 @@ const useAppData = () => {
   }
   const updateAddressesHash = () => {
     const payload = addresses.list?.reduce(
-      (acc, address) => {
+      (acc, address, idx) => {
         acc[address.id] = address;
+        acc[address.id].index = idx;
         return acc;
       },
       {}
@@ -204,7 +227,7 @@ const useAppData = () => {
   const updateUnassignedOrders = (update = []) => {
     const list = [...orders.assigned.list];
     update.forEach(order => {
-      const idx = list.findIndex(each => each.id === order.id);
+      const idx = orders.hash[order.id].index;
       list.splice(idx, 1);
     })
     const assignedPayload = {
@@ -254,7 +277,7 @@ const useAppData = () => {
   }
   const deleteOrder = (id, key) => {
     const list = [...orders[key].list]
-    const idx = list.findIndex(order => order.id === id);
+    const idx = orders.hash[id].index
     list.splice(idx, 1);
     const payload = {
       list
@@ -290,8 +313,9 @@ const useAppData = () => {
         },
         payloadPre
       )
-    dispatch({ type: SET_WILD_PROPS, par: 'orders', 
-    child: 'hash', payload
+    dispatch({
+      type: SET_WILD_PROPS, par: 'orders',
+      child: 'hash', payload
     });
   }
   const handleCreateSupplier = async (createForm) => {
@@ -384,7 +408,7 @@ const useAppData = () => {
     old = 'unassigned',
     dest = 'assigned') => {
     const oldList = [...orders[old].list]
-    const oldIdx = oldList.findIndex(order => order.id === newOrder.id);
+    const oldIdx = orders.hash[newOrder.id].index
     oldList.splice(oldIdx, 1);
     const payloadA = {
       list: oldList
@@ -399,7 +423,7 @@ const useAppData = () => {
 
   const deleteOrderThenAdd = (newOrder, key = 'assigned') => {
     const oldList = [...orders[key].list]
-    const oldIdx = oldList.findIndex(order => order.id === newOrder.id);
+    const oldIdx = orders.hash[newOrder.id].index;
     if (oldIdx < 0) return;
     oldList.splice(oldIdx, 1);
     const payload = {
@@ -425,7 +449,7 @@ const useAppData = () => {
 
   const deleteDriverAppData = (id) => {
     const payload = [...drivers.list];
-    const idx = payload.findIndex(driver => driver.id === id);
+    const idx = drivers.hash[id].index;
 
     payload.splice(idx, 1);
     dispatch({ type: SET_WILD_PROPS, par: 'drivers', child: 'list', payload });
@@ -446,18 +470,112 @@ const useAppData = () => {
     })
   }
 
-  cbRef.current.updateOrders = (list) => {
-    const assignedList = [...orders.assigned.list];
-    const unassignedList = [...orders.unassigned.list];
+  const updateOrdersLive = (list = [], oldData = {}) => {
+    const cpy = {
+      assigned: [...oldData.current.orders.assigned.list],
+      unassigned: [...oldData.current.orders.unassigned.list]
+    }
     list.forEach(order => {
-      const oldOrder = orders.hash[order.id]
-      if(oldOrder) {
-        const {keyName, index} = oldOrder.keyName
-
+      const oldOrder = oldData.current.orders.hash[order.id]
+      if (oldOrder) {
+        const { keyName, index } = oldOrder
+        if (!!oldOrder.driver_id === !order.driver_id) {
+          const newKeyName = keyName === 'assigned' ? 'unassigned' : 'assigned'
+          order.isNew = true;
+          cpy[newKeyName].unshift(order);
+          const idx = cpy[keyName].findIndex(each => each.id === order.id);
+          cpy[keyName].splice(idx, 1);
+          return;
+        }
+        cpy[keyName][index] = order;
+        return;
       }
-
-
+      order.isNew = true;
+      if (order.driver_id)
+        cpy.assigned.unshift(order);
+      else cpy.unassigned.unshift(order);
     })
+    const ordersCpy = {
+      assigned: {
+        list: cpy.assigned
+      },
+      unassigned: {
+        list: cpy.unassigned
+      }
+    }
+    dispatch({ type: UPDATE_ORDERS, orders: ordersCpy })
+  }
+
+  const deleteOrdersLive = (list = [], oldData = {}) => {
+    // const cpyList = [...]
+    const cpy = {
+      assigned: {
+        list: [...oldData.current.orders.assigned.list]
+      },
+      unassigned: {
+        list: [...oldData.current.orders.unassigned.list]
+      },
+    }
+
+    const orderList = list.map(order => oldData.current.orders.hash[order.id]).sort((a, b) => b.index - a.index);
+    orderList.forEach(each => {
+      cpy[each.keyName].list.splice(each.index, 1);
+    })
+    dispatch({ type: UPDATE_ORDERS, orders: cpy })
+  }
+  const updateDriversLive = (list = [], oldData = {}) => {
+    const payload = [...oldData.current.drivers.list];
+    list.forEach(driver => {
+      const oldDriver = oldData.current.drivers.hash[driver.id];
+      if (oldDriver) {
+        payload[oldDriver.index] = driver;
+        return;
+      }
+      payload.unshift(driver);
+    });
+
+    dispatch({
+      type: SET_WILD_PROPS,
+      par: 'drivers',
+      child: 'list',
+      payload
+    });
+  }
+  const deleteDriversLive = (list = [], oldData = {}) => {
+    const payload = [...oldData.current.drivers.list];
+    const newList = list.map(each => oldData.current.drivers.hash[each.id])
+      .sort((a, b) => b.index - a.index);
+    newList.forEach(each => {
+      payload.splice(each.index, 1);
+    });
+    console.log(payload, newList);
+
+    dispatch({
+      type: SET_WILD_PROPS,
+      par: 'drivers',
+      child: 'list',
+      payload
+    });
+  }
+  const updateListLive = (list = [], oldData = {}, type = 'suppliers') => {
+    const data = oldData.current[type];
+    const payload = [...data.list];
+    list.forEach(each => {
+      const oldItem = data.hash[each.id];
+      if (oldItem) {
+        payload[oldItem.index] = each;
+        return;
+      }
+      payload.unshift(each);
+    });
+    console.log(payload, list);
+
+    dispatch({
+      type: SET_WILD_PROPS,
+      par: type,
+      child: 'list',
+      payload
+    });
   }
 
 
@@ -517,9 +635,23 @@ const useAppData = () => {
     socket.addEventListener('message', function (event) {
       const data = JSON.parse(event.data);
       console.log(data);
+      if (data.key === 'orders') {
+        if (data.type === 'delete')
+          deleteOrdersLive(data.orders, dataRef);
+        else updateOrdersLive(data.orders, dataRef);
+      } else if (data.key === 'drivers') {
+        if (data.type === 'delete')
+          deleteDriversLive(data.drivers, dataRef);
+        else updateDriversLive(data.drivers, dataRef);
+      } else if (['suppliers', 'customers', 'addresses'].includes(data.key)) {
+        updateListLive(data.list, dataRef, data.key)
+      }
 
     });
-    return () => socket.close();
+    return () => {
+      console.log('close');
+      socket.close()
+    };
   }, []);
   return {
     appData,

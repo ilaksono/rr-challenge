@@ -14,7 +14,10 @@ const {
 
 const { seedOrders, seedSupplierCustomerAddresses } = require('./db/seeds');
 
-module.exports = ({broadcastUpdateOrder}) => {
+module.exports = ({
+  broadcastUpdateOrder, 
+  broadcastUpdateDriver,
+  broadcastUpdateList}) => {
 
   app.use(cors());
   app.use(bodyParser.json());
@@ -32,31 +35,31 @@ module.exports = ({broadcastUpdateOrder}) => {
   })
   
   app.get('/api/drivers', async (req, res) => {
-    await driversController(req, res);
+    await driversController(req, res, broadcastUpdateDriver);
   })
   app.post('/api/drivers', async (req, res) => {
-    await driversController(req, res);
+    await driversController(req, res, broadcastUpdateDriver);
   })
   app.put('/api/drivers', async (req, res) => {
-    await driversController(req, res);
+    await driversController(req, res, broadcastUpdateDriver);
   })
   app.get('/api/suppliers', async (req, res) => {
-    await suppliersController(req, res);
+    await suppliersController(req, res, broadcastUpdateList);
   })
   app.post('/api/suppliers', async (req, res) => {
-    await suppliersController(req, res);
+    await suppliersController(req, res, broadcastUpdateList);
   })
   app.get('/api/customers', async (req, res) => {
-    await customersController(req, res);
+    await customersController(req, res, broadcastUpdateList);
   })
   app.post('/api/customers', async (req, res) => {
-    await customersController(req, res);
+    await customersController(req, res, broadcastUpdateList);
   })
   app.get('/api/addresses', async (req, res) => {
-    await addressesController(req, res);
+    await addressesController(req, res, broadcastUpdateList);
   })
   app.post('/api/addresses', async (req, res) => {
-    await addressesController(req, res);
+    await addressesController(req, res, broadcastUpdateList);
   })
   
   const {

@@ -46,9 +46,10 @@ const makeAddress = async (req, res) => {
       text: queryMakeAddress({ customer_id, supplier_id }),
       values
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
-    return errorResponse(res, errorMessages.queryFailed)
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows; 
+    }return errorResponse(res, errorMessages.queryFailed)
 
   } catch (er) {
     console.error(er);

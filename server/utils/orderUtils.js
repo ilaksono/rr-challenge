@@ -55,8 +55,8 @@ const makeOrder = async (req, res) => {
   if (!description)
     return errorResponse(res, "Please add a description");
   const values = [
-    cost * 100,
-    revenue * 100,
+    Math.round(cost * 100),
+    Math.round(revenue * 100),
     start_time,
     end_time,
     description,
@@ -118,8 +118,8 @@ const updateOrder = async (req, res) => {
   const paramsArr = Object.entries({
     description,
     driver_id,
-    cost_cents,
-    revenue_cents,
+    cost_cents: Math.round(cost_cents),
+    revenue_cents: Math.round(revenue_cents),
     source_address_id,
     destination_address_id,
     start_time,

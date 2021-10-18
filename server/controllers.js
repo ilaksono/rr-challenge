@@ -47,85 +47,95 @@ const ordersController = async (req, res, broadcastUpdateOrder) => {
   broadcastUpdateOrder(response, type);
 
 }
-const suppliersController = async (req, res) => {
+const suppliersController = async (req, res, broadcastUpdateList) => {
   const {
     type
   } = req.query;
+  let response = [];
 
   switch (type) {
     case 'all':
       await supplierUtils
         .getAllSuppliers(req, res);
-      break;
+      return;
 
     case 'create':
-      await supplierUtils
+     response = await supplierUtils
         .makeSupplier(req, res);
       break;
 
     default:
       return errorResponse(res, 'Invalid order request type')
   }
+  broadcastUpdateList(response, type, 'suppliers')
 }
-const customersController = async (req, res) => {
+const customersController = async (req, res, broadcastUpdateList) => {
   const {
     type
   } = req.query;
+
+  let response = [];
 
   switch (type) {
     case 'all':
       await customerUtils
         .getAllCustomers(req, res);
-      break;
+      return;
     case 'create':
-      await customerUtils
+     response = await customerUtils
         .makeCustomer(req, res);
       break;
 
     default:
       return errorResponse(res, 'Invalid order request type')
   }
+  broadcastUpdateList(response, type, 'customers')
 }
 
-const driversController = async (req, res) => {
+const driversController = async (req, res, broadcastUpdateDriver) => {
   const {
     type
   } = req.query;
+  let response = [];
 
   switch (type) {
     case 'all':
       await driverUtils
         .getAllDrivers(req, res);
-      break;
+      return;
     case 'create':
-      await driverUtils
+      response = await driverUtils
         .makeDriver(req, res);
       break;
     case 'delete':
-      await driverUtils
+      response = await driverUtils
         .deleteDriver(req, res);
       break;
     default:
       return errorResponse(res, 'Invalid driver request type')
   }
+  broadcastUpdateDriver(response, type)
 }
-const addressesController = async (req, res) => {
+
+const addressesController = async (req, res, broadcastUpdateList) => {
   const {
     type
   } = req.query;
+  let response = []
 
   switch (type) {
     case 'all':
       await addressUtils
         .getAllAddresses(req, res);
-      break;
+      return;
     case 'create':
-      await addressUtils
+     response =  await addressUtils
         .makeAddress(req, res);
       break;
     default:
       return errorResponse(res, 'Invalid driver request type')
   }
+  broadcastUpdateList(response, type, 'addresses')
 }
 
 module.exports = {
