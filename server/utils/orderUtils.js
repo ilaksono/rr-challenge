@@ -71,9 +71,10 @@ const makeOrder = async (req, res) => {
       text: queryMakeOrder({ driverId }),
       values
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
-    return errorResponse(res, errorMessages.queryFailed)
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows
+    } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
     return errorResponse(res, errorMessages.queryFailed)
@@ -90,9 +91,10 @@ const setOrderUnassigned = async (req, res) => {
       text: queryUnassignOrder,
       values: [order_id]
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
-    return errorResponse(res, errorMessages.queryFailed)
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows
+    } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
     return errorResponse(res, errorMessages.queryFailed)
@@ -138,8 +140,10 @@ const updateOrder = async (req, res) => {
       text: queryUpdateTable(params, 'orders'),
       values: Object.values(params).concat(id)
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows
+    }
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
@@ -158,9 +162,10 @@ const deleteOrder = async (req, res) => {
       text: queryDeleteOrder,
       values: [order_id]
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
-    return errorResponse(res, errorMessages.queryFailed)
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows
+    } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
     return errorResponse(res, errorMessages.queryFailed)
@@ -179,9 +184,10 @@ const unassignDriverOrders = async (req, res) => {
       text: queryUnassignDriverOrders,
       values: [driver_id]
     });
-    if (resq?.rows)
-      return done(res, resq.rows);
-    return errorResponse(res, errorMessages.queryFailed)
+    if (resq?.rows) {
+      done(res, resq.rows);
+      return resq.rows
+    } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
     console.error(er);
     return errorResponse(res, errorMessages.queryFailed)

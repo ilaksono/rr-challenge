@@ -1,6 +1,9 @@
 // use express and add controllers + routes
-const express = require('express')();
-const app = require('./middleware')(express);
+const app = require('express')();
+// const app = require('./middleware')(express);
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
 const {
   ordersController,
   driversController,
@@ -9,53 +12,71 @@ const {
   suppliersController
 } = require('./controllers');
 
-app.get('/api/orders', async (req, res) => {
-  await ordersController(req, res);
-})
-app.post('/api/orders', async (req, res) => {
-  await ordersController(req, res);
-})
+const { seedOrders, seedSupplierCustomerAddresses } = require('./db/seeds');
 
-// uses put for delete routes
-// because delete request bodies are stripped in http
-app.put('/api/orders', async (req, res) => {
-  await ordersController(req, res);
-})
+module.exports = ({broadcastUpdateOrder}) => {
 
-app.get('/api/drivers', async (req, res) => {
-  await driversController(req, res);
-})
-app.post('/api/drivers', async (req, res) => {
-  await driversController(req, res);
-})
-app.put('/api/drivers', async (req, res) => {
-  await driversController(req, res);
-})
-app.get('/api/suppliers', async (req, res) => {
-  await suppliersController(req, res);
-})
-app.post('/api/suppliers', async (req, res) => {
-  await suppliersController(req, res);
-})
-app.get('/api/customers', async (req, res) => {
-  await customersController(req, res);
-})
-app.post('/api/customers', async (req, res) => {
-  await customersController(req, res);
-})
-app.get('/api/addresses', async (req, res) => {
-  await addressesController(req, res);
-})
-app.post('/api/addresses', async (req, res) => {
-  await addressesController(req, res);
-})
-
-
-const {
-  PORT = 8000
-} = process.env
+  app.use(cors());
+  app.use(bodyParser.json());
+  
+  app.get('/api/orders', async (req, res) => {
+    await ordersController(req, res, broadcastUpdateOrder);
+  })
+  app.post('/api/orders', async (req, res) => {
+    await ordersController(req, res,broadcastUpdateOrder);
+  })
+  // uses put for delete routes
+  // because delete request bodies are stripped in http
+  app.put('/api/orders', async (req, res) => {
+    await ordersController(req, res, broadcastUpdateOrder);
+  })
+  
+  app.get('/api/drivers', async (req, res) => {
+    await driversController(req, res);
+  })
+  app.post('/api/drivers', async (req, res) => {
+    await driversController(req, res);
+  })
+  app.put('/api/drivers', async (req, res) => {
+    await driversController(req, res);
+  })
+  app.get('/api/suppliers', async (req, res) => {
+    await suppliersController(req, res);
+  })
+  app.post('/api/suppliers', async (req, res) => {
+    await suppliersController(req, res);
+  })
+  app.get('/api/customers', async (req, res) => {
+    await customersController(req, res);
+  })
+  app.post('/api/customers', async (req, res) => {
+    await customersController(req, res);
+  })
+  app.get('/api/addresses', async (req, res) => {
+    await addressesController(req, res);
+  })
+  app.post('/api/addresses', async (req, res) => {
+    await addressesController(req, res);
+  })
+  
+  const {
+    PORT = 8000
+  } = process.env
+  
+  app.get('/seed', async (req, res) => {
+    try {
+      await seedSupplierCustomerAddresses();
+      await seedOrders();
+      res.send('seed successful');
+    } catch (er) {
+      console.error(er);
+      res.send(er.message);
+    }
+  });
+  return app
+}
 
 // Port and listen 
-app.listen(PORT, () => console.log('Listening on: ', PORT));
+// app.listen(PORT, () => console.log('Listening on: ', PORT));
 
-module.exports = app;
+// module.exports = app;

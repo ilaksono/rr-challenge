@@ -6,7 +6,7 @@
 // addresses list and hash
 // view - the two driver's order windows being viewed
 
-import { useReducer } from 'react';
+import { useReducer, useRef } from 'react';
 import axios, {
   GET_UNASSIGNED,
   GET_ALL_DRIVERS,
@@ -19,7 +19,7 @@ import axios, {
   CREATE_ADDRESS,
 } from 'ax';
 import { useEffect, useCallback } from 'react';
-import {initAppData as init} from 'utils/initStates';
+import { initAppData as init } from 'utils/initStates';
 const SET_WILD_PROPS = 'SET_PROPERTIES_CUSTOM';
 const UPDATE_ORDERS = 'UPDATE_ORDERS_OBJECT'
 
@@ -59,7 +59,9 @@ const reducer = (state, action) => {
 const useAppData = () => {
 
   const [appData, dispatch] = useReducer(reducer, init)
-
+  const cbRef = useRef({
+    updateOrders: () => { }
+  })
   const {
     drivers,
     orders,
@@ -68,6 +70,7 @@ const useAppData = () => {
     addresses,
     view
   } = appData
+
   const fetchUnassignedOrders = async () => {
 
     try {
@@ -210,13 +213,15 @@ const useAppData = () => {
     const unassignedPayload = {
       list: [...update, ...orders.unassigned.list]
     }
-    dispatch({type: SET_WILD_PROPS, 
-      par: 'orders', 
+    dispatch({
+      type: SET_WILD_PROPS,
+      par: 'orders',
       child: 'assigned',
       payload: assignedPayload
     })
-    dispatch({type: SET_WILD_PROPS, 
-      par: 'orders', 
+    dispatch({
+      type: SET_WILD_PROPS,
+      par: 'orders',
       child: 'unassigned',
       payload: unassignedPayload
     })
@@ -262,17 +267,32 @@ const useAppData = () => {
 
   }
   const updateOrdersHash = () => {
-    const combinedArray = orders.assigned.list
-      .concat(orders.unassigned.list);
+    // const combinedArray = orders.assigned.list
+    //   .concat(orders.unassigned.list);
 
-    const payload = combinedArray.reduce(
-      (acc, order) => {
-        acc[order.id] = order;
-        return acc;
-      },
-      {}
-    )
-    dispatch({ type: SET_WILD_PROPS, par: 'orders', child: 'hash', payload });
+    const payloadPre = orders.assigned.list
+      .reduce(
+        (acc, order, idx) => {
+          acc[order.id] = order;
+          acc[order.id].index = idx;
+          acc[order.id].keyName = 'assigned'
+          return acc;
+        },
+        {}
+      )
+    const payload = orders.unassigned.list
+      .reduce(
+        (acc, order, idx) => {
+          acc[order.id] = order;
+          acc[order.id].index = idx;
+          acc[order.id].keyName = 'unassigned'
+          return acc;
+        },
+        payloadPre
+      )
+    dispatch({ type: SET_WILD_PROPS, par: 'orders', 
+    child: 'hash', payload
+    });
   }
   const handleCreateSupplier = async (createForm) => {
 
@@ -408,10 +428,37 @@ const useAppData = () => {
     const idx = payload.findIndex(driver => driver.id === id);
 
     payload.splice(idx, 1);
-    dispatch({type: SET_WILD_PROPS, par: 'drivers', child:'list', payload});
+    dispatch({ type: SET_WILD_PROPS, par: 'drivers', child: 'list', payload });
 
   }
 
+
+  const refreshDriverView = () => {
+    if (!Object.values(drivers.hash).length) return;
+    const payload = view.drivers.map(id =>
+      !drivers.hash[id] ? drivers.list[0].id : id
+    );
+    dispatch({
+      type: SET_WILD_PROPS,
+      par: 'view',
+      child: 'drivers',
+      payload
+    })
+  }
+
+  cbRef.current.updateOrders = (list) => {
+    const assignedList = [...orders.assigned.list];
+    const unassignedList = [...orders.unassigned.list];
+    list.forEach(order => {
+      const oldOrder = orders.hash[order.id]
+      if(oldOrder) {
+        const {keyName, index} = oldOrder.keyName
+
+      }
+
+
+    })
+  }
 
 
   useEffect(() => {
@@ -424,24 +471,13 @@ const useAppData = () => {
   }, [])
 
   useEffect(() => {
-    
+
     if (drivers.list.length)
       updateDriversHash();
     // eslint-disable-next-line
 
   }, [drivers.list])
 
-  const refreshDriverView = () => {
-    if(!Object.values(drivers.hash).length) return;
-    const payload = view.drivers.map(id => 
-      !drivers.hash[id] ? drivers.list[0].id:id
-    );
-    dispatch({type: SET_WILD_PROPS,
-      par: 'view',
-      child: 'drivers',
-      payload
-    })
-  }
 
   useEffect(() => {
     refreshDriverView()
@@ -470,6 +506,21 @@ const useAppData = () => {
     // eslint-disable-next-line
   }, [orders.assigned.list, orders.unassigned.list])
 
+
+
+  useEffect(() => { // on mount - add websocket listener to trigger render on update
+    const baseURL = process.env.REACT_APP_WEBSOCKET_URL || 'ws://localhost:8000';
+    const socket = new WebSocket(baseURL);
+    socket.onopen = () => {
+      socket.send('ping');
+    };
+    socket.addEventListener('message', function (event) {
+      const data = JSON.parse(event.data);
+      console.log(data);
+
+    });
+    return () => socket.close();
+  }, []);
   return {
     appData,
     fetchUnassignedOrders,
