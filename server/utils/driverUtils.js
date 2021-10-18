@@ -1,7 +1,8 @@
 const { pool } = require('./pool')
 const { done, errorResponse } = require('./globalSettings');
 const { queryAllDrivers,
-  queryMakeDriver } = require('./sqlQueries');
+  queryMakeDriver,
+  queryDeleteDriver } = require('./sqlQueries');
 const errorMessages = require('./errorMessages');
 
 const getAllDrivers = async (req, res) => {
@@ -48,8 +49,29 @@ const makeDriver = async (req, res) => {
 
   }
 }
+const deleteDriver = async (req, res) => {
+  
+  const {
+    driver_id
+  } = req.body
+
+  try {
+    const resq = await pool.query({
+      text: queryDeleteDriver,
+      values: [driver_id]
+    });
+    if (resq?.rows)
+      return done(res, resq.rows);
+    return errorResponse(res, errorMessages.queryFailed)
+  } catch (er) {
+    console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+
+  }
+}
 
 module.exports = {
   getAllDrivers,
-  makeDriver
+  makeDriver,
+  deleteDriver
 }

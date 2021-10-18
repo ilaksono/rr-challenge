@@ -18,7 +18,8 @@ const MainView = () => {
         <OrderView
           id={1}
         />
-        <DriverView id={appData.view.drivers[0]}
+        <DriverView 
+        id={appData.view.drivers[0]}
           driverIndex={0}
           fullName={hf.formatFullName(driverA.driver_fname, driverA.driver_lname)}
         />

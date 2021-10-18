@@ -1,3 +1,11 @@
+// Application State that holds the necessary data
+// drivers list and hash, 
+// orders lists (assigned, unassigned) and hashes
+// suppliers list and hash
+// customers list and hash
+// addresses list and hash
+// view - the two driver's order windows being viewed
+
 import { useReducer } from 'react';
 import axios, {
   GET_UNASSIGNED,
@@ -5,10 +13,13 @@ import axios, {
   GET_ALL_SUPPLIERS,
   GET_ALL_CUSTOMERS,
   GET_ALL_ADDRESSES,
-  GET_ASSIGNED_ORDERS
+  GET_ASSIGNED_ORDERS,
+  CREATE_SUPPLIER,
+  CREATE_CUSTOMER,
+  CREATE_ADDRESS,
 } from 'ax';
-import { useEffect } from 'react';
-
+import { useEffect, useCallback } from 'react';
+import {initAppData as init} from 'utils/initStates';
 const SET_WILD_PROPS = 'SET_PROPERTIES_CUSTOM';
 const UPDATE_ORDERS = 'UPDATE_ORDERS_OBJECT'
 
@@ -43,39 +54,7 @@ const reducer = (state, action) => {
   }
 }
 
-const init = {
-  orders: {
 
-    // unassigned orders
-    unassigned: {
-      list: [],
-    },
-    // assigned orders in format {[driver_id]: [Order Model]}
-    assigned: {
-      list: []
-    },
-    hash: {}
-  },
-  drivers: {
-    list: [],
-    hash: {}
-  },
-  suppliers: {
-    list: [],
-    hash: {}
-  },
-  customers: {
-    list: [],
-    hash: {}
-  },
-  addresses: {
-    list: [],
-    hash: {}
-  },
-  view: {
-    drivers: [1, 2]
-  }
-}
 
 const useAppData = () => {
 
@@ -112,7 +91,6 @@ const useAppData = () => {
   const fetchAssignedOrders = async () => {
     try {
       const res = await axios(GET_ASSIGNED_ORDERS);
-      console.log(res)
       if (res && Array.isArray(res)) {
         const payload = {
           list: res,
@@ -220,8 +198,33 @@ const useAppData = () => {
     dispatch({ type: SET_WILD_PROPS, par: 'addresses', child: 'hash', payload });
   }
 
+  const updateUnassignedOrders = (update = []) => {
+    const list = [...orders.assigned.list];
+    update.forEach(order => {
+      const idx = list.findIndex(each => each.id === order.id);
+      list.splice(idx, 1);
+    })
+    const assignedPayload = {
+      list
+    }
+    const unassignedPayload = {
+      list: [...update, ...orders.unassigned.list]
+    }
+    dispatch({type: SET_WILD_PROPS, 
+      par: 'orders', 
+      child: 'assigned',
+      payload: assignedPayload
+    })
+    dispatch({type: SET_WILD_PROPS, 
+      par: 'orders', 
+      child: 'unassigned',
+      payload: unassignedPayload
+    })
+  }
+
   const addOrderToList = order => {
 
+    order.isNew = true;
     if (!order.driver_id) {
       const payload = {
         list: [order, ...orders.unassigned.list]
@@ -244,6 +247,20 @@ const useAppData = () => {
       })
     }
   }
+  const deleteOrder = (id, key) => {
+    const list = [...orders[key].list]
+    const idx = list.findIndex(order => order.id === id);
+    list.splice(idx, 1);
+    const payload = {
+      list
+    }
+    dispatch({
+      type: SET_WILD_PROPS,
+      par: 'orders', child: key,
+      payload
+    })
+
+  }
   const updateOrdersHash = () => {
     const combinedArray = orders.assigned.list
       .concat(orders.unassigned.list);
@@ -257,6 +274,91 @@ const useAppData = () => {
     )
     dispatch({ type: SET_WILD_PROPS, par: 'orders', child: 'hash', payload });
   }
+  const handleCreateSupplier = async (createForm) => {
+
+    if (createForm.supplierId && createForm.source_address_id && !createForm.supplierChecked)
+      return { id: createForm.source_address_id };
+    try {
+      if (!createForm.supp_city)
+        throw new Error('Please add the Supplier city');
+      const res = await axios(CREATE_SUPPLIER, 'post', createForm);
+      if (res) {
+        const addressJson = {
+          address: createForm.supp_address,
+          city: createForm.supp_city,
+          postal: createForm.supp_postal,
+          state: createForm.supp_state,
+          country: createForm.supp_country,
+          supplier_id: res[0].id,
+        }
+        const payload = [res[0], ...suppliers.list];
+        dispatch({
+          type: SET_WILD_PROPS,
+          par: 'suppliers',
+          child: 'list',
+          payload
+        })
+        return handleCreateAddress(addressJson)
+      }
+    } catch (er) {
+      throw new Error('Please select a supplier or add supplier details');
+    }
+  }
+  const handleCreateCustomer = async (createForm) => {
+    if (createForm.customerId && createForm.destination_address_id && !createForm.customerChecked)
+      return { id: createForm.destination_address_id };
+    try {
+      if (!createForm.cust_city)
+        throw new Error('Please add the Customer city');
+      const res = await axios(CREATE_CUSTOMER, 'post', createForm);
+      if (res) {
+        const addressJson = {
+          address: createForm.cust_address,
+          city: createForm.cust_city,
+          postal: createForm.cust_postal,
+          state: createForm.cust_state,
+          country: createForm.cust_country,
+          customer_id: res[0].id,
+        }
+        const payload = [res[0], ...customers.list];
+        dispatch({
+          type: SET_WILD_PROPS,
+          par: 'customers',
+          child: 'list',
+          payload
+        })
+
+        return handleCreateAddress(addressJson)
+
+      }
+    } catch (er) {
+      throw new Error('Please select a customer or add customer details');
+    }
+
+  }
+  const addAddressesList = (list = []) => {
+
+    const payload = [...list.filter(each => each), ...addresses.list];
+    dispatch({
+      type: SET_WILD_PROPS,
+      par: 'addresses',
+      child: 'list',
+      payload
+    })
+  }
+
+  const handleCreateAddress = async (payload) => {
+    try {
+      const res = await axios(CREATE_ADDRESS, 'post', payload)
+      if (res) {
+
+        return res[0]
+      }
+    } catch (er) {
+      throw new Error('Could not create address')
+    }
+  }
+
 
   const moveOrderToList = (newOrder,
     old = 'unassigned',
@@ -301,6 +403,17 @@ const useAppData = () => {
     dispatch({ type: SET_WILD_PROPS, par: 'view', child: 'drivers', payload })
   }
 
+  const deleteDriverAppData = (id) => {
+    const payload = [...drivers.list];
+    const idx = payload.findIndex(driver => driver.id === id);
+
+    payload.splice(idx, 1);
+    dispatch({type: SET_WILD_PROPS, par: 'drivers', child:'list', payload});
+
+  }
+
+
+
   useEffect(() => {
     fetchUnassignedOrders();
     fetchDrivers();
@@ -311,10 +424,29 @@ const useAppData = () => {
   }, [])
 
   useEffect(() => {
+    
     if (drivers.list.length)
       updateDriversHash();
     // eslint-disable-next-line
+
   }, [drivers.list])
+
+  const refreshDriverView = () => {
+    if(!Object.values(drivers.hash).length) return;
+    const payload = view.drivers.map(id => 
+      !drivers.hash[id] ? drivers.list[0].id:id
+    );
+    dispatch({type: SET_WILD_PROPS,
+      par: 'view',
+      child: 'drivers',
+      payload
+    })
+  }
+
+  useEffect(() => {
+    refreshDriverView()
+  }, [drivers.hash])
+
   useEffect(() => {
     if (suppliers.list.length)
       updateSuppliersHash();
@@ -345,7 +477,14 @@ const useAppData = () => {
     addOrderToList,
     moveOrderToList,
     modifyDriverView,
-    deleteOrderThenAdd
+    deleteOrderThenAdd,
+    handleCreateAddress,
+    handleCreateCustomer,
+    handleCreateSupplier,
+    addAddressesList,
+    deleteOrder,
+    updateUnassignedOrders,
+    deleteDriverAppData
   }
 
 }

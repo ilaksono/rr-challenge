@@ -4,7 +4,10 @@ const { queryUnassignedOrders,
   queryMakeOrder,
   queryUpdateTable,
   queryUnassignOrder,
-  queryAssignedOrders } = require('./sqlQueries');
+  queryAssignedOrders,
+  queryDeleteOrder,
+  queryUnassignDriverOrders
+} = require('./sqlQueries');
 const errorMessages = require('./errorMessages');
 
 const getUnassignedOrders = async (req, res) => {
@@ -144,6 +147,46 @@ const updateOrder = async (req, res) => {
 
   }
 }
+const deleteOrder = async (req, res) => {
+  const {
+    order_id
+  } = req.body;
+
+
+  try {
+    const resq = await pool.query({
+      text: queryDeleteOrder,
+      values: [order_id]
+    });
+    if (resq?.rows)
+      return done(res, resq.rows);
+    return errorResponse(res, errorMessages.queryFailed)
+  } catch (er) {
+    console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+  }
+}
+
+const unassignDriverOrders = async (req, res) => {
+
+  const {
+    driver_id
+  } = req.body;
+
+  console.log(driver_id);
+  try {
+    const resq = await pool.query({
+      text: queryUnassignDriverOrders,
+      values: [driver_id]
+    });
+    if (resq?.rows)
+      return done(res, resq.rows);
+    return errorResponse(res, errorMessages.queryFailed)
+  } catch (er) {
+    console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+  }
+}
 
 
 module.exports = {
@@ -151,5 +194,7 @@ module.exports = {
   makeOrder,
   getAssignedOrders,
   updateOrder,
-  setOrderUnassigned
+  setOrderUnassigned,
+  deleteOrder,
+  unassignDriverOrders
 }

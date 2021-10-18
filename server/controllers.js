@@ -31,6 +31,14 @@ const ordersController = async (req, res) => {
       await orderUtils
         .setOrderUnassigned(req, res)
       break;
+    case 'delete':
+      await orderUtils
+        .deleteOrder(req, res)
+      break;
+    case 'unassignOrders':
+      await orderUtils
+        .unassignDriverOrders(req, res)
+      break;
 
     default:
       return errorResponse(res, 'Invalid order request type')
@@ -90,6 +98,10 @@ const driversController = async (req, res) => {
       await driverUtils
         .makeDriver(req, res);
       break;
+    case 'delete':
+      await driverUtils
+        .deleteDriver(req, res);
+     break;     
     default:
       return errorResponse(res, 'Invalid driver request type')
   }

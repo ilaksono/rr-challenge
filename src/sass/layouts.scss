@@ -17,57 +17,49 @@
   .driver-layout {
     width: 24%;
     padding: 8px;
-    // border: 1px solid $rrblue;
     border-radius: 4px;
     box-shadow: 0 2px 4px 1px $rrblue;
-    min-height: 95%;
-    max-height: 95%;
+    position: relative;
+    min-height: fit-content;
     min-width: 340px;
+    height:84vh;
     transition: all 1s;
     button {
       display: inherit;
       margin: 0 auto;
+      margin-top: 12px;
     }
+    &:hover {
+      .delete-icon-driver {
+        display: block;
+        text-align: right;
+      }
+    }
+  }
+  .delete-icon-driver {
+    display: none;
   }
 
   .order-layout {
-    // border: 1px solid $rrblue;
     padding: 12px;
     box-shadow: 0 2px 4px 1px $rrblue;
     max-width: 50%;
     border-radius: 4px;
-    height: 95%;
+    height:84vh;
     transition: transform 1s, width 1s, max-height 1s;
     button {
       display: inherit;
-      margin: 0 auto;
+      margin: 16px auto;
+      margin-bottom:30px;
     }
   }
   .order-layout.selected,
   .driver-layout.selected {
     transform: scale(1.05);
-    // animation: animGrow 1s forwards;
   }
   .order-layout.unselected,
   .driver-layout.unselected {
     transform: scale(1);
-    // animation: animGrow 1s reverse;
-  }
-}
-
-@keyframes animGrow {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.05);
-  }
-}
-@keyframes animShrink {
-  from {
-  }
-  to {
-    transform: scale(0.95);
   }
 }
 
@@ -80,11 +72,14 @@
       margin: 8px;
       margin-top: 36px;
       max-width: 100%;
+      height:fit-content;
     }
     .driver-layout {
       width: calc(100% - 16px - 4px);
       margin: 8px;
       min-width: 30%;
+      height:fit-content;
+
     }
   }
 }

@@ -14,54 +14,7 @@ import SupplierDisplayItem from 'components/suppliers/SupplierDisplayItem';
 import SupplierFormElements from 'components/suppliers/SupplierFormElements';
 import * as hf from 'utils/helperFuncs';
 
-const handleCreateSupplier = async (createForm) => {
 
-  if (createForm.supplierId && createForm.source_address_id && !createForm.supplierChecked)
-    return createForm.source_address_id;
-  try {
-    if (!createForm.supp_city)
-      throw new Error('Please add the Supplier city');
-    const res = await ax(CREATE_SUPPLIER, 'post', createForm);
-    console.log(res);
-    if (res) {
-      const addressJson = {
-        address: createForm.supp_address,
-        city: createForm.supp_city,
-        postal: createForm.supp_postal,
-        state: createForm.supp_state,
-        country: createForm.supp_country,
-        supplier_id: res[0].id,
-      }
-      return handleCreateAddress(addressJson)
-    }
-  } catch (er) {
-    throw new Error('Please select a supplier or add supplier details');
-  }
-}
-const handleCreateCustomer = async (createForm) => {
-  if (createForm.customerId && createForm.destination_address_id && !createForm.customerChecked)
-    return createForm.destination_address_id;
-  try {
-    if (!createForm.cust_city)
-      throw new Error('Please add the Customer city');
-    const res = await ax(CREATE_CUSTOMER, 'post', createForm);
-    console.log(res);
-    if (res) {
-      const addressJson = {
-        address: createForm.cust_address,
-        city: createForm.cust_city,
-        postal: createForm.cust_postal,
-        state: createForm.cust_state,
-        country: createForm.cust_country,
-        customer_id: res[0].id,
-      }
-      return handleCreateAddress(addressJson)
-
-    }
-  } catch (er) {
-    throw new Error('Could not create customer');
-  }
-}
 const numMsUTCtoEST = 14400000
 
 const compareObjects = (raw, model) => {
@@ -81,16 +34,6 @@ const compareObjects = (raw, model) => {
 
 //payload format: {address,city,state,postal,country,supplier_id,customer_id}
 
-const handleCreateAddress = async (payload) => {
-  try {
-    const res = await ax(CREATE_ADDRESS, 'post', payload)
-    if (res)
-      return res[0].id
-  } catch (er) {
-    throw new Error('Could not create address')
-  }
-
-}
 
 const CreateOrderForm = (props) => {
 
@@ -105,7 +48,10 @@ const CreateOrderForm = (props) => {
     appData,
     addOrderToList,
     createAlert,
-    deleteOrderThenAdd
+    deleteOrderThenAdd,
+    handleCreateCustomer,
+    handleCreateSupplier,
+    addAddressesList
   } = useContext(AppContext);
   const {
     createForm,
@@ -165,9 +111,19 @@ const CreateOrderForm = (props) => {
     try {
       showLoadModal();
 
-      const resSupplierAddressId = await handleCreateSupplier(createForm);
-      const resCustomerAddressId = await handleCreateCustomer(createForm);
+      const resSupplierAddress = await handleCreateSupplier(createForm);
+      const resCustomerAddress = await handleCreateCustomer(createForm);
+      const addressesList = []
 
+      const resSupplierAddressId = resSupplierAddress.id
+      const resCustomerAddressId = resCustomerAddress.id
+
+      if (!appData.addresses.hash[resSupplierAddressId])
+        addressesList.push(resSupplierAddress);
+      if (!appData.addresses.hash[resCustomerAddressId])
+        addressesList.push(resCustomerAddress);
+
+      addAddressesList(addressesList)
       if (createForm.id)
         return handleSubmitEdit(resSupplierAddressId, resCustomerAddressId);
       const res = await ax(

@@ -1,19 +1,42 @@
 // Module exports the api queries used to SELECT, INSERT, UPDATE 
 // the 5 tables in the app: Orders, Suppliers, Drivers, Customers, Addresses 
 
+// queries that work for all tables
+const queryUpdateTable = (params = {}, tableName = 'orders') => {
+
+  // [[key, value], ...]
+  const paramsArr = Object.keys(params);
+  let query = `UPDATE ${tableName} SET `;
+  let count = 1;
+  for (const key of paramsArr) {
+    if (count !== 1)
+      query += ',';
+    query += ` ${key}=$${count++}`
+  }
+  query += ` WHERE id=$${count}
+  RETURNING *`;
+
+  return query;
+}
+
+
+
 // order queries
 const queryUnassignedOrders = `
 select * from orders 
 WHERE NOT EXISTS (
   select * from drivers 
   where drivers.id=orders.driver_id
-  );`
+  ) AND is_deleted=false 
+  ORDER BY end_time desc;`
+
 const queryAssignedOrders = `
   select * from orders 
   WHERE EXISTS (
     select * from drivers 
     where drivers.id=orders.driver_id
-    );`
+    ) AND is_deleted=false 
+    ORDER BY end_time desc;`
 
 const queryMakeOrder = (params = {}) => {
 
@@ -64,26 +87,21 @@ WHERE id=$1
 RETURNING *;
 `;
 
-const queryUpdateTable = (params = {}, tableName = 'orders') => {
+const queryUnassignDriverOrders = `
+UPDATE orders SET driver_id=null
+WHERE driver_id=$1
+RETURNING *;
+`
 
-  // [[key, value], ...]
-  const paramsArr = Object.keys(params);
-  let query = `UPDATE ${tableName} SET `;
-  let count = 1;
-  for (const key of paramsArr) {
-    if (count !== 1)
-      query += ',';
-    query += ` ${key}=$${count++}`
-  }
-  query += ` WHERE id=$${count}
-  RETURNING *`;
-
-  return query;
-}
+const queryDeleteOrder = `
+UPDATE orders SET is_deleted=true
+WHERE id=$1
+RETURNING *;
+`;
 
 // driver queries
 const queryAllDrivers = `
-SELECT * FROM drivers;`;
+SELECT * FROM drivers WHERE is_deleted=false;`;
 
 const queryMakeDriver = `
 INSERT INTO drivers (
@@ -99,6 +117,13 @@ INSERT INTO drivers (
     $4,
     $5
   ) RETURNING *;`;
+
+const queryDeleteDriver = `
+UPDATE drivers 
+SET is_deleted=true
+WHERE id=$1
+RETURNING *;
+`;
 
 // supplier queries
 const queryAllSuppliers = `
@@ -183,5 +208,8 @@ module.exports = {
   queryAllAddresses,
   queryMakeAddress,
   queryUpdateTable,
-  queryUnassignOrder
+  queryUnassignOrder,
+  queryDeleteOrder,
+  queryUnassignDriverOrders,
+  queryDeleteDriver
 };

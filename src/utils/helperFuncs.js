@@ -50,14 +50,14 @@ export const determineOrderInformation = (order, appData) => {
     driver = {};
 
   if (order.source_address_id)
-    supp_address_json = appData.addresses.hash[order.source_address_id];
+    supp_address_json = appData.addresses.hash[order.source_address_id] || {};
   if (order.destination_address_id)
-    cust_address_json = appData.addresses.hash[order.destination_address_id];
+    cust_address_json = appData.addresses.hash[order.destination_address_id] || {};
 
   if (supp_address_json)
-    supp = appData.suppliers.hash[supp_address_json.supplier_id]
+    supp = appData.suppliers.hash[supp_address_json.supplier_id] || {}
   if (cust_address_json)
-    cust = appData.customers.hash[cust_address_json.customer_id]
+    cust = appData.customers.hash[cust_address_json.customer_id] || {}
 
   if (order.driver_id)
     driver = appData.drivers.hash[order.driver_id];
@@ -114,7 +114,62 @@ export const transformDateFormat = (d) => {
   return new Date(d).toJSON().slice(0, 16);
 }
 export const formatOrderDate = (d) => {
-  if(!d) return '';
+  if (!d) return '';
   const da = new Date(d).toTimeString().slice(0, 5);
   return da;
+}
+
+export const formatOrdersCsv = (appData) => {
+  const csvData = [];
+  csvData[0] = [
+    'order_id',
+    'driver_fname',
+    'driver_lname',
+    'order_description',
+    'source_address',
+    'source_address_city',
+    'source_address_country',
+    'source_address_postal',
+    'destination_address',
+    'destination_address_city',
+    'destination_address_country',
+    'desintation_address_postal',
+    'start_time',
+    'end_time',
+    'revenue_dollars',
+    'cost_dollars'
+
+  ];
+  const {
+    drivers,
+    orders,
+    addresses
+  } = appData;
+  const list = orders.assigned.list
+    .concat(orders.unassigned.list);
+  list.forEach(order => {
+    const source = addresses.hash[order.source_address_id] || {};
+    const destination = addresses.hash[order.destination_address_id] || {};
+    const driver = drivers.hash[order.driver_id] || {};
+    const entry = [
+      order.id,
+      driver.driver_fname,
+      driver.driver_lname,
+      order.description,
+      source.address,
+      source.city,
+      source.country,
+      source.postal,
+      destination.address,
+      destination.city,
+      destination.country,
+      destination.postal,
+      order.start_time,
+      order.end_time,
+      order.revenue_cents / 100,
+      order.cost_cents / 100
+    ];
+    csvData.push(entry)
+  });
+  return csvData;
 }

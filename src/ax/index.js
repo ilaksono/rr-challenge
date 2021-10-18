@@ -7,10 +7,13 @@ export const CREATE_ORDER = '/api/orders?type=create';
 export const GET_ASSIGNED_ORDERS = '/api/orders?type=assigned'
 export const UPDATE_ORDER = '/api/orders?type=update'
 export const UNASSIGN_ORDER = '/api/orders?type=unassignOrder'
+export const DELETE_ORDER = '/api/orders?type=delete'
+export const UNASSIGN_ORDERS = '/api/orders?type=unassignOrders'
 
 // driver api routes
 export const GET_ALL_DRIVERS = '/api/drivers?type=all'
 export const CREATE_DRIVER = '/api/drivers?type=create';
+export const DELETE_DRIVER ='/api/drivers?type=delete';
 
 // supplier api routes
 export const GET_ALL_SUPPLIERS = '/api/suppliers?type=all'

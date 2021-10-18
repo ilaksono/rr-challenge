@@ -2,8 +2,11 @@ import { useState, useContext, useCallback } from 'react';
 import CreateFormContext from 'context/CreateFormContext';
 import AppContext from 'context/AppContext';
 import * as hf from 'utils/helperFuncs';
-import ax, { UNASSIGN_ORDER, UPDATE_ORDER } from 'ax';
-
+import ax, { 
+  UNASSIGN_ORDER, 
+  UPDATE_ORDER, 
+  DELETE_ORDER } from 'ax';
+import DeleteIcon from 'components/general/DeleteIcon';
 
 const OrderListItem = (props) => {
 
@@ -14,7 +17,8 @@ const OrderListItem = (props) => {
     revenue_cents,
     cost_cents,
     isNew,
-    id
+    id,
+    driver_id
   } = props;
 
   // const [drag, setDrag] = useState(init)
@@ -31,7 +35,25 @@ const OrderListItem = (props) => {
     createError,
     moveOrderToList,
     deleteOrderThenAdd,
+    deleteOrder
   } = useContext(AppContext);
+
+
+  const handleClickDelete = async () => {
+    try {
+      const res = await ax(DELETE_ORDER, 'put', {
+        order_id: id
+      });
+      if(res?.length) {
+        deleteOrder(
+          res[0].id,
+          driver_id ? 'assigned' : 'unassigned'
+        )
+      }
+    } catch(er) {
+      createError('Order not deleted')
+    }
+  }
 
   const handleAssignToDriver = useCallback(async (driver_id) => {
     const isBooked = hf.isDriverBooked(
@@ -87,10 +109,15 @@ const OrderListItem = (props) => {
       hide: false
     }));
     if (dropZone.id && dropZone.on && dropZone.type === 'driver') {
+      if (dropZone.id === driver_id)
+        return;
       handleAssignToDriver(dropZone.id)
       console.log('do the thing with', dropZone.id, dropZone.type)
-    } else if (dropZone.on && dropZone.type === 'order')
+    } else if (dropZone.on && dropZone.type === 'order') {
+      if (!driver_id)
+        return;
       handleUnassignOrder();
+    }
     // console.log(e, 'from item');
   }
 
@@ -110,7 +137,6 @@ const OrderListItem = (props) => {
 
   const sourceAddress = appData.addresses.hash[source_address_id] || {};
   const destinationAddress = appData.addresses.hash[destination_address_id] || {};
-
   return (
     <div className={containerClassList.join(' ')}
       onDragStart={handleDragStart}
@@ -118,14 +144,18 @@ const OrderListItem = (props) => {
       draggable={true}
       onDragOver={(e) => e.preventDefault()}
     >
-      <div>
+      <div className='order-id light-color-text'>or_{id}</div>
+      <a data-toggle='tooltip'
+        title='Drag and assign to a driver'
+        href={true}
+      >
         <div
           className='bg-image'
           style={{
             backgroundImage: "url(/images/drag.png)",
           }}
         ></div>
-      </div>
+      </a>
       <div>
 
         <div>{sourceAddress.city || 'Toronto'} to {destinationAddress.city || 'Barrie'}</div>
@@ -133,26 +163,37 @@ const OrderListItem = (props) => {
       </div>
       <table className='order-pricing-summary light-color-text'
       >
-        <tr>
-          <td>
-            $
-          </td>
-          <td>
-            <div className='green-color-text'>{(revenue_cents / 100).toFixed(2)}</div>
-          </td>
-        </tr>
-        <tr>
-          <td>$</td>
-          <td>
-            <div className='red-color-text'>{(cost_cents / 100).toFixed(2)}</div>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>
+              $
+            </td>
+            <td>
+              <div className='green-color-text'>{(revenue_cents / 100).toFixed(2)}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>$</td>
+            <td>
+              <div className='red-color-text'>{(cost_cents / 100).toFixed(2)}</div>
+            </td>
+          </tr>
+        </tbody>
       </table>
-      <div className='thumbnail align-start'>
-        <img
-          src='/images/pencil.png'
-          alt='Edit'
-          onClick={handleClick}
+      <div className='align-start order-icon-container'>
+        <a className='thumbnail'
+          data-toggle='tooltip'
+          title='Edit order'
+          href={true}
+        >
+          <img
+            src='/images/pencil.png'
+            alt='Edit'
+            onClick={handleClick}
+          />
+        </a>
+        <DeleteIcon 
+        handleClickDelete={handleClickDelete}
         />
       </div>
     </div>

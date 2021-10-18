@@ -1,6 +1,8 @@
-// Server is used as an API - transferring data from 
+// Express Server API
 
 require('dotenv').config();
+
+// app is created in ./app
 const app = require('./app');
 const { seedOrders, seedSupplierCustomerAddresses } = require('./db/seeds');
 

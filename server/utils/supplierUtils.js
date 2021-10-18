@@ -26,10 +26,10 @@ const makeSupplier = async (req, res) => {
       supp_lname
     } = req.body
     console.log(supp_fname);
-    if(!supp_fname) {
-      console.log('no supp_fname')
-      return errorResponse(res, 'Please add a supplier name');
-    }
+    // if(!supp_fname) {
+    //   console.log('no supp_fname')
+    //   return errorResponse(res, 'Please add a supplier name');
+    // }
     const resq = await pool.query({
       text: queryMakeSupplier,
       values: [supp_fname || 'Example', supp_lname || 'Supplier']

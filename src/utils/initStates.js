@@ -29,3 +29,36 @@ export const initOrderForm = {
   source_address_id: 0,
   destination_address_id: 0
 };
+
+export const initAppData = {
+  orders: {
+    // unassigned orders
+    unassigned: {
+      list: [],
+    },
+    // assigned orders in format {[driver_id]: [Order Model]}
+    assigned: {
+      list: []
+    },
+    hash: {}
+  },
+  drivers: {
+    list: [],
+    hash: {}
+  },
+  suppliers: {
+    list: [],
+    hash: {}
+  },
+  customers: {
+    list: [],
+    hash: {}
+  },
+  addresses: {
+    list: [],
+    hash: {}
+  },
+  view: {
+    drivers: [1, 2]
+  }
+}

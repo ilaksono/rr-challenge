@@ -1,58 +1,39 @@
-import OrderList from 'components/orders/OrderList';
 import { useState, useEffect, useContext } from 'react';
 import AppContext from 'context/AppContext';
-import Modal from 'components/Modal';
 import { CreateFormProvider } from 'context/CreateFormContext';
-import CreateDriverForm from 'components/drivers/CreateDriverForm';
 import { Button, Form } from 'react-bootstrap';
-import CreateOrderForm from 'components/orders/CreateOrderForm';
 import * as hf from 'utils/helperFuncs';
-
+import OrderDriverForms from 'components/orders/OrderDriverForms';
+import DeleteIcon from 'components/general/DeleteIcon';
+import ax, { UNASSIGN_ORDERS, DELETE_DRIVER } from 'ax';
 const init = {
   fname: '',
   lname: '',
   make: '',
   model: '',
-  year: ''
+  year: 2020
 };
 
 
 const DriverView = ({ id, driverIndex, fullName }) => {
 
   const [show, setShow] = useState(false);
-  // const [drag, setDrag] = useState(false)
   const [showOrder, setShowOrder] = useState(false);
   const [classList, setClassList] = useState(['driver-layout']);
 
 
   const {
     drag,
-    createError,
-    createModal,
     appData,
     dropZone,
+    createModal,
+    createError,
     handleDragDropZone,
     handleDragOverZone,
-    modifyDriverView
+    modifyDriverView,
+    updateUnassignedOrders,
+    deleteDriverAppData
   } = useContext(AppContext);
-
-  const promptToClose = () => {
-    createModal(
-      'Exit driver builder?',
-      'Exit',
-      () => setShow(false),
-      'Exit'
-    );
-  }
-  const promptToCloseOrder = () => {
-    createModal(
-      'Exit order builder?',
-      'Exit',
-      () => setShowOrder(false),
-      'Exit'
-    );
-  }
-
 
 
   const handleDragEvents = (e) => {
@@ -68,28 +49,49 @@ const DriverView = ({ id, driverIndex, fullName }) => {
     handleDragDropZone(e, 'driver', id)
   }
 
-  // const { driver_fname, driver_lname } = appData.drivers.hash[id] || {};
-  // console.log(driver_fname);
+  const promptDelete = () => {
+    createModal(`Delete Driver - ${fullName}`, 'Delete', handleClickDelete, 'Confirm')
+  }
 
-  // if()
-  // const containerClassList = ['driver-layout'];
-  // if (dropZone.id === id && dropZone.on) {
-  //   containerClassList.push('selected')
-  // }
-  // if()
+  const handleClickDelete = async () => {
+    try {
+      const res = await ax(UNASSIGN_ORDERS, 'put', {
+        driver_id: id
+      });
+      if (res?.length) {
+        updateUnassignedOrders(
+          res
+        )
+      }
+      const resDriverDelete = await ax(DELETE_DRIVER, 'put', {
+        driver_id: id
+      });
+      if (resDriverDelete?.length) {
+        deleteDriverAppData(resDriverDelete[0].id);
+      }
+
+    } catch (er) {
+      createError('Order not deleted')
+    }
+  }
+
+  const filteredList = appData.orders.assigned?.list?.filter(order => order.driver_id === id)
+
   const driverOptions = appData.drivers.list.map(driver =>
     <option
       key={driver.id}
       value={driver.id}
       selected={driver.id === id}
-    >{hf.formatFullName(driver.driver_fname, driver.driver_lname)}
+    >{hf.formatFullName(driver.driver_fname, driver.driver_lname)} (dr_{driver.id})
     </option>)
-  const filteredList = appData.orders.assigned?.list?.filter(order => order.driver_id === id)
+
 
   useEffect(() => {
     if (!drag.hide)
       setClassList(['driver-layout', 'unselected'])
   }, [drag])
+
+
   return (
     <div className={classList.join(' ')}
       onDragLeave={handleDragEvents}
@@ -97,6 +99,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
       onDragOver={e => handleDragOverZone(e, 'driver', id)}
       id={'asd' + id}
     >
+      
       <div className='view-header'>
         Driver
         <br />
@@ -108,37 +111,22 @@ const DriverView = ({ id, driverIndex, fullName }) => {
       </div>
       <div className='view-header rr-flex-row'>
         <div>
-          Source to Destination 
-          </div>
-          <div>Revenue | Cost</div>
+          Source to Destination
+        </div>
+        <div>Revenue | Cost</div>
       </div>
       <CreateFormProvider
         init={init}
         show={showOrder}
         setShow={setShowOrder}
       >
-        <OrderList
-          list={filteredList}
-        />
-        <Modal
+        <OrderDriverForms
           show={show}
-          onHide={promptToClose}
-          modalTitle='Driver Builder'
-        >
-          <CreateDriverForm
-            forceClose={() => setShow(false)}
-          />
-        </Modal>
-        <Modal
-          show={showOrder}
-          onHide={promptToCloseOrder}
-          modalTitle='Order Builder'
-        >
-          <CreateOrderForm
-            forceClose={() => setShowOrder(false)}
-          // {...}
-          />
-        </Modal>
+          setShow={setShow}
+          showOrder={showOrder}
+          setShowOrder={setShowOrder}
+          filteredList={filteredList}
+        />
       </CreateFormProvider>
       <Button
         onClick={() => setShow(true)}
@@ -157,6 +145,11 @@ const DriverView = ({ id, driverIndex, fullName }) => {
           {(filteredList.reduce((acc, order) => acc + order.cost_cents, 0) / 100).toFixed(2)}
         </span>
       </div>
+      <DeleteIcon
+      className='delete-icon-driver'
+      tooltip='Delete driver'
+        handleClickDelete={promptDelete}
+      />
     </div>
   )
 }

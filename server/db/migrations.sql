@@ -18,11 +18,13 @@ CREATE TABLE suppliers (
 );
 CREATE TABLE drivers (
   id SERIAL PRIMARY KEY NOT NULL,
-  driver_fname VARCHAR(191) NOT NULL,
-  driver_lname VARCHAR(191),
-  vehicle_make VARCHAR(191),
-  vehicle_model VARCHAR(191),
+  driver_fname VARCHAR(50) NOT NULL,
+  driver_lname VARCHAR(50),
+  vehicle_make VARCHAR(50),
+  vehicle_model VARCHAR(50),
   vehicle_year SMALLINT,
+  driver_insurance VARCHAR(191),
+  is_deleted BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT Now()
 );
 
@@ -49,6 +51,7 @@ CREATE TABLE orders (
   source_address_id INTEGER REFERENCES addresses(id) ON DELETE CASCADE,
   destination_address_id INTEGER REFERENCES addresses(id) ON DELETE CASCADE,
   driver_id INTEGER REFERENCES drivers(id) ON DELETE CASCADE,
+  is_deleted BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT Now()
 );
 

@@ -1,5 +1,4 @@
-// use express and 
-
+// use express and add controllers + routes
 const express = require('express')();
 const app = require('./middleware')(express);
 const {
@@ -16,13 +15,20 @@ app.get('/api/orders', async (req, res) => {
 app.post('/api/orders', async (req, res) => {
   await ordersController(req, res);
 })
+
+// uses put for delete routes
+// because delete request bodies are stripped in http
 app.put('/api/orders', async (req, res) => {
   await ordersController(req, res);
+})
+
+app.get('/api/drivers', async (req, res) => {
+  await driversController(req, res);
 })
 app.post('/api/drivers', async (req, res) => {
   await driversController(req, res);
 })
-app.get('/api/drivers', async (req, res) => {
+app.put('/api/drivers', async (req, res) => {
   await driversController(req, res);
 })
 app.get('/api/suppliers', async (req, res) => {
@@ -46,10 +52,10 @@ app.post('/api/addresses', async (req, res) => {
 
 
 const {
-  PORT
+  PORT = 8000
 } = process.env
 
-// Port to listen 
+// Port and listen 
 app.listen(PORT, () => console.log('Listening on: ', PORT));
 
 module.exports = app;

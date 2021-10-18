@@ -1,13 +1,15 @@
 @import "./helpers.scss";
 
 .order-list {
-  max-height: 436px;
+  max-height: 400px;
   padding: 2px;
   width: 100%;
   overflow-y: auto;
+  cursor: all-scroll;
 }
 .order-list-item {
-  cursor: pointer;
+  cursor: grab;
+
   // background-color: $rrblue;
   // color: white;
   margin-bottom: 8px;
@@ -16,6 +18,7 @@
   border-radius: 12px;
   box-shadow: 0 1px 2px 0.5px $rrblue;
   padding: 12px;
+  position: relative;
   @include flexbox(row, space-around, center);
   .order-pricing-summary {
     tr {
@@ -23,7 +26,23 @@
     }
     @include flexbox(row, space-between, center);
   }
-  // position: absolute;
+  .order-id {
+    font-size: 14px;
+    position: absolute;
+    top: 0;
+    left: 8px;
+  }
+  &:hover {
+    .delete-icon {
+      display: block;
+    }
+  }
+}
+.order-icon-container {
+  height:100%;
+}
+.delete-icon {
+  display: none;
 }
 .create-driver-form,
 .create-order-form {

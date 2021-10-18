@@ -1,11 +1,13 @@
 # Unit Tests
+## Build App Test
   1. app should start & build successfully; going to the correct url should connect to the app
     - browser.connect('localhost:3000')
     - waitForText('OnlyTrans')
     - if (isOnPage('OnlyTrans')) -> test is successful
 
   - Before all next tests - connect to app & wait for page to load;
-  
+
+## React render tests  
   2. should render order list items
     - waitForElementWithClass('order-list-item')
     - success if element renders
@@ -27,7 +29,7 @@
     - wait for element with text 'Order Builder' to show
     - if (element) success
 
-  - Testing helper functions - in `utils/helperFuncs`
+## Testing modular helper functions - in `utils/helperFuncs`
 
   6. formatDate takes 1 Date string, number, or object argument and should return a string in the form of '3 minutes ago'
     - formatDate(undefined) should return empty string
@@ -90,4 +92,9 @@
     - assert(transformDateFormat(undefined).length).isEqualTo(0);
   10. formatOrderDate takes a date string, number or object and returns a string in the form of '09:30' or '16:30' representing 'hh:mm'
     - assert(formatOrderDate(validDate).length).isEqualTo(5) 
-    - assert(formatOrderDate(undefined).length).isEqualTo(0) 
+    - assert(formatOrderDate(undefined).length).isEqualTo(0)
+
+## Testing custom hooks
+  11. useAppData:
+    - calling addAddressesList(undefined) should have no change on the `appData.addresses.list` array
+    - calling addAddressList([validAddress]) should add the `validAddress` to the addressess list and 

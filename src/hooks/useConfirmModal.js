@@ -16,7 +16,7 @@ const useConfirmModal = () => {
     setConMod(init);
   }
 
-  const createModal = (body, title, confirm = null, btnText = 'Submit') => {
+  const createModal = (body, title, confirm = () => {}, btnText = 'Submit') => {
     setConMod({show: true, body, title, btnText, confirm});
   }
 

@@ -9,10 +9,16 @@
 # Database Instructions:  
   - install postgres on mac - 
   in the command line, run `brew install psql`
+  - run command `cd server` from the project root
   - connect to psql database
   `sudo psql -U postgres`
   - when it prompts to type in a password `password: ` enter your computer password
   - run sql command `CREATE DATABASE rr;`
+  - run sql command `\c rr`
+  - run `\i ./db/migrations.sql`
+    - create/drop tables
+  - run `\i ./db/seeds.sql`
+    - insert seeds for suppliers, customers, drivers
   - move on to `Dev Environment Instructions`
 
 # Dev Envrionment Instructions
@@ -20,6 +26,8 @@
   - paste the contents in a new file and save it as `.env` inside `/server`
   - in the command line, change directory to `/server` and run `npm start`
   - open a new command line tab and cd to the root of the project - run `npm start`
+  - if you are not using a PORT=8000, you must go into the root/package.json and modify the proxy value to `localhost:[PORT]` to match the port you provided
+  - to add `orders` seeds - go to url in browser `localhost:[PORT]/seed`
 
 # Technologies used:
   - FE: React, Bootstrap
@@ -68,3 +76,71 @@
   ----
 
 !["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png)  
+
+
+# Custom Hooks 
+  - `useAlertData`: controls alert popup display, text, and children
+    - main trigger: 
+      - createAlert(
+        text: string | node, 
+        type: string = success
+        )
+
+  - `useAppData`: (useReducer) controls global state entities: 
+    - orders, drivers, suppliers, customers, and addresses
+    - initialValue = {
+      orders: {
+        unassigned: {
+          list: [],
+        },
+        assigned: {
+          list: []
+        },
+        hash: {}
+      },
+      drivers: {
+        list: [],
+        hash: {}
+      },
+      suppliers: {
+        list: [],
+        hash: {}
+      },
+      customers: {
+        list: [],
+        hash: {}
+      },
+      addresses: {
+        list: [],
+        hash: {}
+      },
+      view: {
+        drivers: [1, 2]
+    }
+
+  - `useConfirmModal`: controls custom prompt - display, text, title text, and button submit handler
+    - main trigger: 
+      - createModal(
+        body: string | node,
+        title: string,
+        confirm = () => {},
+        btnText = 'Submit'
+      )
+
+  - `useCreateForm`: controls form data in OrderCreateForm and DriverCreateForm
+    - main change handle:
+      - handleCreateFormChange(event)
+
+  - `useDropZone`: stores drop data when dragged item enters/leaves a controlled boundary - DriverView or OrderView
+    - stores `on` state - true if dragged item is inside boundary, false if outside
+    - `id` number represents the driver_id
+    - `type` string =`'driver'` | `'order'`
+    
+  - `useErrorToast`: controls error popup text and display
+    - main trigger:
+      - createError(
+        body: string | node
+      )
+
+  - `useLoadingModal`: controls a loading modal that covers page to control user's accessibility according to certain operations - repetitive triggers of updating sensitive data 
+  
