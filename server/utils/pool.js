@@ -3,7 +3,7 @@ const {
   DB_HOST,
   DB_NAME,
 } = process.env;
-const connectionString = `postgresql://${DB_HOST}/${DB_NAME}`
+const connectionString = process.env.connectionString || `postgresql://${DB_HOST}/${DB_NAME}`
 const pool = new Pool({
   connectionString
 })

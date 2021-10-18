@@ -25,7 +25,6 @@ const makeSupplier = async (req, res) => {
       supp_fname, 
       supp_lname
     } = req.body
-    console.log(supp_fname);
     // if(!supp_fname) {
     //   console.log('no supp_fname')
     //   return errorResponse(res, 'Please add a supplier name');

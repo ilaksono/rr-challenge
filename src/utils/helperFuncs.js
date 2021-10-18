@@ -87,7 +87,6 @@ export const determineOrderInformation = (order, appData) => {
     revenue: (order.revenue_cents / 100).toFixed(2),
     cost: (order.cost_cents / 100).toFixed(2)
   };
-  console.log(json);
   return json;
 }
 export const formatFullName = (fname = '', lname = '') =>

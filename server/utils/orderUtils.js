@@ -65,7 +65,6 @@ const makeOrder = async (req, res) => {
   ];
   if (driverId)
     values.push(driverId);
-  console.log(values);
   try {
     const resq = await pool.query({
       text: queryMakeOrder({ driverId }),
@@ -133,7 +132,6 @@ const updateOrder = async (req, res) => {
       return acc;
     }, {});
 
-  console.log(params);
 
   try {
     const resq = await pool.query({
@@ -178,7 +176,6 @@ const unassignDriverOrders = async (req, res) => {
     driver_id
   } = req.body;
 
-  console.log(driver_id);
   try {
     const resq = await pool.query({
       text: queryUnassignDriverOrders,

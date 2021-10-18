@@ -66,7 +66,6 @@ const CreateOrderForm = (props) => {
     )
   }, [createForm])
   const handleSubmitEdit = useCallback(async (source_address_id, destination_address_id) => {
-    console.log('editting');
     try {
       const payload = {
         cost_cents: createForm.cost * 100,
@@ -81,9 +80,7 @@ const CreateOrderForm = (props) => {
       }
       const json = compareObjects(payload, appData.orders.hash[createForm.id])
       json.id = createForm.id
-      console.log(json);
       const res = await ax(UPDATE_ORDER, 'put', payload);
-      console.log(res);
       if (res?.length) {
         if (!deleteOrderThenAdd(res[0]))
           deleteOrderThenAdd('unassigned')
@@ -176,10 +173,6 @@ const CreateOrderForm = (props) => {
         source_address_id: 0,
       }))
     }
-    console.log(appData.addresses.hash,
-      address_id,
-      supplier_name,
-      supplierId)
     const address = appData.addresses.hash[address_id] || {}
     // .find(address => address.supplier_id === supplierId) || {}
     setCreateForm(prev => ({

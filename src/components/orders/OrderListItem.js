@@ -79,7 +79,6 @@ const OrderListItem = (props) => {
         id: props.id,
         driver_id
       })
-      console.log(res);
       if (res?.length) {
         if (!props.driver_id)
           moveOrderToList(res[0])
@@ -96,7 +95,6 @@ const OrderListItem = (props) => {
       const res = await ax(UNASSIGN_ORDER, 'put', {
         order_id: props.id,
       })
-      console.log(res);
       if (res?.length) {
         moveOrderToList(res[0], 'assigned', 'unassigned')
       }
@@ -122,7 +120,6 @@ const OrderListItem = (props) => {
       if (dropZone.id == driver_id)
         return;
       handleAssignToDriver(dropZone.id)
-      console.log('do the thing with', dropZone.id, dropZone.type)
     } else if (dropZone.on && dropZone.type === 'order') {
       if (!driver_id)
         return;

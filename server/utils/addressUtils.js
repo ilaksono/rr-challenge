@@ -38,7 +38,6 @@ const makeAddress = async (req, res) => {
       country,
       supplier_id || customer_id,
     ]
-    console.log(values);
     // if (!supplier_id) {
     //   return errorResponse(res, 'Please add a driver name');
     // }

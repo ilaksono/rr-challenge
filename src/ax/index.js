@@ -27,6 +27,9 @@ export const CREATE_CUSTOMER = '/api/customers?type=create';
 export const GET_ALL_ADDRESSES = '/api/addresses?type=all'
 export const CREATE_ADDRESS = '/api/addresses?type=create';
 
+if (process.env.REACT_APP_API_BASE_URL) {
+  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+}
 
 const isValidResponse = (res) => {
   if (res.data.data || (!res.data.msg && (res.data.status === 'success')))

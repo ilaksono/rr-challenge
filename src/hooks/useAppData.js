@@ -548,7 +548,6 @@ const useAppData = () => {
     newList.forEach(each => {
       payload.splice(each.index, 1);
     });
-    console.log(payload, newList);
 
     dispatch({
       type: SET_WILD_PROPS,
@@ -568,7 +567,6 @@ const useAppData = () => {
       }
       payload.unshift(each);
     });
-    console.log(payload, list);
 
     dispatch({
       type: SET_WILD_PROPS,
@@ -634,7 +632,7 @@ const useAppData = () => {
     };
     socket.addEventListener('message', function (event) {
       const data = JSON.parse(event.data);
-      console.log(data);
+      // console.log(data);
       if (data.key === 'orders') {
         if (data.type === 'delete')
           deleteOrdersLive(data.orders, dataRef);
@@ -649,7 +647,6 @@ const useAppData = () => {
 
     });
     return () => {
-      console.log('close');
       socket.close()
     };
   }, []);

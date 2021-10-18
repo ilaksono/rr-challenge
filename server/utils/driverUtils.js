@@ -29,9 +29,7 @@ const makeDriver = async (req, res) => {
       model,
       year
     } = req.body
-    console.log(fname);
     if (!fname) {
-      console.log('no fname')
       return errorResponse(res, 'Please add a driver name');
     }
     const resq = await pool.query({

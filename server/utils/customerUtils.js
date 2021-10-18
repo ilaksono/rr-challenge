@@ -25,7 +25,6 @@ const makeCustomer = async (req, res) => {
       cust_fname, 
       cust_lname
     } = req.body
-    console.log(cust_fname);
     // if(!cust_fname) {
     //   console.log('no cust_fname')
     //   return errorResponse(res, 'Please add a driver name');

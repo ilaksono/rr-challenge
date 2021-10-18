@@ -11,8 +11,6 @@ const { PORT } = process.env;
 
 wss.on("connection", socket => {
   socket.onmessage = event => {
-    console.log(`Message Received: ${event.data}`);
-
     if (event.data === "ping") {
       socket.send(JSON.stringify("pong"));
     }
