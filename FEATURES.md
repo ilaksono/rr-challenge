@@ -62,11 +62,15 @@
     - end_time
     - revenue
     - cost
+    
 11. `Two users of the app can see each other’s changes in real-time`
   - uses `ws` on BE for live server messages
   - uses `WebSocket` object on FE with message handlers to update all data entities
 
-12. `Anything else you can think of!`    
+12. `Deploy the app somewhere / containerize it`
+  - Netlify link: https://rr-challenge-il.netlify.app/  
+
+13. `Anything else you can think of!`    
   - Added supplier, customer, address entities
     - Enables relationship between supplier <> addresses and customer <> addresses 
     - improves data integrity and reduces redundancy

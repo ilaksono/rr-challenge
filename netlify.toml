@@ -12,6 +12,7 @@
   command = "CI= npm run build"
 [build.environment]  
   REACT_APP_API_BASE_URL = "https://rr-challenge-il.herokuapp.com/"
+  REACT_APP_WEBSOCKET_URL = "wss://rr-challenge-il.herokuapp.com/"
 
 [[redirects]]
   from = "/*"
