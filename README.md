@@ -7,8 +7,16 @@
   - Start BE: `cd server && npm start` 
 
 # Database Instructions:  
-  - install postgres on mac - 
-  in the command line, run `brew install psql`
+## install postgres on mac 
+  in the command line:
+    - install libpq `brew install libpq`
+    - update PATH
+      - if use zsh:
+      - run `echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.zshrc`
+      - run `source ~/.zshrc`
+      - if use bash:
+        - run `echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.bash_profile`
+        - run `source ~/.bash_profile`
   - run command `cd server` from the project root
   - connect to psql database
   `sudo psql -U postgres`
@@ -59,17 +67,6 @@
   - adding payments + invoicing and remit-to (payable) additional addresses on invoices
   - Adding UI elements - such as maps/geolocaiton apis for easier location selection
   - The Drag and Drop events do not work in iOS Safari
-
-# Challenges:
-  - 2021-10-16:
-    - making an insert query using node-pg that can use DEFAULT when the param is falsey for the suppliers table - supp_fname and supp_lname
-    - building a solid relationship  between addresses and its customer/supplier that allows null models e.g. using an address for the order's source/destination without adding a new Supplier / Customer
-    - Deciding whether to keep Customers and Suppliers in one table called Contacts - or keep them separate
-      - Decided to keep them separate because only suppliers have a payable address
-      - customers are linked to accounts receivable/debtors/sales orders
-      - suppliers are linked to accounts payable/creditors/purchase orders 
-  - 2021-10-17:
-    - Accounting for timezones (all are currently in UTC) - when calculating the driver's availability for updating an order to a driver
 
 # Screenshots and Demos
   !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
@@ -146,3 +143,18 @@
 
   - `useLoadingModal`: controls a loading modal that covers page to control user's accessibility according to certain operations - repetitive triggers of updating sensitive data 
   
+
+# Challenges:
+  - 2021-10-16:
+    - making an insert query using node-pg that can use DEFAULT when the param is falsey for the suppliers table - supp_fname and supp_lname
+    - building a solid relationship  between addresses and its customer/supplier that allows null models e.g. using an address for the order's source/destination without adding a new Supplier / Customer
+    - Deciding whether to keep Customers and Suppliers in one table called Contacts - or keep them separate
+      - Decided to keep them separate because only suppliers have a payable address
+      - customers are linked to accounts receivable/debtors/sales orders
+      - suppliers are linked to accounts payable/creditors/purchase orders 
+  - 2021-10-17:
+    - Accounting for timezones (all are currently in UTC) - when calculating the driver's availability for updating an order to a driver
+  - 2021-10-18:
+    - Had some issues with stale state and dispatch for useAppData in websocket handler
+    - tried using ref callbacks but failed
+    - Fixed by passing a ref to the callback instead of using state
