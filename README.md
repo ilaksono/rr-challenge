@@ -30,6 +30,8 @@
   - move on to `Dev Environment Instructions`
 
 # Dev Envrionment Instructions
+  - If you don't have node installed, [instructions here](https://www.pluralsight.com/guides/getting-started-with-nodejs)
+   - Or you can install node version manager: [instructions here](https://github.com/nvm-sh/nvm)
   - copy the contents `.env.example` file in folder `/server` in the repo 
   - paste the contents in a new file and save it as `.env` inside `/server`
   - in the command line, change directory to `/server` and run `npm start`
@@ -61,7 +63,7 @@
   6. A Customer can have many Addresses
   7. Each Address includes a street address, city, country, postal, timezone offset (calculated), and customer/supplier
 
-# Bugs/Improvements to make:
+# Current Bugs & Needed Improvements:
   - modify Driver <> Vehicle relationship to handle: 1 to Many || Many to Many
   - add data pagination on backend for slicing large lists
   - adding payments + invoicing and remit-to (payable) additional addresses on invoices
@@ -69,6 +71,13 @@
   - (fixed) The Drag and Drop events do not work in iOS Safari
   - growIn animation on OrderListItem does not work on Firefox 93 
   - Performs well on Google Chrome 
+  - 2021/10/18 - Checking `Manual input` on supplier section of OrderCreateForm with a supplier selected dismisses the input fields and uses the selected supplier
+  - Should add:
+    - form validation for country/city/state in address table
+    - form validation driver_insurance of drivers and standard format
+    - More test coverage
+
+
 
 # Screenshots and Demos
   !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
@@ -163,3 +172,7 @@
   - 2021-10-19:
     - The Drag and Drop event handlers not triggering in Safari and FireFox 93
     - onDragLeave handlers is different between 
+
+
+    TODOS:
+      fix the manual input after selecting a supplier/customer (selected = true)

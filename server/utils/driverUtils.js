@@ -27,14 +27,22 @@ const makeDriver = async (req, res) => {
       lname,
       make,
       model,
-      year
+      year,
+      driver_insurance
     } = req.body
     if (!fname) {
       return errorResponse(res, 'Please add a driver name');
     }
     const resq = await pool.query({
       text: queryMakeDriver,
-      values: [fname, lname, make, model, Number(year)]
+      values: [
+        fname,
+        lname,
+        make,
+        model,
+        Number(year),
+        driver_insurance
+      ]
     });
     if (resq?.rows) {
       done(res, resq.rows);

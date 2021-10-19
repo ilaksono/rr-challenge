@@ -159,7 +159,8 @@ const CreateOrderForm = (props) => {
   }
 
 
-  const handleClickSupplier = (supplier_name, supplierId, address_id) => {
+  const handleClickSupplier = (e, supplier_name, supplierId, address_id) => {
+    e.stopPropagation();
     if (createForm.source_address_id === address_id) {
       return setCreateForm(prev => ({
         ...prev,
@@ -203,7 +204,8 @@ const CreateOrderForm = (props) => {
     }))
   }
 
-  const handleClickCustomer = (customer_name, customerId, address_id) => {
+  const handleClickCustomer = (e, customer_name, customerId, address_id) => {
+    e.stopPropagation();
     if (createForm.customer_name === customer_name) {
       return setCreateForm(prev => ({
         ...prev,
@@ -349,11 +351,9 @@ const CreateOrderForm = (props) => {
           <legend>Driver</legend>
           <div className='form-row'>
             <InputGroup className="mb-2">
-              {/* <InputGroup.Prepend> */}
               <InputGroup.Text
               >Search
               </InputGroup.Text>
-              {/* </InputGroup.Prepend> */}
               <Form.Control
                 value={createForm.driver_name || ''}
                 onChange={handleCreateFormChange}
@@ -382,7 +382,6 @@ const CreateOrderForm = (props) => {
         >
           <legend>Supplier</legend>
           <div className='form-row'>
-            {/* <div> */}
             {
               createForm.supplierChecked ?
                 <SupplierFormElements
@@ -392,13 +391,10 @@ const CreateOrderForm = (props) => {
                 :
                 <>
                   <InputGroup className="mb-2 flex"
-
                   >
-                    {/* <InputGroup.Prepend> */}
                     <InputGroup.Text
                     >Search
                     </InputGroup.Text>
-                    {/* </InputGroup.Prepend> */}
                     <Form.Control
                       value={createForm.supplier_name || ''}
                       onChange={handleCreateFormChange}
@@ -407,14 +403,9 @@ const CreateOrderForm = (props) => {
                       placeholder='Type a name'
                     />
                   </InputGroup>
-
-                  {/* </div> */}
                   <div
                     className='display-container'
-                  >{
-                      parsedSuppliers
-                    }
-
+                  >{parsedSuppliers}
                   </div>
                 </>
             }
@@ -441,7 +432,6 @@ const CreateOrderForm = (props) => {
         >
           <legend>Customer</legend>
           <div className='form-row'>
-            {/* <div> */}
             {
               createForm.customerChecked ?
                 <SupplierFormElements
@@ -452,11 +442,9 @@ const CreateOrderForm = (props) => {
                 : <>
                   <InputGroup className="mb-2 flex"
                   >
-                    {/* <InputGroup.Prepend> */}
                     <InputGroup.Text
                     >Search
                     </InputGroup.Text>
-                    {/* </InputGroup.Prepend> */}
                     <Form.Control
                       value={createForm.customer_name || ''}
                       onChange={handleCreateFormChange}

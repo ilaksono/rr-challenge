@@ -11,7 +11,8 @@ const init = {
   lname: '',
   make: '',
   model: '',
-  year: 2020
+  year: 2020,
+  driver_insurance: ''
 };
 
 

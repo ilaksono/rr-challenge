@@ -109,13 +109,15 @@ INSERT INTO drivers (
   driver_lname, 
   vehicle_make, 
   vehicle_model, 
-  vehicle_year
+  vehicle_year,
+  driver_insurance
   ) VALUES (
     $1,
     $2,
     $3,
     $4,
-    $5
+    $5,
+    $6
   ) RETURNING *;`;
 
 const queryDeleteDriver = `

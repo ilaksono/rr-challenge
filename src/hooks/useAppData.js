@@ -320,8 +320,9 @@ const useAppData = () => {
   }
   const handleCreateSupplier = async (createForm) => {
 
-    if (createForm.supplierId && createForm.source_address_id && !createForm.supplierChecked)
+    if (createForm.supplierId && createForm.source_address_id && !createForm.supplierChecked) {
       return { id: createForm.source_address_id };
+    }
     try {
       if (!createForm.supp_city)
         throw new Error('Please add the Supplier city');

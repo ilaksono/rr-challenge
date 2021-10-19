@@ -156,7 +156,7 @@ const OrderListItem = (props) => {
       <div className='order-id light-color-text'>or_{id}</div>
       <a data-toggle='tooltip'
         title='Drag and assign to a driver'
-        href={true}
+        href="#"
       >
         <div
           className='bg-image'
@@ -193,7 +193,7 @@ const OrderListItem = (props) => {
         <a className='thumbnail'
           data-toggle='tooltip'
           title='Edit order'
-          href={true}
+          href="#"
         >
           <img
             src='/images/pencil.png'

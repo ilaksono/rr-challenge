@@ -59,7 +59,7 @@ const CreateDriverForm = ({forceClose}) => {
         <div className='form-row'>
           <InputGroup className="mb-2">
             <InputGroup.Text
-            >First Name
+            >First Name *
             </InputGroup.Text>
             <Form.Control
               value={createForm.fname || ''}
@@ -82,6 +82,18 @@ const CreateDriverForm = ({forceClose}) => {
             />
           </InputGroup>
         </div>
+        <InputGroup className="mb-2">
+            <InputGroup.Text
+            >Insurance Policy Number
+            </InputGroup.Text>
+            <Form.Control
+              value={createForm.driver_insurance || ''}
+              onChange={handleCreateFormChange}
+              type='text'
+              name='driver_insurance'
+              placeholder='12345678910'
+            />
+          </InputGroup>
         <fieldset>
           <legend>Vehicle</legend>
           <div className='form-row'>

@@ -10,7 +10,7 @@ const DeleteIcon = (props) => {
     <a className={'thumbnail align-start ' + className}
       data-toggle='tooltip'
       title={tooltip}
-      href={true}
+      href="#"
     >
       <img
         src='/images/delete.png'
