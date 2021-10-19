@@ -66,7 +66,8 @@
   - add data pagination on backend for slicing large lists
   - adding payments + invoicing and remit-to (payable) additional addresses on invoices
   - Adding UI elements - such as maps/geolocaiton apis for easier location selection
-  - The Drag and Drop events do not work in iOS Safari
+  - (fixed) The Drag and Drop events do not work in iOS Safari
+  - growIn animation on OrderListItem does not work on Firefox 93 
   - Performs well on Google Chrome 
 
 # Screenshots and Demos
