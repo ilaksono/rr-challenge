@@ -16,13 +16,13 @@
   height: fit-content;
   .driver-layout {
     width: 24%;
-    padding: 8px;
+    padding: 12px;
     border-radius: 4px;
     box-shadow: 0 2px 4px 1px $rrblue;
     position: relative;
     min-height: fit-content;
-    min-width: 340px;
-    height:84vh;
+    min-width: 357px;
+    height:88vh;
     transition: all 1s;
     button {
       display: inherit;
@@ -37,7 +37,9 @@
     }
   }
   .delete-icon-driver {
-    display: none;
+    // display: none;
+    text-align: right;
+    display: block;
   }
 
   .order-layout {
@@ -45,7 +47,9 @@
     box-shadow: 0 2px 4px 1px $rrblue;
     max-width: 50%;
     border-radius: 4px;
-    height:84vh;
+    min-width: 357px;
+
+    height:88vh;
     min-height: fit-content;
     transition: all 1s;
     button {

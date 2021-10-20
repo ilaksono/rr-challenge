@@ -1,10 +1,13 @@
-import { useState, useContext, useEffect } from 'react';
+import { lazy, useState, useContext, useEffect } from 'react';
 import AppContext from 'context/AppContext';
 import HomeBanner from 'components/general/HomeBanner'
 import { initOrderForm as init } from 'utils/initStates';
-import OrderFormModal from 'components/orders/OrderFormModal';
+// import OrderFormModal from 'components/orders/OrderFormModal';
 import { CreateFormProvider } from 'context/CreateFormContext';
-import OrderDownload from 'components/orders/OrderDownload';
+import RRLazyWrapper from 'components/general/RRLazyWrapper';
+// import OrderDownload from 'components/orders/OrderDownload';
+const OrderDownload = lazy(() => import('components/orders/OrderDownload'));
+const OrderFormModal = lazy(() => import('components/orders/OrderFormModal'));
 const OrderView = ({ id }) => {
 
   const [show, setShow] = useState(false)
@@ -46,25 +49,25 @@ const OrderView = ({ id }) => {
       <div className='view-header'>
         Unassigned Orders
       </div>
-      <div className='view-header rr-flex-row'>
-        <div>
-          Source to Destination
-        </div>
-        <div>Revenue | Cost</div>
-      </div>
+
       <CreateFormProvider
         init={init}
         show={show}
         setShow={setShow}
       >
-        <OrderFormModal
-          show={show}
-          setShow={setShow}
-        />
+        <RRLazyWrapper>
+          <OrderFormModal
+            show={show}
+            setShow={setShow}
+          />
+        </RRLazyWrapper>
       </CreateFormProvider>
-      <OrderDownload 
-      
-      />
+      <RRLazyWrapper>
+
+        <OrderDownload
+
+        />
+      </RRLazyWrapper>
 
 
     </div>

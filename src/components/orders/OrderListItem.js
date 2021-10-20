@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import CreateFormContext from 'context/CreateFormContext';
 import AppContext from 'context/AppContext';
 import * as hf from 'utils/helperFuncs';
@@ -8,6 +8,21 @@ import ax, {
   DELETE_ORDER
 } from 'ax';
 import DeleteIcon from 'components/general/DeleteIcon';
+import { AddressPopover } from 'components/suppliers/SupplierDisplayItem';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+import RRLazyWrapper from 'components/general/RRLazyWrapper';
+
+export const CompanyPopover = React.forwardRef(
+  ({ popper, children, show: _, ...props }, ref) => {
+    return (
+      <Popover ref={ref} body {...props}>
+        <div><span className='light-color-text'>name: </span>{props.fname} {props.lname}</div>
+        <div><span className='light-color-text'>type: </span>{props.type}</div>
+      </Popover>
+    );
+  },
+);
+
 
 const OrderListItem = (props) => {
 
@@ -125,6 +140,8 @@ const OrderListItem = (props) => {
         return;
       handleUnassignOrder();
     }
+    if (!dropZone.id && dropZone.on && dropZone.type === 'driver')
+      createError('Please select/add a driver');
     // console.log(e, 'from item');
   }
 
@@ -145,68 +162,114 @@ const OrderListItem = (props) => {
   const sourceAddress = appData.addresses.hash[source_address_id] || {};
   const destinationAddress = appData.addresses.hash[destination_address_id] || {};
   return (
-    <div className={containerClassList.join(' ')}
-      onDragStart={handleDragStart}
-      // onDragEnd={handleDragEnd}
-      onMouseUp={() => console.log('mouse up')}
-      draggable={true}
-      onDragEndCapture={handleDragEnd}
-      onDragOver={(e) => e.preventDefault()}
-    >
-      <div className='order-id light-color-text'>or_{id}</div>
-      <a data-toggle='tooltip'
-        title='Drag and assign to a driver'
-        href="#"
-      >
-        <div
-          className='bg-image'
-          style={{
-            backgroundImage: "url(/images/drag.png)",
-          }}
-        ></div>
-      </a>
-      <div>
+    <RRLazyWrapper>
 
-        <div>{sourceAddress.city || 'Toronto'} to {destinationAddress.city || 'Barrie'}</div>
-        <div className='light-color-text'>{hf.formatOrderDate(props.start_time)} - {hf.formatOrderDate(props.end_time)}</div>
-      </div>
-      <table className='order-pricing-summary light-color-text'
+      <div className={containerClassList.join(' ')}
+        onDragStart={handleDragStart}
+        // onDragEnd={handleDragEnd}
+        onMouseUp={() => console.log('mouse up')}
+        draggable={true}
+        onDragEndCapture={handleDragEnd}
+        onDragOver={(e) => e.preventDefault()}
       >
-        <tbody>
-          <tr>
-            <td>
-              $
-            </td>
-            <td>
-              <div className='green-color-text'>{(revenue_cents / 100).toFixed(2)}</div>
-            </td>
-          </tr>
-          <tr>
-            <td>$</td>
-            <td>
-              <div className='red-color-text'>{(cost_cents / 100).toFixed(2)}</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div className='align-start order-icon-container'>
-        <a className='thumbnail'
-          data-toggle='tooltip'
-          title='Edit order'
+        <div className='order-id light-color-text'>or_{id}</div>
+        <a data-toggle='tooltip'
+          title='Drag and assign to a driver'
           href="#"
         >
-          <img
-            src='/images/pencil.png'
-            alt='Edit'
-            onClick={handleClick}
-          />
+          <div
+            className='bg-image'
+            style={{
+              backgroundImage: "url(/images/drag.png)",
+            }}
+          ></div>
         </a>
-        <DeleteIcon
-          handleClickDelete={promptDelete}
-        />
-      </div>
-    </div>
+        <div>
 
+          <div className='flex'>
+            <OverlayTrigger
+              triger='hover'
+              overlay={
+                <AddressPopover
+                  {...sourceAddress}
+                />
+              }>
+              <div>
+                {sourceAddress.city || 'Toronto'}
+              </div>
+            </OverlayTrigger>
+            &nbsp;to&nbsp;
+            <OverlayTrigger
+              triger='hover'
+              overlay={
+                <AddressPopover
+                  {...destinationAddress}
+                />
+              }>
+              <div>
+                {destinationAddress.city || 'Barrie'}
+              </div>
+            </OverlayTrigger>
+          </div>
+          <div className='light-color-text flex'>{hf.formatOrderDate(props.start_time)} - {hf.formatOrderDate(props.end_time)}</div>
+        </div>
+        <table className='order-pricing-summary light-color-text'
+        >
+          <tbody>
+            <OverlayTrigger
+              triger='hover'
+              overlay={
+                <CompanyPopover
+                  fname={appData.suppliers.hash[sourceAddress.supplier_id]?.supp_fname}
+                  lname={appData.suppliers.hash[sourceAddress.supplier_id]?.supp_lname}
+                  type='Supplier'
+                />
+              }>
+              <tr>
+                <td>
+                  $
+                </td>
+                <td>
+                  <div className='green-color-text'>{(revenue_cents / 100).toFixed(2)}</div>
+                </td>
+              </tr>
+            </OverlayTrigger>
+            <OverlayTrigger
+              triger='hover'
+              overlay={
+                <CompanyPopover
+                  fname={appData.customers.hash[destinationAddress.customer_id]?.cust_fname}
+                  lname={appData.customers.hash[destinationAddress.customer_id]?.cust_lname}
+                  type='Customer'
+                />
+              }>
+              <tr>
+                <td>$</td>
+                <td>
+                  <div className='red-color-text'>{(cost_cents / 100).toFixed(2)}</div>
+                </td>
+              </tr>
+            </OverlayTrigger>
+          </tbody>
+        </table>
+        <div className='align-start order-icon-container'>
+          <a className='thumbnail'
+            data-toggle='tooltip'
+            title='Edit order'
+            href="#"
+          >
+            <img
+              src='/images/pencil.png'
+              alt='Edit'
+              onClick={handleClick}
+            />
+          </a>
+          <DeleteIcon
+            handleClickDelete={promptDelete}
+          />
+        </div>
+      </div>
+    </RRLazyWrapper>
   )
 }
 export default OrderListItem;

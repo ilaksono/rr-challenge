@@ -71,7 +71,7 @@
   - (fixed) The Drag and Drop events do not work in iOS Safari
   - growIn animation on OrderListItem does not work on Firefox 93 
   - Performs well on Google Chrome 
-  - 2021/10/18 - Checking `Manual input` on supplier section of OrderCreateForm with a supplier selected dismisses the input fields and uses the selected supplier
+  - (fixed 2021/10/19) 2021/10/18 - Checking `Manual input` on supplier and customer sections of OrderCreateForm with a supplier selected dismisses the input fields and uses the selected supplier/customer instead
   - Should add:
     - form validation for country/city/state in address table
     - form validation driver_insurance of drivers and standard format

@@ -60,8 +60,8 @@ const makeOrder = async (req, res) => {
     start_time,
     end_time,
     description,
-    destination_address_id || resCustomerAddressId,
-    source_address_id || resSupplierAddressId,
+    resCustomerAddressId || destination_address_id,
+    resSupplierAddressId || source_address_id ,
   ];
   if (driverId)
     values.push(driverId);

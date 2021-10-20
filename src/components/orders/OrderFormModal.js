@@ -1,10 +1,11 @@
 import { Button } from 'react-bootstrap';
-import CreateOrderForm from 'components/orders/CreateOrderForm';
 import OrderList from 'components/orders/OrderList';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, lazy } from 'react';
 import AppContext from 'context/AppContext';
 import CreateFormContext from 'context/CreateFormContext';
 import Modal from 'components/Modal';
+import RRLazyWrapper from 'components/general/RRLazyWrapper';
+const CreateOrderForm = lazy(() => import('components/orders/CreateOrderForm'));
 
 const OrderFormModal = ({ show, setShow }) => {
 
@@ -13,7 +14,7 @@ const OrderFormModal = ({ show, setShow }) => {
     appData,
     createModal
   } = useContext(AppContext);
-  
+
   const {
     resetCreateForm
   } = useContext(CreateFormContext);
@@ -32,23 +33,28 @@ const OrderFormModal = ({ show, setShow }) => {
   }
   return (
     <>
-        <OrderList
-          list={appData.orders.unassigned.list}
+      <OrderList
+        list={appData.orders.unassigned.list}
 
-        />
-        <Button
-          onClick={() => setShow(true)}
-        >Create Order</Button>
+      />
+      <Button
+        onClick={() => setShow(true)}
+      >Create Order</Button>
+      {
+        show &&
         <Modal
           show={show}
           onHide={promptToClose}
           modalTitle='Order Builder'
         >
-          <CreateOrderForm 
-          forceClose={forceClose}
-          />
+          <RRLazyWrapper>
+            <CreateOrderForm
+              forceClose={forceClose}
+            />
+          </RRLazyWrapper>
         </Modal>
-        </>
+      }
+    </>
   )
 }
 export default OrderFormModal;

@@ -26,7 +26,6 @@ const MainView = () => {
         <DriverView id={appData.view.drivers[1]}
           driverIndex={1}
           fullName={hf.formatFullName(driverB.driver_fname, driverB.driver_lname)}
-
         />
       </div>
     </>

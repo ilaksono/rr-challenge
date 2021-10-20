@@ -12,17 +12,24 @@
 
   // background-color: $rrblue;
   // color: white;
+  margin: 0 auto;
   margin-bottom: 8px;
   min-width: 280px;
-  border: 2px inset $rrblue;
+  max-width: 320px;
+  // border: 2px inset $rrblue;
   border-radius: 12px;
-  box-shadow: 0 1px 2px 0.5px $rrblue;
+  box-shadow: 0 2px 4px 1px rgb(133, 133, 133);
   padding: 12px;
   position: relative;
   @include flexbox(row, space-around, center);
+  transition: all 0.3s;
+  border: 1px solid rgb(182, 182, 182);
+  &:hover {
+    transform: scale(1.02);
+  }
   .order-pricing-summary {
     tr {
-      padding-left:4px;
+      padding-left: 4px;
     }
     @include flexbox(row, space-between, center);
   }
@@ -39,23 +46,31 @@
   }
 }
 .order-icon-container {
-  height:100%;
+  height: 100%;
 }
 .delete-icon {
-  display: none;
+  // display: none;
+  display: block;
+  opacity: 0.7;
 }
 .create-driver-form,
 .create-order-form {
   padding-top: 36px;
 }
 .view-header {
+  .vert-align-header {
+    line-height: 2.3;
+    margin-right: 24px;
+    margin-left: 12px;
+  }
   text-align: center;
-  color: #5D5D5D;
+  color: #5d5d5d;
   margin-bottom: 12px;
 }
-.form-label .flex {
+.flex {
   display: flex;
 }
+
 .partial-hide {
   opacity: 0.4;
 }
@@ -142,6 +157,7 @@ form {
     margin-right: 12px;
   }
 }
+
 .display-item.selected {
   border: 2px solid $rrblue;
   margin: 0;
@@ -151,13 +167,13 @@ form {
   min-height: 180px;
 }
 .light-color-text {
-  color: #5D5D5D;
+  color: #5d5d5d;
 }
 .green-color-text {
   color: green;
 }
 .red-color-text {
-  color: red;
+  color: #cd2026;
 }
 
 .bg-image {
@@ -196,8 +212,10 @@ form {
   .display-container {
     max-width: 100%;
   }
+  .order-list-item {
+    max-width: 600px;
+  }
 }
-
 
 @media screen and (min-width: 992px) {
   .manual-check {
@@ -213,8 +231,8 @@ form {
 
 @media screen and (max-width: 481px) {
   .order-list {
-    max-height:none;
-    overflow-y:hidden;
+    max-height: none;
+    overflow-y: hidden;
   }
 }
 

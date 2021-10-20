@@ -59,6 +59,6 @@ export const initAppData = {
     hash: {}
   },
   view: {
-    drivers: [1, 2]
+    drivers: [0, 0]
   }
 }

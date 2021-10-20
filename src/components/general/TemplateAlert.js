@@ -9,7 +9,7 @@ const TemplateAlert = ({ alert, resetAlert }) => {
       <Alert
         dismissable={true}
         transition
-
+        role='alert'
         show={alert.show}
         variant={alert.type}
       >

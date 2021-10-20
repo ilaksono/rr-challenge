@@ -6,7 +6,10 @@
 // addresses list and hash
 // view - the two driver's order windows being viewed
 
-import { useReducer, useRef } from 'react';
+import {
+  useReducer, useRef,
+  useEffect, useCallback,
+} from 'react';
 import axios, {
   GET_UNASSIGNED,
   GET_ALL_DRIVERS,
@@ -18,7 +21,6 @@ import axios, {
   CREATE_CUSTOMER,
   CREATE_ADDRESS,
 } from 'ax';
-import { useEffect, useCallback } from 'react';
 import { initAppData as init } from 'utils/initStates';
 const SET_WILD_PROPS = 'SET_PROPERTIES_CUSTOM';
 const UPDATE_ORDERS = 'UPDATE_ORDERS_OBJECT'
@@ -80,6 +82,12 @@ const useAppData = () => {
 
 
   dataRef.current = appData;
+  const appHashRef = useRef({
+    suppliers: {},
+    orders: {},
+    customers: {},
+    drivers: {}
+  });
 
   const {
     drivers,
@@ -343,7 +351,9 @@ const useAppData = () => {
           child: 'list',
           payload
         })
-        return handleCreateAddress(addressJson)
+        const addressRes = await handleCreateAddress(addressJson)
+        console.log(addressRes);
+        return addressRes
       }
     } catch (er) {
       throw new Error('Please select a supplier or add supplier details');
@@ -372,9 +382,9 @@ const useAppData = () => {
           child: 'list',
           payload
         })
-
-        return handleCreateAddress(addressJson)
-
+        const addressRes = await handleCreateAddress(addressJson)
+        console.log(addressRes);
+        return addressRes;
       }
     } catch (er) {
       throw new Error('Please select a customer or add customer details');
@@ -459,10 +469,31 @@ const useAppData = () => {
 
 
   const refreshDriverView = () => {
+    if (!drivers.list.length)
+      return dispatch({
+        type: SET_WILD_PROPS,
+        par: 'view',
+        child: 'drivers',
+        payload: [0, 0]
+      })
     if (!Object.values(drivers.hash).length) return;
-    const payload = view.drivers.map(id =>
-      !drivers.hash[id] ? drivers.list[0].id : id
-    );
+    // const payload = view.drivers.map(id =>
+    //   !drivers.hash[id] ? drivers.list[0].id : id
+    // );
+    let payload = [];
+    for (const driver of drivers.list) {
+      if (payload.length === 2) break;
+      if (drivers.hash[driver.id]
+        && !payload.includes(driver.id)
+      ) {
+        payload.push(driver.id)
+      }
+    }
+    if (payload.length === 1)
+      payload[1] = payload[0];
+    if (payload.length === 0)
+      payload = [0, 0]
+    console.log(payload);
     dispatch({
       type: SET_WILD_PROPS,
       par: 'view',
@@ -588,9 +619,7 @@ const useAppData = () => {
   }, [])
 
   useEffect(() => {
-
-    if (drivers.list.length)
-      updateDriversHash();
+    updateDriversHash();
     // eslint-disable-next-line
 
   }, [drivers.list])

@@ -119,7 +119,7 @@ const CreateOrderForm = (props) => {
         addressesList.push(resSupplierAddress);
       if (!appData.addresses.hash[resCustomerAddressId])
         addressesList.push(resCustomerAddress);
-
+      console.log(addressesList);
       addAddressesList(addressesList)
       if (createForm.id)
         return handleSubmitEdit(resSupplierAddressId, resCustomerAddressId);
@@ -312,7 +312,7 @@ const CreateOrderForm = (props) => {
         >
           <InputGroup className="m-1">
             <InputGroup.Text
-            >Start
+            >Depart
             </InputGroup.Text>
             <Form.Control
               value={createForm.start_time || ''}
@@ -324,7 +324,7 @@ const CreateOrderForm = (props) => {
           </InputGroup>
           <InputGroup className="m-1">
             <InputGroup.Text
-            >End
+            >Arrive
             </InputGroup.Text>
             <Form.Control
               value={createForm.end_time || ''}

@@ -4,9 +4,8 @@ import { Tab, Nav, OverlayTrigger, Popover } from 'react-bootstrap';
 import CreateFormContext from 'context/CreateFormContext';
 import * as hf from 'utils/helperFuncs';
 
-const SupplierPopover = React.forwardRef(
+export const AddressPopover = React.forwardRef(
   ({ popper, children, show: _, ...props }, ref) => {
-   
     return (
       <Popover ref={ref} body {...props}>
        <div><span className='light-color-text'>city: </span>{props.city}</div>
@@ -14,7 +13,6 @@ const SupplierPopover = React.forwardRef(
        <div><span className='light-color-text'>country: </span>{props.country || 'none'}</div>
        <div><span className='light-color-text'>postal: </span>{props.postal || 'none'}</div>
        <div><span className='light-color-text'>address: </span>{props.address || 'none'}</div>
-
       </Popover>
     );
   },
@@ -66,7 +64,7 @@ const SupplierDisplayItem = (props) => {
     <OverlayTrigger
       triger='hover'
       overlay={
-        <SupplierPopover 
+        <AddressPopover 
           {...list[0]}
         />
       }

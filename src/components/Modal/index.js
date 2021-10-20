@@ -17,7 +17,6 @@ const ModalTemplate = (props) => {
       onHide={onHide}
       show={show}
       size={size}
-      aria-labelledby="contained-modal-title-vcenter"
       centered
       style={modalStyle || {
         // border: '1px solid ' + con.rrBlue,
@@ -28,7 +27,8 @@ const ModalTemplate = (props) => {
       <Modal.Header
       className='rr-modal-header'
         >
-        <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Title 
+        >
           {modalTitle}
         </Modal.Title>
         <ModalCloseButton onHide={onHide} />

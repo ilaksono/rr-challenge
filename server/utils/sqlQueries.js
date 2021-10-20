@@ -28,7 +28,7 @@ WHERE NOT EXISTS (
   select * from drivers 
   where drivers.id=orders.driver_id
   ) AND is_deleted=false 
-  ORDER BY end_time desc;`
+  ORDER BY id desc;`
 
 const queryAssignedOrders = `
   select * from orders 
@@ -36,7 +36,7 @@ const queryAssignedOrders = `
     select * from drivers 
     where drivers.id=orders.driver_id
     ) AND is_deleted=false 
-    ORDER BY end_time desc;`
+    ORDER BY id desc;`
 
 const queryMakeOrder = (params = {}) => {
 
@@ -101,7 +101,9 @@ RETURNING *;
 
 // driver queries
 const queryAllDrivers = `
-SELECT * FROM drivers WHERE is_deleted=false;`;
+SELECT * FROM drivers 
+WHERE is_deleted=false
+ORDER BY id DESC;`;
 
 const queryMakeDriver = `
 INSERT INTO drivers (
@@ -129,7 +131,8 @@ RETURNING *;
 
 // supplier queries
 const queryAllSuppliers = `
-SELECT * FROM suppliers;`;
+SELECT * FROM suppliers 
+ORDER BY id DESC;`;
 
 const queryMakeSupplier = `
   INSERT INTO suppliers (
@@ -142,7 +145,8 @@ const queryMakeSupplier = `
 
 // customer queries
 const queryAllCustomers = `
-SELECT * FROM customers;`;
+SELECT * FROM customers 
+ORDER BY id DESC;`;
 
 const queryMakeCustomer = `
   INSERT INTO customers (
@@ -156,7 +160,8 @@ const queryMakeCustomer = `
 // address queries
 
 const queryAllAddresses = `
-SELECT * FROM addresses;`;
+SELECT * FROM addresses 
+ORDER BY id DESC;`;
 
 const queryMakeAddress = (params = {}) => {
 

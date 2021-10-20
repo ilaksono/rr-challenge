@@ -77,3 +77,12 @@
     - Enables relationship between supplier <> addresses and customer <> addresses 
     - improves data integrity and reduces redundancy
   - Ability to change order's source address and destination address
+  - Ability to Sort `orders` by attributes:
+    - Creation date
+    - Departure time
+    - Arrival time
+    - Revenue
+    - Cost
+    - Revenue - Cost difference
+    - Customer 
+    - Supplier

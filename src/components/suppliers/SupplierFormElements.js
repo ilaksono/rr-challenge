@@ -16,7 +16,7 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
             onChange={handleCreateFormChange}
             type='text'
             name={prefix + 'fname'}
-            placeholder='Larry'
+            placeholder='Add name here'
           />
         </InputGroup>
         <InputGroup className="mb-2">
@@ -28,7 +28,7 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
             onChange={handleCreateFormChange}
             type='text'
             name={prefix + 'lname'}
-            placeholder='Wheels'
+            placeholder='Add name here'
           />
         </InputGroup>
       </div>
@@ -44,7 +44,7 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
             onChange={handleCreateFormChange}
             type='text'
             name={prefix + 'address'}
-            placeholder='123 Main st.'
+            placeholder='Add address'
           />
         </InputGroup>
         <InputGroup className="mb-2">
@@ -56,7 +56,7 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
             onChange={handleCreateFormChange}
             type='text'
             name={prefix + 'city'}
-            placeholder='San Francisco'
+            placeholder='Add a city'
           />
         </InputGroup>
         <InputGroup className="mb-2">
@@ -68,7 +68,7 @@ const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'su
             onChange={handleCreateFormChange}
             type='text'
             name={prefix + 'state'}
-            placeholder='California'
+            placeholder='Add state'
           />
         </InputGroup>
       </div>

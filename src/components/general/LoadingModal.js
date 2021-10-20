@@ -9,7 +9,7 @@ const LoadingModal = ({ show, onHide }) => {
       show={show}
       size='sm'
       id='loading-modal'
-      onHide={() => {}}
+      onHide={() => { }}
     >
       <GeneralSpinner
         size='md'

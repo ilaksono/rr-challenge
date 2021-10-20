@@ -1,0 +1,20 @@
+@import './helpers.scss';
+#loading-modal {
+  .modal-content {
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    width: 80px;
+    border: 2px solid $rrblue;
+    margin: 0 auto;
+  }
+}
+
+.suspense-fallback {
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}

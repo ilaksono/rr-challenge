@@ -1,10 +1,12 @@
-import CreateDriverForm from 'components/drivers/CreateDriverForm';
-import CreateOrderForm from 'components/orders/CreateOrderForm';
 import Modal from 'components/Modal';
 import OrderList from 'components/orders/OrderList';
 import AppContext from 'context/AppContext';
 import CreateFormContext from 'context/CreateFormContext';
-import { useContext } from 'react';
+import { useContext, lazy } from 'react';
+import RRLazyWrapper from 'components/general/RRLazyWrapper';
+const CreateDriverForm = lazy(() => import('components/drivers/CreateDriverForm'));
+const CreateOrderForm = lazy(() => import('components/orders/CreateOrderForm'));
+
 
 const OrderDriverForms = ({ show, setShow,
   showOrder, setShowOrder, filteredList }) => {
@@ -48,25 +50,34 @@ const OrderDriverForms = ({ show, setShow,
       <OrderList
         list={filteredList}
       />
-      <Modal
-        show={show}
-        onHide={promptToClose}
-        modalTitle='Driver Builder'
-      >
-        <CreateDriverForm
-          forceClose={forceCloseDriver}
-        />
-      </Modal>
-      <Modal
-        show={showOrder}
-        onHide={promptToCloseOrder}
-        modalTitle='Order Builder'
-      >
-        <CreateOrderForm
-          forceClose={forceCloseOrder}
-        // {...}
-        />
-      </Modal>
+      {
+        show &&
+        <Modal
+          show={show}
+          onHide={promptToClose}
+          modalTitle='Driver Builder'
+        >
+          <RRLazyWrapper>
+            <CreateDriverForm
+              forceClose={forceCloseDriver}
+            />
+          </RRLazyWrapper>
+        </Modal>
+      }
+      {
+        showOrder &&
+        <Modal
+          show={showOrder}
+          onHide={promptToCloseOrder}
+          modalTitle='Order Builder'
+        >
+          <RRLazyWrapper>
+            <CreateOrderForm
+              forceClose={forceCloseOrder}
+            />
+          </RRLazyWrapper>
+        </Modal>
+      }
     </>
   )
 }

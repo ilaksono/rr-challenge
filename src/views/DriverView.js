@@ -1,11 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
+import { lazy, useState, useEffect, useContext } from 'react';
 import AppContext from 'context/AppContext';
 import { CreateFormProvider } from 'context/CreateFormContext';
 import { Button, Form } from 'react-bootstrap';
 import * as hf from 'utils/helperFuncs';
-import OrderDriverForms from 'components/orders/OrderDriverForms';
 import DeleteIcon from 'components/general/DeleteIcon';
 import ax, { UNASSIGN_ORDERS, DELETE_DRIVER } from 'ax';
+// import OrderDriverForms from 'components/orders/OrderDriverForms';
+import RRLazyWrapper from 'components/general/RRLazyWrapper';
+const OrderDriverForms = lazy(() => import('components/orders/OrderDriverForms'));
 const init = {
   fname: '',
   lname: '',
@@ -101,9 +103,10 @@ const DriverView = ({ id, driverIndex, fullName }) => {
       onDragOver={e => handleDragOverZone(e, 'driver', id)}
       id={'asd' + id}
     >
-      
-      <div className='view-header'>
-        Driver
+      <div className='view-header flex'>
+        <div
+          className='vert-align-header'
+        >Driver</div>
         <br />
         <Form.Control
           as='select'
@@ -111,17 +114,14 @@ const DriverView = ({ id, driverIndex, fullName }) => {
         >{driverOptions}
         </Form.Control>
       </div>
-      <div className='view-header rr-flex-row'>
-        <div>
-          Source to Destination
-        </div>
-        <div>Revenue | Cost</div>
-      </div>
+    
       <CreateFormProvider
         init={init}
         show={showOrder}
         setShow={setShowOrder}
       >
+        <RRLazyWrapper>
+
         <OrderDriverForms
           show={show}
           setShow={setShow}
@@ -129,6 +129,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
           setShowOrder={setShowOrder}
           filteredList={filteredList}
         />
+        </RRLazyWrapper>
       </CreateFormProvider>
       <Button
         onClick={() => setShow(true)}
