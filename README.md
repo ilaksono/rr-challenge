@@ -76,6 +76,7 @@
     - form validation for country/city/state in address table
     - form validation driver_insurance of drivers and standard format
     - More test coverage
+  - Optimize animations on OrderListItem
 
 
 

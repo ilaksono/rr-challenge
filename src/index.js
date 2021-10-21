@@ -5,10 +5,14 @@ import App from './App';
 // import reportWebVitals from './reportWebVitals';
 import { AppProvider } from 'context/AppContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'sass/keyframes.scss';
 import 'sass/custombs.scss';
 import 'sass/layouts.scss'
 import 'sass/icons.scss'
 import 'sass/loading.scss';
+
+
+
 ReactDOM.render(
   <React.StrictMode>
     <AppProvider>

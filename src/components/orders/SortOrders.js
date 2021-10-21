@@ -27,7 +27,7 @@ const SortOrders = (props) => {
   )
   return (
     <>
-      <div className='light-color-text'>Sort Orders | Total: 
+      <div className='light-color-text text-center'>Sort Orders | Total: 
       <strong >&nbsp;{length}</strong></div>
       <div className='flex'>
         <a

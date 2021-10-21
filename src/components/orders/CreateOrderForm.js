@@ -60,6 +60,8 @@ const CreateOrderForm = (props) => {
     handleCreateFormChange
   } = useContext(CreateFormContext);
 
+  const timezoneName = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2];
+
   const validateTimes = useCallback(() => {
     return (
       new Date(createForm.end_time).getTime() >= new Date(createForm.start_time).getTime()
@@ -105,12 +107,14 @@ const CreateOrderForm = (props) => {
       return createError('This driver is booked - please select another driver, or modify the start/end times.');
     if (!createForm.supp_city || !createForm.cust_city)
       return createError('Please add city information');
+    if((createForm.revenue && !Number(createForm.revenue)) || (createForm.cents && !Number(createForm.cents)))
+      return createError('Revenue & Cost must be amounts');  
     try {
       showLoadModal();
 
       const resSupplierAddress = await handleCreateSupplier(createForm);
       const resCustomerAddress = await handleCreateCustomer(createForm);
-      const addressesList = []
+      const addressesList = [];
 
       const resSupplierAddressId = resSupplierAddress.id
       const resCustomerAddressId = resCustomerAddress.id
@@ -143,7 +147,7 @@ const CreateOrderForm = (props) => {
       createError(er.message);
     }
     hideLoadModal();
-  }, [createForm, addOrderToList]);
+  }, [createForm, appData]);
 
 
   const handleFilterList = (list = [], str = '') => {
@@ -312,7 +316,10 @@ const CreateOrderForm = (props) => {
         >
           <InputGroup className="m-1">
             <InputGroup.Text
-            >Depart
+            >Depart&nbsp;
+            <div className='light-color-text'>
+              ({timezoneName})
+            </div>
             </InputGroup.Text>
             <Form.Control
               value={createForm.start_time || ''}
@@ -324,7 +331,10 @@ const CreateOrderForm = (props) => {
           </InputGroup>
           <InputGroup className="m-1">
             <InputGroup.Text
-            >Arrive
+            >Arrive&nbsp;
+            <div className='light-color-text'>
+              ({timezoneName})
+            </div>
             </InputGroup.Text>
             <Form.Control
               value={createForm.end_time || ''}

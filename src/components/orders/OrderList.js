@@ -32,10 +32,11 @@ const OrderList = ({ list = [] }) => {
         </div>
         <div>Revenue | Cost</div>
       </div>
-    <div className='order-list'>
+    <ul className='order-list'
+    >
       {parsedList}
 
-    </div>
+    </ul>
     </>
   )
 }

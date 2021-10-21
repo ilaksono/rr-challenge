@@ -40,7 +40,7 @@ const OrderView = ({ id }) => {
   }, [drag])
 
   return (
-    <div className={classList.join(' ')}
+    <section className={classList.join(' ')}
       onDragLeave={handleDragEvents}
       onDragEnter={handleDragEvents}
       onDragOver={e => handleDragOverZone(e, 'order', id)}
@@ -70,7 +70,7 @@ const OrderView = ({ id }) => {
       </RRLazyWrapper>
 
 
-    </div>
+    </section>
   )
 }
 export default OrderView;

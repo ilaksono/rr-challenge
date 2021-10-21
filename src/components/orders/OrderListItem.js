@@ -23,9 +23,51 @@ export const CompanyPopover = React.forwardRef(
   },
 );
 
+const OrderTimePopover = React.forwardRef(
+  ({ popper, children, show: _, ...props }, ref) => {
+    return (
+      <Popover ref={ref} body {...props}>
+        <div><span className='light-color-text'>start time: </span>{hf.formatMDTimeShort(props.start_time)}</div>
+        <div><span className='light-color-text'>end time: </span>{hf.formatMDTimeShort(props.end_time)}</div>
+        <div><span className='light-color-text'>status: </span>{props.status}</div>
+      </Popover>
+    );
+  },
+);
+const TimeLegendPopover = React.forwardRef(
+  ({ popper, children, show: _, ...props }, ref) => {
+    const listNames = [
+      'transit-completed',
+      'in-transit',
+      'not-in-transit',
+      'transit-past-due'
+    ]
+    return (
+      <Popover ref={ref} body {...props} list={listNames}>
+        <div
+          style={{
+            width: 200,
+            height: 100
+
+          }}
+        >
+
+          {listNames.map(each =>
+            <div
+              key={each}
+              className='position-relative'>
+              <div className={`transit-indicator ${each}`}>
+              </div>
+              <div className='transit-indicator-text'>{hf.kebobToTitle(each)}</div>
+            </div>
+          )}
+        </div>
+      </Popover>
+    );
+  },
+);
 
 const OrderListItem = (props) => {
-
 
   const {
     source_address_id,
@@ -34,7 +76,9 @@ const OrderListItem = (props) => {
     cost_cents,
     isNew,
     id,
-    driver_id
+    driver_id,
+    start_time,
+    end_time
   } = props;
 
   // const [drag, setDrag] = useState(init)
@@ -54,7 +98,6 @@ const OrderListItem = (props) => {
     deleteOrder,
     createModal
   } = useContext(AppContext);
-
 
   const promptDelete = () => {
     createModal(
@@ -119,14 +162,14 @@ const OrderListItem = (props) => {
     }
   }, [props])
 
-  const handleDragStart = (e) => {
+  const handleDragStart = useCallback(() => {
     setDrag(prev => ({
       ...prev,
       hide: true,
       id
     }))
-  }
-  const handleDragEnd = (e) => {
+  }, [drag])
+  const handleDragEnd = useCallback(() => {
     setDrag(prev => ({
       ...prev,
       hide: false
@@ -143,31 +186,40 @@ const OrderListItem = (props) => {
     if (!dropZone.id && dropZone.on && dropZone.type === 'driver')
       createError('Please select/add a driver');
     // console.log(e, 'from item');
-  }
+  }, [drag, dropZone, createError, props]);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     setShow(true)
     initCreateForm(
       hf.determineOrderInformation(props, appData)
     );
-  }
+  }, [props, appData]);
 
   const containerClassList = ['order-list-item'];
+
   if (drag.hide && drag.id === id)
     containerClassList.push('partial-hide')
-
   if (isNew)
     containerClassList.push('grow-animation')
 
+  const transitIndicatorClass = ['transit-indicator', 'transit-completed']
+  const inTransitClass = hf.inTransitClass(props);
+
+  transitIndicatorClass[1] = inTransitClass
+
   const sourceAddress = appData.addresses.hash[source_address_id] || {};
   const destinationAddress = appData.addresses.hash[destination_address_id] || {};
+  if(id === 51)
+    console.log(new Date(), new Date(start_time), new Date(end_time))
+
+    console.log(new Date().toJSONLocal(), id)
   return (
     <RRLazyWrapper>
-
-      <div className={containerClassList.join(' ')}
+      <li
+        className={containerClassList.join(' ')}
         onDragStart={handleDragStart}
         // onDragEnd={handleDragEnd}
-        onMouseUp={() => console.log('mouse up')}
+        // onMouseUp={() => console.log('mouse up')}
         draggable={true}
         onDragEndCapture={handleDragEnd}
         onDragOver={(e) => e.preventDefault()}
@@ -184,6 +236,19 @@ const OrderListItem = (props) => {
             }}
           ></div>
         </a>
+        <OverlayTrigger
+          triger='hover'
+          overlay={
+            <TimeLegendPopover
+            />
+          }>
+          <a
+            data-toggle='tooltip'
+            title={hf.kebobToTitle(transitIndicatorClass[1])}
+          >
+            <div className={transitIndicatorClass.join(' ')}></div>
+          </a>
+        </OverlayTrigger>
         <div>
 
           <div className='flex'>
@@ -211,7 +276,19 @@ const OrderListItem = (props) => {
               </div>
             </OverlayTrigger>
           </div>
-          <div className='light-color-text flex'>{hf.formatOrderDate(props.start_time)} - {hf.formatOrderDate(props.end_time)}</div>
+          <OverlayTrigger
+            triger='hover'
+            overlay={
+              <OrderTimePopover
+                start_time={start_time}
+                end_time={end_time}
+                status={hf.kebobToTitle(transitIndicatorClass[1])}
+              />
+            }>
+            <div className='light-color-text flex'>
+              {hf.formatOrderDate(props.start_time)} - {hf.formatOrderDate(props.end_time)}
+            </div>
+          </OverlayTrigger>
         </div>
         <table className='order-pricing-summary light-color-text'
         >
@@ -268,7 +345,7 @@ const OrderListItem = (props) => {
             handleClickDelete={promptDelete}
           />
         </div>
-      </div>
+      </li>
     </RRLazyWrapper>
   )
 }

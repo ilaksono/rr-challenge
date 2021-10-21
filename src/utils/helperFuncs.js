@@ -1,3 +1,4 @@
+
 export const formatDate = (date) => {
   if (!date) return '';
   const time = new Date(date).getTime();
@@ -62,10 +63,10 @@ export const determineOrderInformation = (order, appData) => {
   if (order.driver_id)
     driver = appData.drivers.hash[order.driver_id];
 
-  const json = {
+  const jsonOrderInformation = {
     ...order,
-    end_time: new Date(order.end_time).toJSON().slice(0, 16),
-    start_time: new Date(order.start_time).toJSON().slice(0, 16),
+    end_time: new Date(order.end_time).toJSONLocal().slice(0, 16),
+    start_time: new Date(order.start_time).toJSONLocal().slice(0, 16),
     supplier_name: formatFullName(supp.supp_fname, supp.supp_lname),
     customer_name: formatFullName(cust.cust_fname, cust.cust_lname),
     driver_name: formatFullName(driver.driver_fname, driver.driver_lname),
@@ -87,10 +88,31 @@ export const determineOrderInformation = (order, appData) => {
     revenue: (order.revenue_cents / 100).toFixed(2),
     cost: (order.cost_cents / 100).toFixed(2)
   };
-  return json;
+  return jsonOrderInformation;
 }
 export const formatFullName = (fname = '', lname = '') =>
   `${fname} ${lname}`
+
+export const inTransitClass = ({ start_time, end_time, driver_id }) => {
+  const now = new Date().getTime();
+  const start = new Date(start_time).getTime();
+  const end = new Date(end_time).getTime();
+  const isScheduled = now >= start && now <= end;
+  const isDone = now >= end
+  if (!driver_id) {
+    if (isDone)
+      return 'transit-past-due'
+    return 'not-in-transit';
+  }
+  if (!isDone && isScheduled)
+    return 'in-transit';
+  return 'transit-completed'
+}
+
+export const kebobToTitle = (str = '') => {
+  if (!str) return str;
+  return str.split('-').map(each => each[0].toUpperCase() + each.slice(1)).join(' ')
+}
 
 export const isDriverBooked = (driverOrders = [], order) => {
   for (const assigned of driverOrders) {
@@ -107,10 +129,29 @@ export const isDriverBooked = (driverOrders = [], order) => {
   }
   return false
 }
+export const formatMDTimeShort = d => {
+  if (!d) return 'Time not available';
+  let dat = d;
+  if (typeof dat === 'string') {
+    dat = d.replace(' ', 'T')
+  }
+  const timezoneName = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2];
+
+  const da = new Date(dat);
+  const day = da.getDate();
+  const mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+  const hr = da.getHours();
+  let min = da.getMinutes();
+  if (min < 10)
+    min = `0${min}`;
+
+  return `${mons[da.getMonth()]} ${day} at ${hr}:${min} ${timezoneName}`;
+}
+
 
 export const transformDateFormat = (d) => {
   if (!d) return ''
-  return new Date(d).toJSON().slice(0, 16);
+  return new Date(d).toJSONLocal().slice(0, 16);
 }
 export const formatOrderDate = (d) => {
   if (!d) return '';

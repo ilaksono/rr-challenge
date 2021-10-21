@@ -16,12 +16,18 @@
       - source address
 
 3. `Clean and visually appealing UI; thought-through UX` 
+  - UX: Total order counts at top of driver and order sections
   - Simple alerts and toasts to inform users
     - success alerts and error toasts
-  - Simple animations to add user enjoyability 
+  - Simple animations to add user interaction 
     - drag and dropping orders between windows - custom built hooks from scratch
-    - orders grow in animation for fun 
-  - added scrollable windows in order forms for selecting a driver, source, and destination for orders
+    - animations on OrderListItem for movement and sense of user interaction 
+  - in CreateOrderForm: added scrollable windows for selecting a driver, source, and destination for orders to select previously input records. 
+  - in OrderListItem: added transit status color dots to show status + a legend for informative content
+  - Popovers on: 
+    - Source + Destination -  describes the locations for departure and arrival
+    - Start and End times - describes the date+time of depart / arrival and corresponding order status
+
 
 4. `More details about drivers and orders can be viewed and edited. You can think what other information we might be relevant to the system`
   - Added edittable supplier address information
@@ -86,3 +92,6 @@
     - Revenue - Cost difference
     - Customer 
     - Supplier
+  - Calculated order status and elements to display status
+    - Animated dots
+    - Popover legend (tooltip)

@@ -6,7 +6,6 @@ const routes = [
     name: 'Main',
     path: '/',
     component: MainView,
-    exact: true
   },
   {
     name: 'Orders',

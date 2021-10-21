@@ -1,7 +1,9 @@
 @import "./helpers.scss";
 .home-banner {
   height: 48px;
+  border-bottom: 1px solid rgba(135, 206, 250, 0.219);
   .title {
+    font-size: 1.2em;
     color: #0b2575;
     font-weight: bold;
     padding: 12px;

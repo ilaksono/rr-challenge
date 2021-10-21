@@ -7,6 +7,40 @@
   overflow-y: auto;
   cursor: all-scroll;
 }
+.in-transit {
+  background-color: rgb(255, 217, 0);
+  animation: pulse-yellow 2.5s infinite;
+}
+.position-relative {
+  position:relative;
+}
+
+.not-in-transit {
+  background-color: rgb(255, 0, 0);
+  animation: pulse-red 2.5s infinite;
+}
+.transit-past-due {
+  background-color: black;
+  animation: pulse-black 2.5s infinite;
+}
+.transit-completed {
+  background-color: green;
+  animation: pulse-green 2.5s infinite;
+
+}
+.transit-indicator {
+  height:8px;
+  width:8px;
+  border-radius: 50%;
+  position: absolute;
+  left: 8px;
+  top: calc(50% - 4px);
+
+}
+.transit-indicator-text {
+  margin-left: 28px;
+}
+
 .order-list-item {
   cursor: grab;
 
@@ -58,6 +92,7 @@
   padding-top: 36px;
 }
 .view-header {
+  font-weight: bold;
   .vert-align-header {
     line-height: 2.3;
     margin-right: 24px;
@@ -175,14 +210,16 @@ form {
 .red-color-text {
   color: #cd2026;
 }
-
+.text-center {
+  text-align: center;
+}
 .bg-image {
   background-size: cover;
   height: 24px;
   width: 24px;
 }
 .grow-animation {
-  animation: growIn 1s forwards;
+  animation: growIn 1s;
 }
 .revenue-cost-summary {
   margin-top: 12px;

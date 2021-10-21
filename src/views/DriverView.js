@@ -49,7 +49,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
     } else if (
       e.type === 'dragenter' && classList[1] === 'unselected'
     ) setClassList(['driver-layout', 'selected'])
-    
+
     handleDragDropZone(e, 'driver', id)
   }
 
@@ -97,7 +97,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
 
 
   return (
-    <div className={classList.join(' ')}
+    <section className={classList.join(' ')}
       onDragLeave={handleDragEvents}
       onDragEnter={handleDragEvents}
       onDragOver={e => handleDragOverZone(e, 'driver', id)}
@@ -106,7 +106,8 @@ const DriverView = ({ id, driverIndex, fullName }) => {
       <div className='view-header flex'>
         <div
           className='vert-align-header'
-        >Driver</div>
+        >Driver:
+        </div>
         <br />
         <Form.Control
           as='select'
@@ -114,21 +115,20 @@ const DriverView = ({ id, driverIndex, fullName }) => {
         >{driverOptions}
         </Form.Control>
       </div>
-    
+
       <CreateFormProvider
         init={init}
         show={showOrder}
         setShow={setShowOrder}
       >
         <RRLazyWrapper>
-
-        <OrderDriverForms
-          show={show}
-          setShow={setShow}
-          showOrder={showOrder}
-          setShowOrder={setShowOrder}
-          filteredList={filteredList}
-        />
+          <OrderDriverForms
+            show={show}
+            setShow={setShow}
+            showOrder={showOrder}
+            setShowOrder={setShowOrder}
+            filteredList={filteredList}
+          />
         </RRLazyWrapper>
       </CreateFormProvider>
       <Button
@@ -149,11 +149,11 @@ const DriverView = ({ id, driverIndex, fullName }) => {
         </span>
       </div>
       <DeleteIcon
-      className='delete-icon-driver'
-      tooltip='Delete driver'
+        className='delete-icon-driver'
+        tooltip='Delete driver'
         handleClickDelete={promptDelete}
       />
-    </div>
+    </section>
   )
 }
 export default DriverView;

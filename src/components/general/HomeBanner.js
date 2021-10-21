@@ -5,7 +5,7 @@ const HomeBanner = () => {
     <div className='home-banner'>
       <div
        className='title'
-      >OnlyTrans &nbsp;|&nbsp; Manage your drivers
+      >TransIt &nbsp;|&nbsp; Organize and drive your orders
       </div>
     </div>
   )
