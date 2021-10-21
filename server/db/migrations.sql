@@ -43,8 +43,8 @@ CREATE TABLE addresses (
 
 CREATE TABLE orders (
   id SERIAL PRIMARY KEY NOT NULL,
-  start_time TIMESTAMP,
-  end_time TIMESTAMP,
+  start_time TIMESTAMPTZ,
+  end_time TIMESTAMPTZ,
   cost_cents INTEGER,
   description VARCHAR(191),
   revenue_cents INTEGER,

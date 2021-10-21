@@ -13,9 +13,9 @@ import DriverDisplayItem from 'components/drivers/DriverDisplayItem';
 import SupplierDisplayItem from 'components/suppliers/SupplierDisplayItem';
 import SupplierFormElements from 'components/suppliers/SupplierFormElements';
 import * as hf from 'utils/helperFuncs';
+import * as con from 'utils/con';
 
-
-const numMsUTCtoEST = 14400000
+const numMsUTCtoEST = 3600000 * con.tzOffset
 
 const compareObjects = (raw, model) => {
   for (const [key, value] of Object.entries(raw)) {
