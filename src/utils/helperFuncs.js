@@ -129,13 +129,30 @@ export const isDriverBooked = (driverOrders = [], order) => {
   }
   return false
 }
+
+export const makeDateTimeString = dString => {
+  if (!new Date(dString).getTime())
+    throw new Error('Not a valid date');
+  let offset = new Date().getTimezoneOffset() / 60;
+  let suffix = (Math.round(offset * 100)).toString();
+  let operator = '-';
+  if (offset < 0) {
+    offset *= -1;
+    operator = '+';
+  }
+  if (suffix.length <= 3)
+    suffix = '0' + suffix;
+
+  return `${dString}:00${operator}${suffix}`;
+}
+
 export const formatMDTimeShort = d => {
   if (!d) return 'Time not available';
   let dat = d;
   if (typeof dat === 'string') {
     dat = d.replace(' ', 'T')
   }
-  const timezoneName = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2];
+  const timezoneName = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
 
   const da = new Date(dat);
   const day = da.getDate();

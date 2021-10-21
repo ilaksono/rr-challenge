@@ -73,8 +73,8 @@ const CreateOrderForm = (props) => {
         cost_cents: createForm.cost * 100,
         revenue_cents: createForm.revenue * 100,
         description: createForm.description,
-        start_time: createForm.start_time,
-        end_time: createForm.end_time,
+        start_time: createForm.start_time && hf.makeDateTimeString(createForm.start_time),
+        end_time: createForm.end_time && hf.makeDateTimeString(createForm.end_time),
         // start_time: createForm.start_time,
         source_address_id,
         destination_address_id,
@@ -82,7 +82,9 @@ const CreateOrderForm = (props) => {
       }
       const json = compareObjects(payload, appData.orders.hash[createForm.id])
       json.id = createForm.id
-      const res = await ax(UPDATE_ORDER, 'put', payload);
+      const res = await ax(UPDATE_ORDER, 
+        'put', 
+        payload);
       if (res?.length) {
         if (!deleteOrderThenAdd(res[0]))
           deleteOrderThenAdd('unassigned')
@@ -132,6 +134,8 @@ const CreateOrderForm = (props) => {
         'post',
         {
           ...createForm,
+          start_time: hf.makeDateTimeString(createForm.start_time),
+          end_time: hf.makeDateTimeString(createForm.end_time),
           resSupplierAddressId,
           resCustomerAddressId
         }
@@ -149,6 +153,7 @@ const CreateOrderForm = (props) => {
     hideLoadModal();
   }, [createForm, appData]);
 
+  console.log(new Date(createForm.start_time))
 
   const handleFilterList = (list = [], str = '') => {
     if (!str)
