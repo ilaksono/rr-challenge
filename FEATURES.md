@@ -95,3 +95,8 @@
   - Calculated order status and elements to display status
     - Animated dots
     - Popover legend (tooltip)
+    - blue dots: order completed
+      - Blue was chosen over green to prevent red-green color issues
+    - red dots: order needs to be assigned
+    - yellow dots: order delivery in progress
+    - black: order is past-due(expired and unassigned)

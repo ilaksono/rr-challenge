@@ -17,6 +17,7 @@ export const CompanyPopover = React.forwardRef(
     return (
       <Popover ref={ref} body {...props}>
         <div><span className='light-color-text'>name: </span>{props.fname} {props.lname}</div>
+        <div><span className='light-color-text'>amount: </span>${props.amount}</div>
         <div><span className='light-color-text'>type: </span>{props.type}</div>
       </Popover>
     );
@@ -300,6 +301,7 @@ const OrderListItem = (props) => {
                   fname={appData.suppliers.hash[sourceAddress.supplier_id]?.supp_fname}
                   lname={appData.suppliers.hash[sourceAddress.supplier_id]?.supp_lname}
                   type='Supplier'
+                  amount={(revenue_cents / 100).toFixed(2)}
                 />
               }>
               <tr>
@@ -318,6 +320,7 @@ const OrderListItem = (props) => {
                   fname={appData.customers.hash[destinationAddress.customer_id]?.cust_fname}
                   lname={appData.customers.hash[destinationAddress.customer_id]?.cust_lname}
                   type='Customer'
+                  amount={(cost_cents / 100).toFixed(2)}
                 />
               }>
               <tr>

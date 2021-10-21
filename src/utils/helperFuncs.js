@@ -180,6 +180,7 @@ export const formatOrdersCsv = (appData) => {
   const csvData = [];
   csvData[0] = [
     'order_id',
+    'driver_id',
     'driver_fname',
     'driver_lname',
     'driver_insurance_policy_number',
@@ -213,7 +214,8 @@ export const formatOrdersCsv = (appData) => {
     const destination = addresses.hash[order.destination_address_id] || {};
     const driver = drivers.hash[order.driver_id] || {};
     const entry = [
-      order.id,
+      'or_' + order.id,
+      order.driver_id ? 'dr_' + order.driver_id : '',
       driver.driver_fname,
       driver.driver_lname,
       driver.driver_insurance,
