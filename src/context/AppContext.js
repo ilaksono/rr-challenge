@@ -11,7 +11,7 @@ const AppContext = React.createContext();
 export const AppProvider = ({ children }) => {
 
   const {
-    appData,
+    appData = {},
     fetchUnassignedOrders,
     addDriverToList,
     addOrderToList,

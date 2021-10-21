@@ -51,5 +51,8 @@
     "collectCoverageFrom": [
       "!src/index.js"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react-hooks": "^7.0.2"
   }
 }

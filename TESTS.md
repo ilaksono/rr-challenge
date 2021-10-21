@@ -1,22 +1,18 @@
-# Unit Tests
-## Build App Test
-  1. app should start & build successfully; going to the correct url should connect to the app
-    - browser.connect('localhost:3000')
-    - waitForText('OnlyTrans')
-    - if (isOnPage('OnlyTrans')) -> test is successful
+# Implemented Unit Tests:
+  - run `npm run test` to run test scripts
+    - uses jest for mock functions
+    - uses react-testing-library for render and element selectors/queries
+  1. Render App
+  2. Render Update components
+    - Alert
+    - ConfirmModal
+    - ErrorToast
+  3. Render OrderList with non-empty OrderListItems
 
-  - Before all next tests - connect to app & wait for page to load;
+# Non-implemented Tests
 
 ## React render tests  
-  2. should render order list items
-    - waitForElementWithClass('order-list-item')
-    - success if element renders
-
-  3. order list items should not be empty
-    - render OrderListItem with dummy props
-    - assert text inside OrderListItem to match cities and times in props
-    - if (assert) success
-
+  
   4. clicking Create a Driver button should open Driver Builder
     - selectElementWithText('Create a Driver')
     - Click element

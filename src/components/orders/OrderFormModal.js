@@ -11,9 +11,9 @@ const OrderFormModal = ({ show, setShow }) => {
 
 
   const {
-    appData,
+    appData = {},
     createModal
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
 
   const {
     resetCreateForm

@@ -41,7 +41,6 @@ const SortOrders = (props) => {
           as='select'
           value={mode}
           onChange={e => {
-            console.log(e.target.value);
             handleChange(e.target.value)
           }}
         >{parsedOptions}</Form.Control>

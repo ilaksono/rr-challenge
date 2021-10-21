@@ -18,7 +18,7 @@ const OrderView = ({ id }) => {
     handleDragDropZone,
     handleDragOverZone,
     dropZone,
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
 
 
   const handleDragEvents = (e) => {

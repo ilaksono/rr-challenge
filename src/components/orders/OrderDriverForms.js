@@ -14,7 +14,7 @@ const OrderDriverForms = ({ show, setShow,
 
   const {
     createModal,
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
   const {
     resetCreateForm
   } = useContext(CreateFormContext)

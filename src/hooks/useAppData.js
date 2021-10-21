@@ -60,7 +60,7 @@ const reducer = (state, action) => {
 
 const useAppData = () => {
 
-  const [appData, dispatch] = useReducer(reducer, init)
+  const [appData = {}, dispatch] = useReducer(reducer, init)
   const dataRef = useRef({
     suppliers: {
       list: [],
@@ -116,6 +116,7 @@ const useAppData = () => {
       }
     } catch (er) {
       console.error(er);
+
     }
   }
   const fetchAssignedOrders = async () => {
@@ -134,6 +135,7 @@ const useAppData = () => {
       }
     } catch (er) {
       console.error(er);
+      
     }
   }
 
@@ -151,7 +153,7 @@ const useAppData = () => {
         dispatch({ type: SET_WILD_PROPS, par: 'drivers', child: 'list', payload: res })
       }
     } catch (er) {
-      console.error(er);
+      
     }
   }
   const fetchSuppliers = async () => {
@@ -163,6 +165,7 @@ const useAppData = () => {
       }
     } catch (er) {
       console.error(er);
+
     }
   }
   const fetchCustomers = async () => {
@@ -174,6 +177,7 @@ const useAppData = () => {
       }
     } catch (er) {
       console.error(er);
+
     }
   }
   const fetchAddresses = async () => {
@@ -185,6 +189,7 @@ const useAppData = () => {
       }
     } catch (er) {
       console.error(er);
+
     }
   }
   const updateDriversHash = () => {
@@ -352,7 +357,6 @@ const useAppData = () => {
           payload
         })
         const addressRes = await handleCreateAddress(addressJson)
-        console.log(addressRes);
         return addressRes
       }
     } catch (er) {
@@ -383,7 +387,6 @@ const useAppData = () => {
           payload
         })
         const addressRes = await handleCreateAddress(addressJson)
-        console.log(addressRes);
         return addressRes;
       }
     } catch (er) {
@@ -493,7 +496,6 @@ const useAppData = () => {
       payload[1] = payload[0];
     if (payload.length === 0)
       payload = [0, 0]
-    console.log(payload);
     dispatch({
       type: SET_WILD_PROPS,
       par: 'view',

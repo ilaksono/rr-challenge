@@ -91,14 +91,14 @@ const OrderListItem = (props) => {
   const {
     drag,
     setDrag,
-    appData,
+    appData = {},
     dropZone,
     createError,
     moveOrderToList,
     deleteOrderThenAdd,
     deleteOrder,
     createModal
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
 
   const promptDelete = () => {
     createModal(
@@ -210,10 +210,7 @@ const OrderListItem = (props) => {
 
   const sourceAddress = appData.addresses.hash[source_address_id] || {};
   const destinationAddress = appData.addresses.hash[destination_address_id] || {};
-  if(id === 51)
-    console.log(new Date(), new Date(start_time), new Date(end_time))
 
-    console.log(new Date().toJSONLocal(), id)
   return (
     <RRLazyWrapper>
       <li

@@ -15,7 +15,7 @@ const Updates = () => {
     alert,
     resetAlert,
     loadModal,
-  } = useContext(AppContext)
+  } = useContext(AppContext) || {}
 
   const alRef = useRef();
   

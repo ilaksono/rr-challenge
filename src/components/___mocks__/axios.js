@@ -141,18 +141,19 @@ const axios = {
           lname,
           make,
           model,
-          year
+          year,
         } = payload;
         const drivers = appData.drivers;
-        appData.drivers.push({
+        const newDriver = {
           id: drivers.length + 1,
           driver_fname: fname,
           driver_lname: lname,
           make,
           model,
           year
-        });
-        const data = [appData.orders[type][idx]]
+        }
+        appData.drivers.push(newDriver);
+        const data = [newDriver];
         return validUrlResponse(data)
       }
       default:

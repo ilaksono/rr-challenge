@@ -45,14 +45,14 @@ const CreateOrderForm = (props) => {
     createError,
     showLoadModal,
     hideLoadModal,
-    appData,
+    appData = {},
     addOrderToList,
     createAlert,
     deleteOrderThenAdd,
     handleCreateCustomer,
     handleCreateSupplier,
     addAddressesList
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
   const {
     createForm,
     resetCreateForm,
@@ -125,7 +125,6 @@ const CreateOrderForm = (props) => {
         addressesList.push(resSupplierAddress);
       if (!appData.addresses.hash[resCustomerAddressId])
         addressesList.push(resCustomerAddress);
-      console.log(addressesList);
       addAddressesList(addressesList)
       if (createForm.id)
         return handleSubmitEdit(resSupplierAddressId, resCustomerAddressId);
@@ -153,7 +152,6 @@ const CreateOrderForm = (props) => {
     hideLoadModal();
   }, [createForm, appData]);
 
-  console.log(new Date(createForm.start_time))
 
   const handleFilterList = (list = [], str = '') => {
     if (!str)

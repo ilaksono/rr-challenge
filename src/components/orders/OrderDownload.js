@@ -12,7 +12,7 @@ const OrderDownload = () => {
 
   const {
     appData
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
 
   return (
     <CSVLink 

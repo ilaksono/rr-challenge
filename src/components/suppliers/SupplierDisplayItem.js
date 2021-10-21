@@ -22,7 +22,7 @@ const SupplierDisplayItem = (props) => {
 
   const {
     appData
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
   const {
     createForm
   } = useContext(CreateFormContext);

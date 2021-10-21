@@ -13,7 +13,7 @@ const getAllCustomers = async (req, res) => {
       return done(res, resq.rows);
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -40,7 +40,7 @@ const makeCustomer = async (req, res) => {
     return errorResponse(res, errorMessages.queryFailed)
 
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
 

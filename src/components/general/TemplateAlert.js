@@ -7,7 +7,7 @@ const TemplateAlert = ({ alert, resetAlert }) => {
       className='template-alert-wrapper'
     >
       <Alert
-        dismissable={true}
+        dismissable="true"
         transition
         role='alert'
         show={alert.show}

@@ -27,7 +27,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
 
   const {
     drag,
-    appData,
+    appData = {},
     dropZone,
     createModal,
     createError,
@@ -36,7 +36,7 @@ const DriverView = ({ id, driverIndex, fullName }) => {
     modifyDriverView,
     updateUnassignedOrders,
     deleteDriverAppData
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
 
 
   const handleDragEvents = (e) => {

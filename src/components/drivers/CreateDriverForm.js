@@ -19,7 +19,7 @@ const CreateDriverForm = ({forceClose}) => {
     showLoadModal,
     hideLoadModal,
     createAlert
-  } = useContext(AppContext);
+  } = useContext(AppContext) || {};
   const {
     createForm,
     handleCreateFormChange,

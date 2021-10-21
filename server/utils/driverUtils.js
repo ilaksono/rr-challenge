@@ -14,7 +14,7 @@ const getAllDrivers = async (req, res) => {
       return done(res, resq.rows);
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -51,7 +51,7 @@ const makeDriver = async (req, res) => {
     return errorResponse(res, errorMessages.queryFailed)
 
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
 
@@ -73,7 +73,7 @@ const deleteDriver = async (req, res) => {
       return resq.rows;
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
   }

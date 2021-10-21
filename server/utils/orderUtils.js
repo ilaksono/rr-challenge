@@ -19,7 +19,7 @@ const getUnassignedOrders = async (req, res) => {
       return done(res, resq.rows);
     return errorResponse(res, errorMessages.failedUnassignedOrders)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -33,7 +33,7 @@ const getAssignedOrders = async (req, res) => {
       return done(res, resq.rows);
     return errorResponse(res, errorMessages.failedUnassignedOrders)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -76,7 +76,7 @@ const makeOrder = async (req, res) => {
       return resq.rows
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -96,7 +96,7 @@ const setOrderUnassigned = async (req, res) => {
       return resq.rows
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -145,7 +145,7 @@ const updateOrder = async (req, res) => {
     }
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -166,7 +166,7 @@ const deleteOrder = async (req, res) => {
       return resq.rows
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
   }
 }
@@ -187,7 +187,7 @@ const unassignDriverOrders = async (req, res) => {
       return resq.rows
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    console.error(er);
+    
     return errorResponse(res, errorMessages.queryFailed)
   }
 }

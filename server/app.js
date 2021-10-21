@@ -72,7 +72,7 @@ module.exports = ({
       await seedOrders();
       res.send('seed successful');
     } catch (er) {
-      console.error(er);
+      
       res.send(er.message);
     }
   });
