@@ -1,25 +1,20 @@
-import './App.css';
-import { Switch, BrowserRouter as Router, Route } from 'react-router-dom';
+import { lazy } from 'react';
 import ErrorBoundary from 'ErrorBoundary';
-import routes from 'routes'
-import Updates from 'components/general/Updates';
+import RRLazyWrapper from 'components/general/RRLazyWrapper';
+import useRemoveInitialLoader from 'hooks/useRemoveInitialLoader'
+const MainView = lazy(() => import('views/MainView'));
+const Updates = lazy(() => import('components/general/Updates'));
 
 function App() {
+ 
+  useRemoveInitialLoader();
 
-  const parsedRoutes = routes.map(each =>
-    <Route
-      key={each.path}
-      {...each} />)
   return (
     <ErrorBoundary>
-      <Router>
-        <Switch>
-          {parsedRoutes}
-        </Switch>
+      <RRLazyWrapper>
+        <MainView />
         <Updates />
-      </Router>
-
-
+      </RRLazyWrapper>
     </ErrorBoundary>
   );
 }

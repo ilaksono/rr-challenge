@@ -13,7 +13,7 @@ const getAllSuppliers = async (req, res) => {
       return done(res, resq.rows);
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    
+
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -22,7 +22,7 @@ const getAllSuppliers = async (req, res) => {
 const makeSupplier = async (req, res) => {
   try {
     const {
-      supp_fname, 
+      supp_fname,
       supp_lname
     } = req.body
     // if(!supp_fname) {
@@ -35,13 +35,11 @@ const makeSupplier = async (req, res) => {
     });
     if (resq?.rows) {
       done(res, resq.rows);
-      return resq.rows; 
-    }return errorResponse(res, errorMessages.queryFailed)
+      return resq.rows;
+    } return errorResponse(res, errorMessages.queryFailed)
 
   } catch (er) {
-    
     return errorResponse(res, errorMessages.queryFailed)
-
   }
 }
 

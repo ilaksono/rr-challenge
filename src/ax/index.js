@@ -9,11 +9,12 @@ export const UPDATE_ORDER = '/api/orders?type=update'
 export const UNASSIGN_ORDER = '/api/orders?type=unassignOrder'
 export const DELETE_ORDER = '/api/orders?type=delete'
 export const UNASSIGN_ORDERS = '/api/orders?type=unassignOrders'
+export const UPLOAD_ORDERS_LIST = '/api/orders?type=uploadList'
 
 // driver api routes
 export const GET_ALL_DRIVERS = '/api/drivers?type=all'
 export const CREATE_DRIVER = '/api/drivers?type=create';
-export const DELETE_DRIVER ='/api/drivers?type=delete';
+export const DELETE_DRIVER = '/api/drivers?type=delete';
 
 // supplier api routes
 export const GET_ALL_SUPPLIERS = '/api/suppliers?type=all'
@@ -37,17 +38,37 @@ const isValidResponse = (res) => {
   return false;
 }
 
-const axiosWrapper = async (url, method = 'get', body = {}, headers = {}) => {
+const axiosWrapper = async (
+  url,
+  method = 'get',
+  body = {},
+  headers = {},
+  numRetry = 2
+) => {
   try {
     const axiosMethod = axios[method];
 
     const res = await axiosMethod(url, body, headers);
-    if(!isValidResponse(res)) {
+    if (!isValidResponse(res)) {
+      if (method === 'get'
+       && numRetry > 0)
+        return new Promise((resolve, reject) =>
+          setTimeout(() =>
+            resolve(axiosWrapper(url, method, body, headers, numRetry - 1))
+            , 7000));
       console.error(res);
       throw new Error(res.data.msg);
     }
     return res.data.data;
   } catch (er) {
+    if (method === 'get'
+    && numRetry > 0)
+      return new Promise((resolve, reject) =>
+        setTimeout(() =>
+          resolve(axiosWrapper(url, method, body, headers, numRetry - 1))
+          , 7000));
+
+
     throw new Error(er.message);
   }
 

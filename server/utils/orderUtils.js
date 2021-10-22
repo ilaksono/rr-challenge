@@ -6,7 +6,9 @@ const { queryUnassignedOrders,
   queryUnassignOrder,
   queryAssignedOrders,
   queryDeleteOrder,
-  queryUnassignDriverOrders
+  queryUnassignDriverOrders,
+  queryMakeOrderList,
+  queryUpdateOrderList
 } = require('./sqlQueries');
 const errorMessages = require('./errorMessages');
 
@@ -19,7 +21,7 @@ const getUnassignedOrders = async (req, res) => {
       return done(res, resq.rows);
     return errorResponse(res, errorMessages.failedUnassignedOrders)
   } catch (er) {
-    
+
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -33,7 +35,7 @@ const getAssignedOrders = async (req, res) => {
       return done(res, resq.rows);
     return errorResponse(res, errorMessages.failedUnassignedOrders)
   } catch (er) {
-    
+
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -62,7 +64,7 @@ const makeOrder = async (req, res) => {
     end_time,
     description,
     resCustomerAddressId || destination_address_id,
-    resSupplierAddressId || source_address_id ,
+    resSupplierAddressId || source_address_id,
   ];
   if (driverId)
     values.push(driverId);
@@ -76,7 +78,7 @@ const makeOrder = async (req, res) => {
       return resq.rows
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    
+
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -96,7 +98,7 @@ const setOrderUnassigned = async (req, res) => {
       return resq.rows
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    
+
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -145,7 +147,7 @@ const updateOrder = async (req, res) => {
     }
     return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    
+
     return errorResponse(res, errorMessages.queryFailed)
 
   }
@@ -166,7 +168,7 @@ const deleteOrder = async (req, res) => {
       return resq.rows
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    
+
     return errorResponse(res, errorMessages.queryFailed)
   }
 }
@@ -187,11 +189,85 @@ const unassignDriverOrders = async (req, res) => {
       return resq.rows
     } return errorResponse(res, errorMessages.queryFailed)
   } catch (er) {
-    
     return errorResponse(res, errorMessages.queryFailed)
   }
 }
 
+const updateOrderList = async (req, res) => {
+  try {
+    const {
+      list
+    } = req.body;
+    let makeValues = [];
+    let updateValues = [];
+    for (const order of list) {
+      if (order.order_id) {
+        updateValues.push([
+          order.order_id,
+          order.cost,
+          order.revenue,
+          order.order_start_time,
+          order.order_end_time,
+          order.order_description,
+          order.destination_address_id,
+          order.source_address_id,
+          order.driver_id,
+        ]);
+      } else {
+        makeValues.push([
+          order.cost,
+          order.revenue,
+          order.order_start_time,
+          order.order_end_time,
+          order.order_description,
+          order.destination_address_id,
+          order.source_address_id,
+          order.driver_id
+        ]);
+      }
+    }
+    // const makeValues = list.map(order =>
+    //   [
+    //     order.cost,
+    //     order.revenue,
+    //     order.order_start_time,
+    //     order.order_end_time,
+    //     order.description,
+    //     order.destination_address_id,
+    //     order.source_address_id,
+    //     order.driver_id
+    //   ]
+    // ).flat()
+    const makeText = queryMakeOrderList(makeValues);
+    const updateText = queryUpdateOrderList(updateValues);
+    makeValues = makeValues.flat();
+    updateValues = updateValues.flat();
+    console.log(makeText, makeValues);
+    console.log(updateText, updateValues);
+
+    let resq, resUpdate;
+    if (makeValues.length)
+      resq = await pool.query({
+        text: makeText,
+        values: makeValues
+      })
+    if (updateValues.length)
+      resUpdate = await pool.query({
+        text: updateText,
+        values: updateValues
+      })
+    const concatArr = (resq?.rows || []).concat(resUpdate?.rows || []);
+    if (concatArr?.length) {
+      done(res, concatArr);
+      return concatArr
+    } return errorResponse(res, errorMessages.queryFailed)
+
+  } catch (er) {
+    console.error(er);
+    return errorResponse(res, errorMessages.queryFailed)
+
+  }
+}
 
 module.exports = {
   getUnassignedOrders,
@@ -200,5 +276,6 @@ module.exports = {
   updateOrder,
   setOrderUnassigned,
   deleteOrder,
-  unassignDriverOrders
+  unassignDriverOrders,
+  updateOrderList
 }

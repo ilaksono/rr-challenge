@@ -8,65 +8,13 @@ import ax, {
   DELETE_ORDER
 } from 'ax';
 import DeleteIcon from 'components/general/DeleteIcon';
-import { AddressPopover } from 'components/suppliers/SupplierDisplayItem';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import RRLazyWrapper from 'components/general/RRLazyWrapper';
+import AddressPopover from 'components/popovers/AddressPopover';
+import OrderTimePopover from '../popovers/OrderTimePopover';
+import CompanyPopover from 'components/popovers/CompanyPopover';
+import TimeLegendPopover from 'components/popovers/TimeLegendPopover';
 
-export const CompanyPopover = React.forwardRef(
-  ({ popper, children, show: _, ...props }, ref) => {
-    return (
-      <Popover ref={ref} body {...props}>
-        <div><span className='light-color-text'>name: </span>{props.fname} {props.lname}</div>
-        <div><span className='light-color-text'>amount: </span>${props.amount}</div>
-        <div><span className='light-color-text'>type: </span>{props.type}</div>
-      </Popover>
-    );
-  },
-);
-
-const OrderTimePopover = React.forwardRef(
-  ({ popper, children, show: _, ...props }, ref) => {
-    return (
-      <Popover ref={ref} body {...props}>
-        <div><span className='light-color-text'>start time: </span>{hf.formatMDTimeShort(props.start_time)}</div>
-        <div><span className='light-color-text'>end time: </span>{hf.formatMDTimeShort(props.end_time)}</div>
-        <div><span className='light-color-text'>status: </span>{props.status}</div>
-      </Popover>
-    );
-  },
-);
-const TimeLegendPopover = React.forwardRef(
-  ({ popper, children, show: _, ...props }, ref) => {
-    const listNames = [
-      'transit-completed',
-      'in-transit',
-      'not-in-transit',
-      'transit-past-due'
-    ]
-    return (
-      <Popover ref={ref} body {...props} list={listNames}>
-        <div
-          style={{
-            width: 200,
-            height: 100
-
-          }}
-        >
-
-          {listNames.map(each =>
-            <div
-              key={each}
-              className='position-relative'>
-              <div className={`transit-indicator ${each}`}>
-              </div>
-              <div className='transit-indicator-text'>{hf.kebobToTitle(each)}</div>
-            </div>
-          )}
-        </div>
-      </Popover>
-    );
-  },
-);
 
 const OrderListItem = (props) => {
 
@@ -217,7 +165,6 @@ const OrderListItem = (props) => {
         className={containerClassList.join(' ')}
         onDragStart={handleDragStart}
         // onDragEnd={handleDragEnd}
-        // onMouseUp={() => console.log('mouse up')}
         draggable={true}
         onDragEndCapture={handleDragEnd}
         onDragOver={(e) => e.preventDefault()}
@@ -255,6 +202,7 @@ const OrderListItem = (props) => {
               overlay={
                 <AddressPopover
                   {...sourceAddress}
+                  type='source'
                 />
               }>
               <div>
@@ -267,6 +215,7 @@ const OrderListItem = (props) => {
               overlay={
                 <AddressPopover
                   {...destinationAddress}
+                  type='destination'
                 />
               }>
               <div>

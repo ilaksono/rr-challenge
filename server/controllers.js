@@ -40,6 +40,10 @@ const ordersController = async (req, res, broadcastUpdateOrder) => {
       response = await orderUtils
         .unassignDriverOrders(req, res)
       break;
+    case 'uploadList':
+      response = await orderUtils
+        .updateOrderList(req, res)
+      break;
 
     default:
       return errorResponse(res, 'Invalid order request type')
@@ -60,7 +64,7 @@ const suppliersController = async (req, res, broadcastUpdateList) => {
       return;
 
     case 'create':
-     response = await supplierUtils
+      response = await supplierUtils
         .makeSupplier(req, res);
       break;
 
@@ -82,7 +86,7 @@ const customersController = async (req, res, broadcastUpdateList) => {
         .getAllCustomers(req, res);
       return;
     case 'create':
-     response = await customerUtils
+      response = await customerUtils
         .makeCustomer(req, res);
       break;
 
@@ -129,7 +133,7 @@ const addressesController = async (req, res, broadcastUpdateList) => {
         .getAllAddresses(req, res);
       return;
     case 'create':
-     response =  await addressUtils
+      response = await addressUtils
         .makeAddress(req, res);
       break;
     default:

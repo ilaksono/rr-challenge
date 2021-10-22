@@ -77,6 +77,7 @@
     - form validation driver_insurance of drivers and standard format
     - More test coverage
   - Optimize animations on OrderListItem
+  - CSV Uploading: will insert; but a bug where order start and end times can cause conflicts with other orders for the same driver - requires validation
 
 
 
@@ -155,6 +156,15 @@
 
   - `useLoadingModal`: controls a loading modal that covers page to control user's accessibility according to certain operations - repetitive triggers of updating sensitive data 
   
+# API Requests
+  - axios request library
+  - api endpoints: 
+    - `/api/orders`
+    - `/api/drivers`
+    - `/api/suppliers`
+    - `/api/customers`
+    - `/api/addresses`
+  - uses a query parameter `?type=` in URI to identify backend switch `/server/controllers.js`
 
 # Challenges:
   - 2021-10-16:
@@ -176,4 +186,7 @@
 
 
     TODOS:
-      fix the manual input after selecting a supplier/customer (selected = true)
+      - (done)fix the manual input after selecting a supplier/customer (selected = true)
+      - add algorithm for updating/make orders from uploads data
+
+

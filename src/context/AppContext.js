@@ -24,7 +24,8 @@ export const AppProvider = ({ children }) => {
     addAddressesList,
     deleteOrder,
     updateUnassignedOrders,
-    deleteDriverAppData
+    deleteDriverAppData,
+    updateOrdersLive
   } = useAppData();
   const {
     loadModal,
@@ -79,6 +80,7 @@ export const AppProvider = ({ children }) => {
       deleteOrder,
       updateUnassignedOrders,
       deleteDriverAppData,
+      updateOrdersLive,
 
       // updates - useAlertData, useConfirmModal, useErrorToast
       alert,

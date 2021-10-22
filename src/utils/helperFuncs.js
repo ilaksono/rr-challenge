@@ -180,6 +180,11 @@ export const formatOrdersCsv = (appData) => {
   const csvData = [];
   csvData[0] = [
     'order_id',
+    'order_start_time',
+    'order_end_time',
+    'order_revenue_dollars',
+    'order_cost_dollars',
+    'order_description',
     'driver_id',
     'driver_fname',
     'driver_lname',
@@ -187,20 +192,18 @@ export const formatOrdersCsv = (appData) => {
     'driver_vehicle_make',
     'driver_vehicle_model',
     'driver_vehicle_year',
-    'order_description',
-    'source_address',
+    'supplier_id',
+    'source_address_id',
+    'source_address_street',
     'source_address_city',
     'source_address_country',
     'source_address_postal',
-    'destination_address',
+    'customer_id',
+    'destination_address_id',
+    'destination_address_street',
     'destination_address_city',
     'destination_address_country',
-    'desintation_address_postal',
-    'start_time',
-    'end_time',
-    'revenue_dollars',
-    'cost_dollars'
-
+    'destination_address_postal',
   ];
   const {
     drivers,
@@ -215,6 +218,11 @@ export const formatOrdersCsv = (appData) => {
     const driver = drivers.hash[order.driver_id] || {};
     const entry = [
       'or_' + order.id,
+      order.start_time,
+      order.end_time,
+      order.revenue_cents / 100,
+      order.cost_cents / 100,
+      order.description,
       order.driver_id ? 'dr_' + order.driver_id : '',
       driver.driver_fname,
       driver.driver_lname,
@@ -222,21 +230,84 @@ export const formatOrdersCsv = (appData) => {
       driver.vehicle_make,
       driver.vehicle_model,
       driver.vehicle_year,
-      order.description,
+      source.supplier_id ? 'su_' + source.supplier_id : '',
+      source.id ? 'ad_' + source.id : '',
       source.address,
       source.city,
       source.country,
       source.postal,
+      destination.customer_id ? 'cu_' + destination.customer_id : '',
+      destination.id ? 'ad_' + destination.id : '',
       destination.address,
       destination.city,
       destination.country,
       destination.postal,
-      order.start_time,
-      order.end_time,
-      order.revenue_cents / 100,
-      order.cost_cents / 100
+
     ];
     csvData.push(entry)
   });
   return csvData;
+}
+
+
+export const csvArrayToJson = (csvArray = []) => {
+  if (!csvArray.length) return;
+
+  const validHeaders = [
+    'order_id',
+    'driver_id',
+    // 'driver_fname',
+    // 'driver_lname',
+    // 'driver_insurance_policy_number',
+    // 'driver_vehicle_make',
+    // 'driver_vehicle_model',
+    // 'driver_vehicle_year',
+    'order_description',
+    // 'supplier_id',
+    'source_address_id',
+    // 'source_address_street',
+    // 'source_address_city',
+    // 'source_address_country',
+    // 'source_address_postal',
+    // 'customer_id',
+    'destination_address_id',
+    // 'destination_address_street',
+    // 'destination_address_city',
+    // 'destination_address_country',
+    // 'desintation_address_postal',
+    'order_start_time',
+    'order_end_time',
+    'order_revenue_dollars',
+    'order_cost_dollars'
+  ];
+  const jsonHeaders = csvArray[0].data
+    .reduce((acc, val, idx) => {
+      if (validHeaders.includes(val))
+        acc[val] = idx;
+      return acc;
+    }, {});
+  const json = csvArray.slice(1).map(row =>
+    Object.entries(jsonHeaders).reduce((acc, [hdKeyName, hdIndex], idx) => {
+      if (
+        ['supplier_id',
+          'order_id',
+          'customer_id',
+          'driver_id',
+          'source_address_id',
+          'destination_address_id']
+          .includes(hdKeyName)
+      ) {
+        acc[hdKeyName] = Number(row.data[hdIndex].split('_')[1]);
+      } else if (['order_revenue_dollars',
+        'order_cost_dollars']
+        .includes(hdKeyName)) {
+        if (!Number.isNaN(Number(row.data[hdIndex])))
+          acc[hdKeyName.split('_')[1]] = row.data[hdIndex] * 100;
+      } else if (hdKeyName === 'driver_vehicle_year') {
+        acc.driver_vehicle_year = Number(row.data[hdIndex])
+      } else
+        acc[hdKeyName] = row.data[hdIndex];
+      return acc;
+    }, {}));
+  return json;
 }

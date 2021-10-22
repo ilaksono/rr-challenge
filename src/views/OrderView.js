@@ -6,6 +6,7 @@ import { initOrderForm as init } from 'utils/initStates';
 import { CreateFormProvider } from 'context/CreateFormContext';
 import RRLazyWrapper from 'components/general/RRLazyWrapper';
 // import OrderDownload from 'components/orders/OrderDownload';
+const OrderUpload = lazy(() => import('components/orders/OrderUpload'));
 const OrderDownload = lazy(() => import('components/orders/OrderDownload'));
 const OrderFormModal = lazy(() => import('components/orders/OrderFormModal'));
 const OrderView = ({ id }) => {
@@ -49,7 +50,6 @@ const OrderView = ({ id }) => {
       <div className='view-header'>
         Unassigned Orders
       </div>
-
       <CreateFormProvider
         init={init}
         show={show}
@@ -63,10 +63,13 @@ const OrderView = ({ id }) => {
         </RRLazyWrapper>
       </CreateFormProvider>
       <RRLazyWrapper>
+        <div
+        className='flex'
+        >
 
-        <OrderDownload
-
-        />
+        <OrderDownload />
+        <OrderUpload />
+        </div>
       </RRLazyWrapper>
 
 

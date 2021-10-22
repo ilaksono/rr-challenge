@@ -1,5 +1,7 @@
 @import "./helpers.scss";
-
+.order-upload-table {
+  margin-top: 12px;
+}
 .order-list {
   max-height: 400px;
   padding: 2px;
@@ -12,30 +14,35 @@
   animation: pulse-yellow 2.5s infinite;
 }
 .position-relative {
-  position:relative;
+  position: relative;
 }
-
+.csv-link {
+  margin: 0 auto;
+  display: block;
+}
+.block-center {
+  display: block;
+  margin: 0 auto;
+}
 .not-in-transit {
   background-color: rgb(255, 0, 0);
   animation: pulse-red 2.5s infinite;
 }
 .transit-past-due {
   background-color: black;
-  animation: pulse-black 2.5s infinite;
+  // animation: pulse-black 2.5s infinite;
 }
 .transit-completed {
   background-color: blue;
-  animation: pulse-blue 2.5s infinite;
-
+  // animation: pulse-blue 2.5s infinite;
 }
 .transit-indicator {
-  height:8px;
-  width:8px;
+  height: 8px;
+  width: 8px;
   border-radius: 50%;
   position: absolute;
   left: 8px;
   top: calc(50% - 4px);
-
 }
 .transit-indicator-text {
   margin-left: 28px;
@@ -61,23 +68,26 @@
   &:hover {
     transform: scale(1.02);
   }
+
   .order-pricing-summary {
     tr {
       padding-left: 4px;
     }
     @include flexbox(row, space-between, center);
   }
-  .order-id {
-    font-size: 14px;
-    position: absolute;
-    top: 0;
-    left: 8px;
-  }
+  
   &:hover {
     .delete-icon {
       display: block;
     }
   }
+}
+
+.order-id {
+  font-size: 14px;
+  position: absolute;
+  top: 0;
+  left: 8px;
 }
 .order-icon-container {
   height: 100%;
@@ -167,15 +177,19 @@ form {
   overflow-x: auto;
   max-width: 60%;
   min-width: 60%;
+  min-height:100px;
   @include flexbox(row, flex-start, center);
   white-space: nowrap;
   border: 1px solid $rrblue;
   padding: 12px;
 }
 
+
+
 .display-item {
   border-radius: 16px;
   margin: 2px;
+  position:relative;
   margin-right: 16px;
   box-shadow: 0 4px 8px 2px grey;
   padding: 7px 5px;
@@ -186,10 +200,10 @@ form {
     margin-right: 15px;
   }
   img {
-    height: 48px;
-    width: 48px;
+    height: 32px;
+    width: 32px;
     border-radius: 50%;
-    margin-right: 12px;
+    margin: 12px;
   }
 }
 

@@ -101,7 +101,9 @@ const useAppData = () => {
   const fetchUnassignedOrders = async () => {
 
     try {
-      const res = await axios(GET_UNASSIGNED);
+      const res = await axios(
+        GET_UNASSIGNED,
+      );
       // ;
       if (res && Array.isArray(res)) {
         const payload = {
@@ -135,7 +137,7 @@ const useAppData = () => {
       }
     } catch (er) {
       console.error(er);
-      
+
     }
   }
 
@@ -153,7 +155,7 @@ const useAppData = () => {
         dispatch({ type: SET_WILD_PROPS, par: 'drivers', child: 'list', payload: res })
       }
     } catch (er) {
-      
+
     }
   }
   const fetchSuppliers = async () => {
@@ -302,10 +304,14 @@ const useAppData = () => {
     })
 
   }
+
+  useEffect(() => {
+    console.log(orders.unassigned.list.map(each => each.id));
+  }, [orders.unassigned])
   const updateOrdersHash = () => {
     // const combinedArray = orders.assigned.list
     //   .concat(orders.unassigned.list);
-
+    console.log(orders.assigned, orders.unassigned, 'hash');
     const payloadPre = orders.assigned.list
       .reduce(
         (acc, order, idx) => {
@@ -504,7 +510,7 @@ const useAppData = () => {
     })
   }
 
-  const updateOrdersLive = (list = [], oldData = {}) => {
+  const updateOrdersLive = (list = [], oldData = dataRef) => {
     const cpy = {
       assigned: [...oldData.current.orders.assigned.list],
       unassigned: [...oldData.current.orders.unassigned.list]
@@ -537,6 +543,7 @@ const useAppData = () => {
         list: cpy.unassigned
       }
     }
+    console.log(cpy);
     dispatch({ type: UPDATE_ORDERS, orders: ordersCpy })
   }
 
@@ -696,7 +703,8 @@ const useAppData = () => {
     addAddressesList,
     deleteOrder,
     updateUnassignedOrders,
-    deleteDriverAppData
+    deleteDriverAppData,
+    updateOrdersLive
   }
 
 }

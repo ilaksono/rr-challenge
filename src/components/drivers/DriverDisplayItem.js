@@ -1,6 +1,7 @@
 const DriverDisplayItem = (props) => {
 
   const {
+    id,
     driver_fname,
     driver_lname,
     selected = false,
@@ -10,8 +11,10 @@ const DriverDisplayItem = (props) => {
   return (
     <div className={containerClass}
       onClick={handleClick}
-
     >
+      <div
+      className='order-id light-color-text'
+      >dr_{id}</div>
       <img
         src='/images/default.png'
         alt={`${driver_fname} ${driver_lname}`}

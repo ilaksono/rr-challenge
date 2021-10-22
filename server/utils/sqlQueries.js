@@ -81,6 +81,78 @@ INSERT INTO orders (
       $7
     ) RETURNING *;`
 }
+
+const queryMakeOrderList = (list = []) => {
+  if (!list.length)
+    return;
+  let qs = `
+  INSERT INTO orders (
+    cost_cents, 
+    revenue_cents, 
+    start_time, 
+    end_time, 
+    description,
+    destination_address_id,
+    source_address_id,
+    driver_id
+    ) VALUES`;
+  for (let i = 0; i < list.length; i++) {
+    if (i !== 0) {
+      qs += `,`;
+    }
+    qs += ` ($${i * 8 + 1}, $${i * 8 + 2}, $${i * 8 + 3}, $${i * 8 + 4}, $${i * 8 + 5}, $${i * 8 + 6}, $${i * 8 + 7}, $${i * 8 + 8})`
+  }
+  qs += ' RETURNING *;'
+  return qs;
+}
+const queryUpdateOrderList = (list = []) => {
+
+  if (!list.length)
+    return;
+
+  let qs = `INSERT INTO orders (
+    id, 
+    cost_cents,
+    revenue_cents,
+    start_time,
+    end_time,
+    description,
+    destination_address_id,
+    source_address_id,
+    driver_id    
+    ) VALUES`
+
+  for (let i = 0; i < list.length; i++) {
+    // qs += `UPDATE orders SET 
+    // cost_cents=$${i * 9 + 1}, 
+    // revenue_cents=$${i * 9 + 2},
+    // start_time=$${i * 9 + 3},
+    // end_time=$${i * 9 + 4},
+    // description=$${i * 9 + 5},
+    // destination_address_id=$${i * 9 + 6},
+    // source_address_id=$${i * 9 + 7},
+    // driver_id=$${i * 9 + 8}
+    // WHERE id=$${i * 9 + 9};`;
+    qs += ` ($${i * 9 + 1}, $${i * 9 + 2}, $${i * 9 + 3}, $${i * 9 + 4}, $${i * 9 + 5}, $${i * 9 + 6}, $${i * 9 + 7}, $${i * 9 + 8}, $${i * 9 + 9})`
+    if (i < list.length - 1)
+      qs += ',';
+  }
+
+  qs += ` ON CONFLICT (id) DO UPDATE 
+    SET cost_cents = excluded.cost_cents, 
+        revenue_cents = excluded.revenue_cents,
+        start_time = excluded.start_time, 
+        end_time = excluded.end_time, 
+        description = excluded.description, 
+        destination_address_id = excluded.destination_address_id, 
+        source_address_id = excluded.source_address_id, 
+        driver_id = excluded.driver_id
+        RETURNING *;`;
+
+  return qs;
+
+}
+
 const queryUnassignOrder = `
 UPDATE orders SET driver_id=null
 WHERE id=$1
@@ -142,6 +214,8 @@ const queryMakeSupplier = `
       $1::text,
       $2
   ) RETURNING *;`;
+
+
 
 // customer queries
 const queryAllCustomers = `
@@ -205,9 +279,14 @@ const queryMakeAddress = (params = {}) => {
 module.exports = {
   queryUnassignedOrders,
   queryAssignedOrders,
+  queryMakeOrder,
+  queryMakeOrderList,
+  queryUnassignOrder,
+  queryDeleteOrder,
+  queryUnassignDriverOrders,
   queryAllDrivers,
   queryMakeDriver,
-  queryMakeOrder,
+  queryDeleteDriver,
   queryAllSuppliers,
   queryMakeSupplier,
   queryAllCustomers,
@@ -215,8 +294,5 @@ module.exports = {
   queryAllAddresses,
   queryMakeAddress,
   queryUpdateTable,
-  queryUnassignOrder,
-  queryDeleteOrder,
-  queryUnassignDriverOrders,
-  queryDeleteDriver
+  queryUpdateOrderList
 };
