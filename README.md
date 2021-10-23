@@ -93,7 +93,7 @@
     - will add/modify orders; but a bug where order start and end conflicting times can be added to a driver - can be fixed with time validation when parsing the data before the insert is run
 
 
-# Screenshots and Demos
+# Screenshots and Video Demos
   !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
   <video src='/docs/rr-video-demo.mov' width=180/>
 
@@ -183,6 +183,35 @@
     - `/api/customers`
     - `/api/addresses`
   - uses a query parameter `?type=` in URI to determine which backend switch `/server/controllers.js`
+
+## Directory Layout
+
+```
+.
+├── ./docs
+│   └── ./docs/features
+├── ./public
+│   └── ./public/images
+├── ./server
+│   ├── ./server/db
+│   └── ./server/utils
+└── ./src
+    ├── ./src/ax              # axios wrapper
+    ├── ./src/components
+    │   ├── ./src/components/Modal
+    │   ├── ./src/components/__tests__
+    │   ├── ./src/components/drivers
+    │   ├── ./src/components/general
+    │   ├── ./src/components/orders
+    │   ├── ./src/components/popovers
+    │   └── ./src/components/suppliers
+    ├── ./src/context
+    ├── ./src/hooks
+    ├── ./src/sass
+    ├── ./src/utils
+    └── ./src/views
+
+```
 
 # Challenges:
   - 2021-10-16:
