@@ -54,9 +54,7 @@
       - [OrderTimePopover.js](./src/components/popovers/OrderTimePopover.js)
       - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/time-popover.png' alt='Time Popover' style="width:180;"/>
   - Added sort feature to `OrderList` for easier access
-    - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/sort-order.png' alt='Sort Options' style="width:80%;"/>
-
-
+    - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/sort-list.png' alt='Sort Options' style="width:80%;"/>
 
 4. `More details about drivers and orders can be viewed and edited. You can think what other information we might be relevant to the system`
   - Added edittable supplier address information by manual input
@@ -106,7 +104,7 @@
     - revenue
     - cost
   - [OrderDownload.js](./src/components/orders/OrderDownload.js)
-  - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/download-btn.png' alt='Delete Buttons' style="width:80px;"/>
+  - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/download-btn.png' alt='Delete Buttons' style="width:160px;"/>
     
 11. `Two users of the app can see each other’s changes in real-time`
   - uses `ws` on BE for live server messages
@@ -120,7 +118,7 @@
 13. `Ability to upload and download CSV data through the web interface`
   - trigger upload interface by clicking `Upload` button
     - [OrderUpload.js](./src/components/orders/OrderUpload.js)
-    - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/upload-interface.png' alt='Upload CSV Interface' style="width:80px;"/>
+    - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/upload-interface.png' alt='Upload CSV Interface' style="width:240px;"/>
   - Download all orders by clicking `Download` button
 
 14. `Anything else you can think of!`    
