@@ -25,10 +25,6 @@ const makeCustomer = async (req, res) => {
       cust_fname, 
       cust_lname
     } = req.body
-    // if(!cust_fname) {
-    //   console.log('no cust_fname')
-    //   return errorResponse(res, 'Please add a driver name');
-    // }
     const resq = await pool.query({
       text: queryMakeCustomer,
       values: [cust_fname || 'Example', cust_lname || 'Customer']

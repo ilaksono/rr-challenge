@@ -8,23 +8,24 @@
   - local psql database >= 9.x
 
 # Start Instructions:
-  - Start FE: `npm start`
-  - Start BE: `cd server && npm start` 
-  - Test: run `npm run test`
-  - Test Coverage: run `CI=true npm test -- --env=jsdom --coverage`
+  - run: `git clone https://github.com/ilaksono/rr-challenge rr-challenge-il && cd rr-challenge-il`
+  - Start FE: `npm i && npm start`
+  - Start BE: `cd server && npm i && npm start` 
+  - Test: run: `npm run test`
+  - Test Coverage: run: `CI=true npm test -- --env=jsdom --coverage`
   - public site: https://rr-challenge-il.netlify.app
 
 # Database Instructions:  
-## install postgres on mac 
+## If postgres is not installed, Install postgres on mac 
   in the command line:
-    - install libpq `brew install libpq`
+  - install libpq `brew install libpq`
     - update PATH
-      - if use zsh:
-      - run `echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.zshrc`
-      - run `source ~/.zshrc`
-      - if use bash:
-        - run `echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.bash_profile`
-        - run `source ~/.bash_profile`
+    - if using zsh shell:
+    - run `echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.zshrc`
+    - run `source ~/.zshrc`
+    - if using bash shell:
+      - run `echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.bash_profile`
+      - run `source ~/.bash_profile`
   - run command `cd server` from the project root
   - connect to psql database
   `sudo psql -U postgres`
@@ -36,6 +37,11 @@
   - run `\i ./db/seeds.sql`
     - insert seeds for suppliers, customers, drivers
   - move on to `Dev Environment Instructions`
+
+  ## Windows
+    - https://www.2ndquadrant.com/en/blog/pginstaller-install-postgresql/
+  ## Linux
+    - https://www.postgresqltutorial.com/install-postgresql-linux/
 
 # Dev Envrionment Instructions
   - If you don't have node installed, [instructions here](https://www.pluralsight.com/guides/getting-started-with-nodejs)
@@ -84,7 +90,7 @@
     - More test coverage
   - Optimize animations on OrderListItem
   - CSV Uploading: 
-    - will add/modify orders; but a bug where order start and end times can cause conflicts with other orders for the same driver - requires more time validation
+    - will add/modify orders; but a bug where order start and end conflicting times can be added to a driver - can be fixed with time validation when parsing the data before the insert is run
 
 
 # Screenshots and Demos

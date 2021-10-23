@@ -7,6 +7,7 @@ import DeleteIcon from 'components/general/DeleteIcon';
 import ax, { UNASSIGN_ORDERS, DELETE_DRIVER } from 'ax';
 // import OrderDriverForms from 'components/orders/OrderDriverForms';
 import RRLazyWrapper from 'components/general/RRLazyWrapper';
+import TotalRevenueCost from 'components/drivers/TotalRevenueCost';
 const OrderDriverForms = lazy(() => import('components/orders/OrderDriverForms'));
 const init = {
   fname: '',
@@ -109,11 +110,15 @@ const DriverView = ({ id, driverIndex, fullName }) => {
         >Driver:
         </div>
         <br />
+        <a data-toggle='tooltip'
+        titl={appData.drivers.hash[id]?.driver_insurance}
+        >
         <Form.Control
           as='select'
           onChange={e => modifyDriverView(driverIndex, e.target.value)}
         >{driverOptions}
         </Form.Control>
+        </a>
       </div>
 
       <CreateFormProvider
@@ -136,18 +141,9 @@ const DriverView = ({ id, driverIndex, fullName }) => {
       >
         Create a Driver
       </Button>
-      <div className='revenue-cost-summary'>
-        Total Revenue: $&nbsp;
-        <span className='green-color-text'>
-          {(filteredList.reduce((acc, order) => acc + order.revenue_cents, 0) / 100).toFixed(2)}
-        </span>
-      </div>
-      <div>
-        Total Cost: $&nbsp;
-        <span className='red-color-text'>
-          {(filteredList.reduce((acc, order) => acc + order.cost_cents, 0) / 100).toFixed(2)}
-        </span>
-      </div>
+      <TotalRevenueCost
+      filteredList={filteredList}
+      />
       <DeleteIcon
         className='delete-icon-driver'
         tooltip='Delete driver'

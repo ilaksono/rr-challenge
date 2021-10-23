@@ -54,7 +54,6 @@ const makeOrder = async (req, res) => {
     start_time,
     description
   } = req.body;
-  // return console.log(end_time, start_time);
   if (!description)
     return errorResponse(res, "Please add a description");
   const values = [
@@ -242,8 +241,6 @@ const updateOrderList = async (req, res) => {
     const updateText = queryUpdateOrderList(updateValues);
     makeValues = makeValues.flat();
     updateValues = updateValues.flat();
-    console.log(makeText, makeValues);
-    console.log(updateText, updateValues);
 
     let resq, resUpdate;
     if (makeValues.length)

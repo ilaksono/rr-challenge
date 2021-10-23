@@ -41,7 +41,6 @@ const useDropZone = () => {
 
   const handleDragOverZone = (e, type, id) => {
     e.preventDefault()
-    // console.log('over');
     if (!ready) return;
     if (dropZone.on)
       return;
@@ -50,7 +49,6 @@ const useDropZone = () => {
       type,
       id
     }))
-    // setReady(false);
   }
 
   return {

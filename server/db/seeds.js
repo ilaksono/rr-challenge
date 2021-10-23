@@ -144,7 +144,6 @@ const seedOrders = async () => {
         supplierId,
         driverId
       ];
-      console.log(qpOrder);
       const resOrder = await pool.query({ text: qsOrder, values: qpOrder });
       const orderId = resOrder.rows[0]?.id;
 
@@ -161,7 +160,6 @@ const seedOrders = async () => {
       //   orderId
       // ];
       // const resDriverOrder = await pool.query({text: qsDriverOrder, values: qpDriverOrder});
-      console.log(orderId);
 
     }
   } catch (er) {
@@ -212,7 +210,6 @@ const seedSupplierCustomerAddresses = async () => {
         values: [id]
       });
 
-      console.log(addressRowsB)
     }
 
     for (const { id } of customerRows.rows) {
@@ -237,7 +234,6 @@ const seedSupplierCustomerAddresses = async () => {
         text: qsAddressCustomer,
         values: [id]
       });
-      console.log(addressRowsA);
     }
   } catch (er) {
     throw new Error(er.message)

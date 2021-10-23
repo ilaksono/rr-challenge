@@ -40,10 +40,6 @@ const OrderUpload = () => {
       const res = await ax(UPLOAD_ORDERS_LIST, 'post', {
         list
       });
-      if (res) {
-        console.log(res, 'success');
-        // updateOrdersLive(res);
-      }
     } catch (er) {
       console.error(er);
       createError(er.message)

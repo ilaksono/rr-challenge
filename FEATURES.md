@@ -9,6 +9,12 @@
   - this sum is displayed in each driver container at the bottom
     - revenue in green; cost in red
 
+  <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/total-rev-cost.png' alt='Total Revenue and Cost' style="width:320px;"/>
+
+- [TotalRevenueCost.js](./src/components/drivers/TotalRevenueCost.js)
+
+---
+
 2. `Allow editing revenue/cost when order is assigned to a driver, so the totals become dynamic`
   - Clicking the pencil icon triggers a form inside a modal that enables editting any of these values for that order:
       - cost
@@ -19,26 +25,37 @@
       - end time
       - destination address
       - source address
+    <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/edit-rev-cost.png' alt='Edit Revenue and Cost' style="width:320px;"/>
+
+- [TotalRevenueCost.js](./src/components/orders/CreateOrderForm.js)
+
+---
 
 3. `Clean and visually appealing UI; thought-through UX` 
   - UX: Total order counts at top of driver and order sections
+    - [SortOrders.js](./src/components/orders/SortOrders.js)
   - Simple alerts and toasts to inform users
     - success alerts and error toasts
+    - [Updates.js](./src/components/general/Updates.js)
   - Simple animations to add user interaction 
     - drag and dropping orders between windows - custom built hooks from scratch
     - animations on OrderListItem for movement and sense of user interaction 
+    - [useDropZone.js](./src/components/hooks/useDropZone.js)
   - in CreateOrderForm: added scrollable windows for selecting a driver, source, and destination for orders to select previously input records. 
   - in OrderListItem: added transit status color dots to show status + a legend for informative content
   - Popovers on: 
     - Source + Destination -  describes the locations for departure and arrival
     - Start and End times - describes the date+time of depart / arrival and corresponding order status
   - Added sort feature to `OrderList` for easier access
-  -   
+<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png' alt='Main View - Desktop' style="width:80%;"/>
+
 
 
 4. `More details about drivers and orders can be viewed and edited. You can think what other information we might be relevant to the system`
-  - Added edittable supplier address information
-  - Added edittable customer address information
+  - Added edittable supplier address information by manual input
+  - Added edittable customer address information by manual input
+  - added driver insurance to driver form - can be viewed by downloading orders via csv file
+
 
 5. `Orders have start and end times, and a driver can’t have two orders that overlap in time`
   - Every order is checked for overlapping start and end times for the driver before create/update of orders in the database

@@ -88,9 +88,7 @@ const OrderListItem = (props) => {
         driver_id
       })
       if (res?.length) {
-        if (!props.driver_id)
-          moveOrderToList(res[0])
-        else if (props.driver_id)
+        if (props.driver_id)
           deleteOrderThenAdd(res[0])
       }
 

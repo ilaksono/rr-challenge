@@ -19,7 +19,6 @@ const compareObjects = (raw, model) => {
     if (value === model[key])
       delete raw[key];
     else if (['start_time', 'end_time'].includes(key)) {
-      // console.log(new Date(value).getTime(), new Date(model[key]).getTime())
       if ((new Date(value).getTime() - numMsUTCtoEST) === new Date(model[key]).getTime()) {
         delete raw[key];
       }
@@ -95,7 +94,7 @@ const CreateOrderForm = (props) => {
     hideLoadModal()
   }, [createForm, addOrderToList])
 
-  const isBooked = createForm.driverId
+  const isBooked = (createForm.driverId)
     && hf.isDriverBooked(
       appData.orders.assigned.list.filter(order => order.driver_id === createForm.driverId),
       createForm

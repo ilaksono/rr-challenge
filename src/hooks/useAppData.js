@@ -301,7 +301,6 @@ const useAppData = () => {
   const updateOrdersHash = () => {
     // const combinedArray = orders.assigned.list
     //   .concat(orders.unassigned.list);
-    console.log(orders.assigned, orders.unassigned, 'hash');
     const payloadPre = orders.assigned.list
       .reduce(
         (acc, order, idx) => {
@@ -501,7 +500,6 @@ const useAppData = () => {
   }
 
   const updateOrdersLive = (list = [], oldData = dataRef) => {
-    console.log(dataRef.current);
     const cpy = {
       assigned: [...oldData.current.orders.assigned.list],
       unassigned: [...oldData.current.orders.unassigned.list]
@@ -537,7 +535,6 @@ const useAppData = () => {
         list: cpy.unassigned
       }
     }
-    console.log(cpy);
     dispatch({ type: UPDATE_ORDERS, orders: ordersCpy })
   }
 
