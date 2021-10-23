@@ -1,5 +1,4 @@
 import { Modal } from 'react-bootstrap';
-import * as con from 'utils/con';
 import ModalCloseButton from './ModalCloseButton';
 const ModalTemplate = (props) => {
 

@@ -1,6 +1,6 @@
-import { Form, InputGroup, Col, Container, Row, Button } from 'react-bootstrap';
+import { Form, InputGroup, Container, Button } from 'react-bootstrap';
 import CreateFormContext from 'context/CreateFormContext';
-import { useContext, useRef, useState, useCallback } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import ax, { CREATE_DRIVER } from 'ax';
 import AppContext from 'context/AppContext';
 const yearsArr = () => {
@@ -25,7 +25,7 @@ const CreateDriverForm = ({forceClose = () => {}}) => {
     handleCreateFormChange,
     resetCreateForm
   } = useContext(CreateFormContext);
-  const [yearOptions, setYearOptions] = useState(() => yearsArr());
+  const [yearOptions] = useState(() => yearsArr());
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();

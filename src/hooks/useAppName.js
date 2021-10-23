@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 const useAppName = () => {
 
-  const [appName, setAppName] = useState('Trans-It');
+  const [appName] = useState('Trans-It');
 
   return {
     appName

@@ -1,5 +1,5 @@
-import { Modal, Button, Form } from 'react-bootstrap';
-import { useRef, useEffect } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import { useEffect } from 'react';
 const ConfirmModal = ({ conMod, resetConfirmModal }) => {
 
   const handleConfirm = () => {

@@ -1,4 +1,4 @@
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 import { formatOrdersCsv } from 'utils/helperFuncs';
 import AppContext from 'context/AppContext';
 import { useContext } from 'react';

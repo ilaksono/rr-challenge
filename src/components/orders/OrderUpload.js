@@ -1,7 +1,7 @@
 import { CSVReader } from 'react-papaparse'
 import React, { useState, useContext } from 'react';
 import Modal from 'components/Modal';
-import { Button, Table, Popover, OverlayTrigger } from 'react-bootstrap';
+import { Button, Table, OverlayTrigger } from 'react-bootstrap';
 import * as hf from 'utils/helperFuncs';
 import ax, { UPLOAD_ORDERS_LIST } from 'ax';
 import AppContext from 'context/AppContext';
@@ -15,7 +15,6 @@ const OrderUpload = () => {
   const [count, setCount] = useState(0);
   const {
     createError,
-    updateOrdersLive,
     showLoadModal,
     hideLoadModal,
     createModal

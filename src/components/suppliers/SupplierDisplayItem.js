@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import AppContext from 'context/AppContext';
-import { Tab, Nav, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Tab, Nav, OverlayTrigger } from 'react-bootstrap';
 import CreateFormContext from 'context/CreateFormContext';
 import * as hf from 'utils/helperFuncs';
 import AddressPopover from 'components/popovers/AddressPopover'

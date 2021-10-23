@@ -8,7 +8,7 @@
 
 import {
   useReducer, useRef,
-  useEffect, useCallback,
+  useEffect
 } from 'react';
 import axios, {
   GET_UNASSIGNED,
@@ -82,13 +82,6 @@ const useAppData = () => {
 
 
   dataRef.current = appData;
-  const appHashRef = useRef({
-    suppliers: {},
-    orders: {},
-    customers: {},
-    drivers: {}
-  });
-
   const {
     drivers,
     orders,

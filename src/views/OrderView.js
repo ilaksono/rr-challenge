@@ -1,6 +1,5 @@
 import { lazy, useState, useContext, useEffect } from 'react';
 import AppContext from 'context/AppContext';
-import HomeBanner from 'components/general/HomeBanner'
 import { initOrderForm as init } from 'utils/initStates';
 // import OrderFormModal from 'components/orders/OrderFormModal';
 import { CreateFormProvider } from 'context/CreateFormContext';

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useContext, useCallback } from 'react';
 import CreateFormContext from 'context/CreateFormContext';
 import AppContext from 'context/AppContext';
 import * as hf from 'utils/helperFuncs';
@@ -8,7 +8,7 @@ import ax, {
   DELETE_ORDER
 } from 'ax';
 import DeleteIcon from 'components/general/DeleteIcon';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { OverlayTrigger } from 'react-bootstrap';
 import RRLazyWrapper from 'components/general/RRLazyWrapper';
 import AddressPopover from 'components/popovers/AddressPopover';
 import OrderTimePopover from '../popovers/OrderTimePopover';
