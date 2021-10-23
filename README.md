@@ -78,10 +78,7 @@
   - Optimize animations on OrderListItem
   - CSV Uploading: 
     - will add/modify orders; but a bug where order start and end times can cause conflicts with other orders for the same driver - requires more time validation
-    - 
-
-
-
+    
 
 # Screenshots and Demos
   !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
@@ -96,7 +93,7 @@
 ----
 
 <!-- !["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png)   -->
-<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png' alt='Driver Form - Mobile' style="width:200px;"/>
+<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png' alt='Driver Form - Mobile' style="width:80%;"/>
 
 # Custom Hooks 
   - `useAlertData`: controls alert popup display, text, and children
@@ -191,10 +188,3 @@
   - 2021-10-19:
     - The Drag and Drop event handlers not triggering in Safari and FireFox 93
     - onDragLeave handlers is different between  
-
-
-    TODOS:
-      - 
-      - add algorithm for updating/make orders from uploads data
-
-
