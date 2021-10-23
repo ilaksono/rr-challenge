@@ -122,6 +122,9 @@
 .flex {
   display: flex;
 }
+.flex-around {
+  @include flexbox(row, space-around, flex-start);
+}
 
 .partial-hide {
   opacity: 0.4;

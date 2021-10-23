@@ -51,6 +51,9 @@ const OrderUpload = () => {
     }
     hideLoadModal();
   }
+  let numMake = 0;
+  const numUpdate = csvBody.slice(1).reduce((acc, each) => each.data[0] ? acc + 1 : (++numMake && acc), 0)
+
   return <>
     <a
       onClick={() => setShow(true)}
@@ -75,15 +78,15 @@ const OrderUpload = () => {
       modalTitle={
         <div className='flex'>Create and Update Orders - Upload CSV
           <OverlayTrigger
-              
-              placement='bottom'
-              overlay={
-                <UploadInstructionPopover
-                />
-              }>
-          <a className='thumbnail ml-2'>
-            <div>?</div>
-          </a>
+
+            placement='bottom'
+            overlay={
+              <UploadInstructionPopover
+              />
+            }>
+            <a className='thumbnail ml-2'>
+              <div>?</div>
+            </a>
           </OverlayTrigger>
         </div>
       }
@@ -122,10 +125,23 @@ const OrderUpload = () => {
           }
         </strong>
       </div>
-      <Button
-        className='block-center mt-2'
-        onClick={promptUpload}
-      >Upload Records</Button>
+      {
+        csvHead.name &&
+      <div className='flex-around'>
+        <Button
+        style={{
+          maxHeight:38
+        }}
+          className='mt-2'
+          onClick={promptUpload}
+        >Upload Records</Button>
+        <div><u>Order upload actions</u>
+          <div>Number of new orders: {numMake}</div>
+          <div>Number of updated orders: {numUpdate}</div>
+        
+        </div>
+      </div>
+      }
       <Table
         responsive='xl'
         striped
@@ -152,7 +168,7 @@ const OrderUpload = () => {
                 {
                   row.data?.map((each, idx) =>
                     <td
-                    key={idx}
+                      key={idx}
                     >{each}</td>
                   )
                 }

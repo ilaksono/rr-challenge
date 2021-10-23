@@ -11,7 +11,6 @@ const UploadInstructionPopover = React.forwardRef(
         <p><span className='light-color-text'>4. </span>When choosing Driver/Source/Destination values, you can input only the driver_id/source_address_id/destination_address_id respectively, but you <strong>must</strong> make sure the <strong>data exists</strong> (see Step 1).</p>
         <p><span className='light-color-text'>5. </span>When no order_id(or_x) is specified, an order will be created with the row's properties.</p>
         <p><span className='light-color-text'>6. </span>When you are done, drag the modified file or click the dotted box, then click 'Upload Records'.</p>
-      
       </Popover>
     );
   },

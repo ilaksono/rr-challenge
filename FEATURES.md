@@ -2,7 +2,7 @@
  - README [(/README.md)](./README.md)
  - FEATURES [(/FEATURES.md)](./FEATURES.md)
  - TESTS [(/TESTS.md)](./TESTS.md)
- 
+
 # Bonus Features and Ideas for Improvements
 
 1. `Display total revenue/cost per driver`
@@ -83,9 +83,12 @@
 12. `Deploy the app somewhere / containerize it`
   - Netlify link: https://rr-challenge-il.netlify.app/  
   - Heroku server (for api routes) idles for ~10 seconds
+  
+13. `Ability to upload and download CSV data through the web interface`
+  - trigger upload interface by clicking `Upload` button
+  - Download all orders by clicking `Download` button
 
-
-13. `Anything else you can think of!`    
+14. `Anything else you can think of!`    
   - Added supplier, customer, address entities
     - Enables relationship between supplier <> addresses and customer <> addresses 
     - improves data integrity and reduces redundancy
