@@ -1,12 +1,13 @@
 # Environment Requirements:
-  - Node >14.17
-  - local psql > 9.x
+  - Node >=14.17
+  - local psql database >= 9.x
 
 # Start Instructions:
   - Start FE: `npm start`
   - Start BE: `cd server && npm start` 
   - Test: run `npm run test`
   - Test Coverage: run `CI=true npm test -- --env=jsdom --coverage`
+  - public site: https://rr-challenge-il.netlify.app
 
 # Database Instructions:  
 ## install postgres on mac 
@@ -70,16 +71,15 @@
   - add data pagination on backend for slicing large lists
   - adding payments + invoicing and remit-to (payable) additional addresses on invoices
   - Adding UI elements - such as maps/geolocaiton apis for easier location selection
-  - (fixed) The Drag and Drop events do not work in iOS Safari
-  - growIn animation on OrderListItem does not work on Firefox 93 
-  - Performs well on Google Chrome 
-  - (fixed 2021/10/19) 2021/10/18 - Checking `Manual input` on supplier and customer sections of OrderCreateForm with a supplier selected dismisses the input fields and uses the selected supplier/customer instead
   - Should add:
     - form validation for country/city/state in address table
     - form validation driver_insurance of drivers and standard format
     - More test coverage
   - Optimize animations on OrderListItem
-  - CSV Uploading: will insert; but a bug where order start and end times can cause conflicts with other orders for the same driver - requires validation
+  - CSV Uploading: 
+    - will add/modify orders; but a bug where order start and end times can cause conflicts with other orders for the same driver - requires more time validation
+    - 
+
 
 
 
@@ -87,15 +87,16 @@
   !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
   <video src='/docs/rr-video-demo.mov' width=180/>
 
-  ----
+----
 
-!["Main View - Desktop"](https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png)  
+<!-- !["Main View - Desktop"](https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png)   -->
 
+<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png' alt='Main View - Desktop' style="width:300px;"/>
 
----
+----
 
-!["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png)  
-
+<!-- !["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png)   -->
+<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png' alt='Driver Form - Mobile' style="width:200px;"/>
 
 # Custom Hooks 
   - `useAlertData`: controls alert popup display, text, and children
@@ -189,11 +190,11 @@
     - Fixed by passing a ref to the callback instead of using state
   - 2021-10-19:
     - The Drag and Drop event handlers not triggering in Safari and FireFox 93
-    - onDragLeave handlers is different between 
+    - onDragLeave handlers is different between  
 
 
     TODOS:
-      - (done)fix the manual input after selecting a supplier/customer (selected = true)
+      - 
       - add algorithm for updating/make orders from uploads data
 
 
