@@ -201,7 +201,7 @@ const OrderListItem = (props) => {
             <div className={transitIndicatorClass.join(' ')}></div>
           </a>
         </OverlayTrigger>
-        <div>
+        <div className='order-item-content'>
 
           <div className='flex'>
             <OverlayTrigger
@@ -212,11 +212,13 @@ const OrderListItem = (props) => {
                   type='source'
                 />
               }>
-              <div>
+              <div className='text-center'>
                 {sourceAddress.city || 'Toronto'}
               </div>
             </OverlayTrigger>
+            <div className='conjugator-center'>
             &nbsp;to&nbsp;
+            </div>
             <OverlayTrigger
               
               overlay={
@@ -225,7 +227,7 @@ const OrderListItem = (props) => {
                   type='destination'
                 />
               }>
-              <div>
+              <div className='text-center'>
                 {destinationAddress.city || 'Barrie'}
               </div>
             </OverlayTrigger>

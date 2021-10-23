@@ -60,13 +60,20 @@
   // border: 2px inset $rrblue;
   border-radius: 12px;
   box-shadow: 0 2px 4px 1px rgb(133, 133, 133);
-  padding: 12px;
+  padding: 12px 16px;
   position: relative;
-  @include flexbox(row, space-around, center);
+  @include flexbox(row, space-between, center);
   transition: all 0.3s;
   border: 1px solid rgb(182, 182, 182);
   &:hover {
     transform: scale(1.02);
+  }
+  .order-item-content {
+    @include flexbox(column, flex-start, center);
+  }
+  .conjugator-center {
+    height: fit-content;
+    align-self: center;
   }
 
   .order-pricing-summary {

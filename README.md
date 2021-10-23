@@ -89,6 +89,11 @@
 
   ----
 
+!["Main View - Desktop"](https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png)  
+
+
+---
+
 !["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png)  
 
 
