@@ -56,7 +56,9 @@
 
 # Database Model:
 ## There are 5 entities - Database  ERD:
-!["Data ERD"](https://github.com/ilaksono/rr-challenge/blob/main/docs/db-erd.png)  
+<!-- !["Data ERD"](https://github.com/ilaksono/rr-challenge/blob/main/docs/db-erd.png)   -->
+<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/db-erd.png' alt='Data ERD' style="width:65%;"/>
+
 
   1. Each Order consists of 1 Supplier Address, 1 Customer Address, and 1 Driver (each 1 to Many relationships)
   2. Each Order can have many Drivers
@@ -78,7 +80,7 @@
   - Optimize animations on OrderListItem
   - CSV Uploading: 
     - will add/modify orders; but a bug where order start and end times can cause conflicts with other orders for the same driver - requires more time validation
-    
+
 
 # Screenshots and Demos
   !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
@@ -88,12 +90,12 @@
 
 <!-- !["Main View - Desktop"](https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png)   -->
 
-<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png' alt='Main View - Desktop' style="width:300px;"/>
+<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png' alt='Main View - Desktop' style="width:80%;"/>
 
 ----
 
 <!-- !["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png)   -->
-<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png' alt='Driver Form - Mobile' style="width:80%;"/>
+<img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png' alt='Driver Form - Mobile' style="width:200px;"/>
 
 # Custom Hooks 
   - `useAlertData`: controls alert popup display, text, and children
