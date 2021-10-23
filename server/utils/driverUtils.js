@@ -5,6 +5,8 @@ const { queryAllDrivers,
   queryDeleteDriver } = require('./sqlQueries');
 const errorMessages = require('./errorMessages');
 
+// get route method for fetching drivers using 'pg.Pool'
+// call done(res, data) to send response
 const getAllDrivers = async (req, res) => {
   try {
     const resq = await pool.query({
@@ -20,6 +22,7 @@ const getAllDrivers = async (req, res) => {
   }
 }
 
+// create driver
 const makeDriver = async (req, res) => {
   try {
     const {
@@ -53,10 +56,10 @@ const makeDriver = async (req, res) => {
   } catch (er) {
     
     return errorResponse(res, errorMessages.queryFailed)
-
-
   }
 }
+
+// deletes driver by updating db record, set is_deleted column
 const deleteDriver = async (req, res) => {
 
   const {

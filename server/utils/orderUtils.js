@@ -12,6 +12,8 @@ const { queryUnassignedOrders,
 } = require('./sqlQueries');
 const errorMessages = require('./errorMessages');
 
+// get route method for fetching unassigned orders using 'pg.Pool'
+// call done(res, data) to send response
 const getUnassignedOrders = async (req, res) => {
   try {
     const resq = await pool.query({
@@ -26,6 +28,7 @@ const getUnassignedOrders = async (req, res) => {
 
   }
 }
+// get assigned route
 const getAssignedOrders = async (req, res) => {
   try {
     const resq = await pool.query({
@@ -41,6 +44,7 @@ const getAssignedOrders = async (req, res) => {
   }
 }
 
+// create order route
 const makeOrder = async (req, res) => {
   const {
     cost,
@@ -82,6 +86,7 @@ const makeOrder = async (req, res) => {
 
   }
 }
+// update order to set unassigned - route
 const setOrderUnassigned = async (req, res) => {
 
   const {
@@ -103,6 +108,7 @@ const setOrderUnassigned = async (req, res) => {
   }
 }
 
+// update order generic - route
 const updateOrder = async (req, res) => {
   const {
     description,
@@ -151,6 +157,8 @@ const updateOrder = async (req, res) => {
 
   }
 }
+
+// delete order route by updating db record, set is_deleted column
 const deleteOrder = async (req, res) => {
   const {
     order_id
@@ -172,6 +180,9 @@ const deleteOrder = async (req, res) => {
   }
 }
 
+// unassigned multiple orders according to their driver_id
+// used when a driver is deleted - unassigns all their orders
+// responds with updated orders lsit
 const unassignDriverOrders = async (req, res) => {
 
   const {
@@ -192,6 +203,8 @@ const unassignDriverOrders = async (req, res) => {
   }
 }
 
+// creates and updates multiple orders 
+// both unassigned and assigned
 const updateOrderList = async (req, res) => {
   try {
     const {
@@ -225,18 +238,7 @@ const updateOrderList = async (req, res) => {
         ]);
       }
     }
-    // const makeValues = list.map(order =>
-    //   [
-    //     order.cost,
-    //     order.revenue,
-    //     order.order_start_time,
-    //     order.order_end_time,
-    //     order.description,
-    //     order.destination_address_id,
-    //     order.source_address_id,
-    //     order.driver_id
-    //   ]
-    // ).flat()
+    
     const makeText = queryMakeOrderList(makeValues);
     const updateText = queryUpdateOrderList(updateValues);
     makeValues = makeValues.flat();

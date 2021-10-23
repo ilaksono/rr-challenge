@@ -4,6 +4,8 @@ const { queryMakeAddress,
   queryAllAddresses } = require('./sqlQueries');
 const errorMessages = require('./errorMessages');
 
+// get route method for fetching addresses using 'pg.Pool'
+// call done(res, data) to send response
 const getAllAddresses = async (req, res) => {
   try {
     const resq = await pool.query({
@@ -19,6 +21,7 @@ const getAllAddresses = async (req, res) => {
   }
 }
 
+// create address
 const makeAddress = async (req, res) => {
   try {
     const {
@@ -38,9 +41,6 @@ const makeAddress = async (req, res) => {
       country,
       supplier_id || customer_id,
     ]
-    // if (!supplier_id) {
-    //   return errorResponse(res, 'Please add a driver name');
-    // }
     const resq = await pool.query({
       text: queryMakeAddress({ customer_id, supplier_id }),
       values

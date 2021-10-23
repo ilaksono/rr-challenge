@@ -4,7 +4,6 @@ import RRLazyWrapper from 'components/general/RRLazyWrapper';
 import useRemoveInitialLoader from 'hooks/useRemoveInitialLoader'
 import Updates from 'components/general/Updates';
 const MainView = lazy(() => import('views/MainView'));
-// const Updates = lazy(() => import('components/general/Updates'));
 
 function App() {
 

@@ -1,10 +1,11 @@
+// Module that controls api request & delegates resources according to params
+
 const orderUtils = require('./utils/orderUtils');
 const driverUtils = require('./utils/driverUtils');
 const supplierUtils = require('./utils/supplierUtils');
 const customerUtils = require('./utils/customerUtils');
 const addressUtils = require('./utils/addressUtils');
 const { errorResponse } = require('./utils/globalSettings');
-// const livesocket = require('./livesocket')
 
 const ordersController = async (req, res, broadcastUpdateOrder) => {
   const {

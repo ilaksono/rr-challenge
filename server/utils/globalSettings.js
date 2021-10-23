@@ -1,5 +1,5 @@
-
-// use uniform response body - data: object | any, status: string, msg: string
+// use uniform response body 
+// data: object | any, status: string, msg: string
 // done = successful request response
 const done = (res, data) => {
   return res.json({

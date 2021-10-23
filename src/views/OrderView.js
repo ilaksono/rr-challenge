@@ -1,10 +1,8 @@
 import { lazy, useState, useContext, useEffect } from 'react';
 import AppContext from 'context/AppContext';
 import { initOrderForm as init } from 'utils/initStates';
-// import OrderFormModal from 'components/orders/OrderFormModal';
 import { CreateFormProvider } from 'context/CreateFormContext';
 import RRLazyWrapper from 'components/general/RRLazyWrapper';
-// import OrderDownload from 'components/orders/OrderDownload';
 const OrderUpload = lazy(() => import('components/orders/OrderUpload'));
 const OrderDownload = lazy(() => import('components/orders/OrderDownload'));
 const OrderFormModal = lazy(() => import('components/orders/OrderFormModal'));

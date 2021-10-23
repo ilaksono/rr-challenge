@@ -1,3 +1,5 @@
+// Module that starts websocket & http server for api use
+
 const app = require('./app') ({
   broadcastUpdateOrder,
   broadcastUpdateDriver,

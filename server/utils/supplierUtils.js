@@ -4,6 +4,8 @@ const { queryMakeSupplier,
   queryAllSuppliers } = require('./sqlQueries');
 const errorMessages = require('./errorMessages');
 
+// get route method for fetching suppliersusing 'pg.Pool'
+// call done(res, data) to send response
 const getAllSuppliers = async (req, res) => {
   try {
     const resq = await pool.query({
@@ -19,6 +21,7 @@ const getAllSuppliers = async (req, res) => {
   }
 }
 
+// create supplier
 const makeSupplier = async (req, res) => {
   try {
     const {
