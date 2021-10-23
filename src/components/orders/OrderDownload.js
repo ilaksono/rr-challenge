@@ -27,6 +27,7 @@ const OrderDownload = () => {
         src='/images/download.png'
         alt='Download all orders'
       />
+      <p>Download</p>
     </CSVLink>
   )
 }

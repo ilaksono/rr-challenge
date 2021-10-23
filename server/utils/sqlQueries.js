@@ -27,16 +27,20 @@ select * from orders
 WHERE NOT EXISTS (
   select * from drivers 
   where drivers.id=orders.driver_id
-  ) AND is_deleted=false 
-  ORDER BY id desc;`
+  ) AND is_deleted=false
+  ORDER BY id
+  ;`
 
 const queryAssignedOrders = `
   select * from orders 
   WHERE EXISTS (
     select * from drivers 
     where drivers.id=orders.driver_id
-    ) AND is_deleted=false 
-    ORDER BY id desc;`
+    ) AND is_deleted=false
+    ORDER BY id
+    ;
+    
+    `
 
 const queryMakeOrder = (params = {}) => {
 
@@ -123,17 +127,7 @@ const queryUpdateOrderList = (list = []) => {
     ) VALUES`
 
   for (let i = 0; i < list.length; i++) {
-    // qs += `UPDATE orders SET 
-    // cost_cents=$${i * 9 + 1}, 
-    // revenue_cents=$${i * 9 + 2},
-    // start_time=$${i * 9 + 3},
-    // end_time=$${i * 9 + 4},
-    // description=$${i * 9 + 5},
-    // destination_address_id=$${i * 9 + 6},
-    // source_address_id=$${i * 9 + 7},
-    // driver_id=$${i * 9 + 8}
-    // WHERE id=$${i * 9 + 9};`;
-    qs += ` ($${i * 9 + 1}, $${i * 9 + 2}, $${i * 9 + 3}, $${i * 9 + 4}, $${i * 9 + 5}, $${i * 9 + 6}, $${i * 9 + 7}, $${i * 9 + 8}, $${i * 9 + 9})`
+     qs += ` ($${i * 9 + 1}, $${i * 9 + 2}, $${i * 9 + 3}, $${i * 9 + 4}, $${i * 9 + 5}, $${i * 9 + 6}, $${i * 9 + 7}, $${i * 9 + 8}, $${i * 9 + 9})`
     if (i < list.length - 1)
       qs += ',';
   }
@@ -146,7 +140,8 @@ const queryUpdateOrderList = (list = []) => {
         description = excluded.description, 
         destination_address_id = excluded.destination_address_id, 
         source_address_id = excluded.source_address_id, 
-        driver_id = excluded.driver_id
+        driver_id = excluded.driver_id,
+        created_at = orders.created_at
         RETURNING *;`;
 
   return qs;

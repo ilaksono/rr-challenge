@@ -4,6 +4,7 @@ import * as sortModes from 'hooks/useSortMode';
 
 const modes = [
   sortModes.CREATED_AT,
+  sortModes.SORT_ID,
   sortModes.START_TIME,
   sortModes.END_TIME,
   sortModes.REVENUE,

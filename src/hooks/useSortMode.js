@@ -34,6 +34,10 @@ export const REV_COST = {
   text: 'Revenue - Cost Difference',
   attribute: 'revenue_cost'
 }
+export const SORT_ID = {
+  text: 'Order ID',
+  attribute: 'id'
+}
 
 
 
@@ -107,7 +111,12 @@ const useSortMode = () => {
             ((rp.revenue_cents - rp.cost_cents) - (lp.revenue_cents - lp.cost_cents))
             : ((lp.revenue_cents - lp.cost_cents) - (rp.revenue_cents - rp.cost_cents))
         )
-
+      case SORT_ID.attribute:
+        return arr.sort((lp, rp) =>
+        desc ?
+          (rp.id - lp.id)
+          : (lp.id - rp.id)
+      )
 
       default: return arr;
     }

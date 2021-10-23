@@ -249,7 +249,7 @@ const useAppData = () => {
       list
     }
     const unassignedPayload = {
-      list: [...update, ...orders.unassigned.list]
+      list: orders.unassigned.list.concat([update])
     }
     dispatch({
       type: SET_WILD_PROPS,
@@ -265,12 +265,12 @@ const useAppData = () => {
     })
   }
 
-  const addOrderToList = order => {
+  const addOrderToList = (order = {}) => {
 
     order.isNew = true;
     if (!order.driver_id) {
       const payload = {
-        list: [order, ...orders.unassigned.list]
+        list: orders.unassigned.list.concat(order)
       };
       return dispatch({
         type: SET_WILD_PROPS,
@@ -280,7 +280,7 @@ const useAppData = () => {
       })
     } else {
       const payload = {
-        list: [order, ...orders.assigned.list]
+        list: orders.assigned.list.concat(order)
       }
       return dispatch({
         type: SET_WILD_PROPS,
@@ -305,9 +305,6 @@ const useAppData = () => {
 
   }
 
-  useEffect(() => {
-    console.log(orders.unassigned.list.map(each => each.id));
-  }, [orders.unassigned])
   const updateOrdersHash = () => {
     // const combinedArray = orders.assigned.list
     //   .concat(orders.unassigned.list);
@@ -452,7 +449,7 @@ const useAppData = () => {
     dispatch({ type: SET_WILD_PROPS, par: 'orders', child: 'assigned', payload });
     // setTimeout(() => {
     newOrder.isNew = true;
-    const newList = [newOrder, ...oldList];
+    const newList = oldList.concat(newOrder);
     const payloadB = {
       list: newList
     };
@@ -511,6 +508,7 @@ const useAppData = () => {
   }
 
   const updateOrdersLive = (list = [], oldData = dataRef) => {
+    console.log(dataRef.current);
     const cpy = {
       assigned: [...oldData.current.orders.assigned.list],
       unassigned: [...oldData.current.orders.unassigned.list]
@@ -518,22 +516,25 @@ const useAppData = () => {
     list.forEach(order => {
       const oldOrder = oldData.current.orders.hash[order.id]
       if (oldOrder) {
-        const { keyName, index } = oldOrder
+        const { keyName } = oldOrder
         if (!!oldOrder.driver_id === !order.driver_id) {
           const newKeyName = keyName === 'assigned' ? 'unassigned' : 'assigned'
           order.isNew = true;
-          cpy[newKeyName].unshift(order);
+          cpy[newKeyName].push(order);
+          // appData is stale, need to use ref data
           const idx = cpy[keyName].findIndex(each => each.id === order.id);
           cpy[keyName].splice(idx, 1);
           return;
         }
-        cpy[keyName][index] = order;
+        const idx = cpy[keyName].findIndex(each => each.id === order.id);
+        cpy[keyName][idx] = order;
+
         return;
       }
       order.isNew = true;
       if (order.driver_id)
-        cpy.assigned.unshift(order);
-      else cpy.unassigned.unshift(order);
+        cpy.assigned.push(order);
+      else cpy.unassigned.push(order);
     })
     const ordersCpy = {
       assigned: {

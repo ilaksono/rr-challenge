@@ -41,8 +41,8 @@ const OrderUpload = () => {
       const res = await ax(UPLOAD_ORDERS_LIST, 'post', {
         list
       });
-      // console.log(res, 'success');
       if (res) {
+        console.log(res, 'success');
         // updateOrdersLive(res);
       }
     } catch (er) {
@@ -67,13 +67,13 @@ const OrderUpload = () => {
         src='/images/upload.png'
         alt='Upload'
       />
+      <p>Upload</p>
     </a>
     <Modal
       onHide={() => setShow(false)}
       show={show}
       modalTitle={
-        <div className='flex'>Upload Orders
-          
+        <div className='flex'>Create and Update Orders - Upload CSV
           <OverlayTrigger
               triger='hover'
               placement='bottom'
