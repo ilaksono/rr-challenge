@@ -171,7 +171,7 @@
     - `/api/suppliers`
     - `/api/customers`
     - `/api/addresses`
-  - uses a query parameter `?type=` in URI to identify backend switch `/server/controllers.js`
+  - uses a query parameter `?type=` in URI to determine which backend switch `/server/controllers.js`
 
 # Challenges:
   - 2021-10-16:
