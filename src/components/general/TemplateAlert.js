@@ -12,6 +12,8 @@ const TemplateAlert = ({ alert, resetAlert }) => {
         role='alert'
         show={alert.show}
         variant={alert.type}
+        data-testid='template-alert'
+
       >
         <Button
           onClick={resetAlert}

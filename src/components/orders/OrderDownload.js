@@ -13,7 +13,6 @@ const OrderDownload = () => {
     <CSVLink
       filename='rr_orders.csv'
       data={formatOrdersCsv(appData)}
-      onClick={(a,b,c) => console.log(a,b,c)}
       data-toggle='tooltip'
       title='Download all orders'
       className='csv-link thumbnail text-center mb-2 lg-thumbnail'

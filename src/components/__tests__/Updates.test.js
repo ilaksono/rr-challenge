@@ -1,24 +1,34 @@
 import '@testing-library/jest-dom';
 import { render, cleanup, fireEvent } from "@testing-library/react";
 
+import LoadingModal from 'components/general/LoadingModal';
 import ConfirmModal from 'components/general/ConfirmModal';
 import TemplateAlert from 'components/general/TemplateAlert'
 import ErrorToast from 'components/general/ErrorToast';
 afterEach(cleanup);
 
 
-describe('Update modals, alerts, and toasts', () => {
+describe('component tests- Update modals, alerts, and toasts', () => {
 
   it('renders without crashing', () => {
-    render(<ConfirmModal 
+    const confirmModal = render(<ConfirmModal 
       conMod={{show: true}}
     />)
-    render(<TemplateAlert 
+    const templateAlert = render(<TemplateAlert 
       alert={{show: true}}
     />)
-    render(<ErrorToast 
+    const errorToast = render(<ErrorToast 
       show={true}
     />)
+    const loadingModal = render(<LoadingModal
+    show={true}
+    />)
+    expect(confirmModal.getByTestId('confirm-modal')).toBeInTheDocument();
+    expect(templateAlert.getByTestId('template-alert')).toBeInTheDocument();
+    expect(errorToast.getByTestId('error-toast')).toBeInTheDocument();
+    expect(loadingModal.getByTestId('loading-modal')).toBeInTheDocument();
+    
+
   });
 
   it('should fire reset modal handler', () => {

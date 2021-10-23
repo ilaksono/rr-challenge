@@ -38,7 +38,7 @@ const compareObjects = (raw, model) => {
 const CreateOrderForm = (props) => {
 
   const {
-    forceClose
+    forceClose = () => {}
   } = props;
 
   const {

@@ -27,6 +27,8 @@
   - Popovers on: 
     - Source + Destination -  describes the locations for departure and arrival
     - Start and End times - describes the date+time of depart / arrival and corresponding order status
+  - Added sort feature to `OrderList` for easier access
+  -   
 
 
 4. `More details about drivers and orders can be viewed and edited. You can think what other information we might be relevant to the system`
@@ -85,6 +87,7 @@
   - Ability to change order's source address and destination address
   - Ability to Sort `orders` by attributes:
     - Creation date
+    - Order ID
     - Departure time
     - Arrival time
     - Revenue

@@ -16,6 +16,7 @@ const GeneralSpinner = (props) => {
       style={style || {
         color: con.rrBlue,
       }}
+      data-testid='general-spinner'
       animation={animation || 'border'}
       size={size || 'sm'}
     />

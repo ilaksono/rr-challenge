@@ -19,7 +19,9 @@ const ConfirmModal = ({ conMod, resetConfirmModal }) => {
   }, [conMod.confirm])
 
   return (
-    <Modal show={conMod.show} onHide={resetConfirmModal}>
+    <Modal 
+    data-testid='confirm-modal'
+    show={conMod.show} onHide={resetConfirmModal}>
       <Modal.Header closeButton>
         <Modal.Title>{conMod.title}</Modal.Title>
       </Modal.Header>

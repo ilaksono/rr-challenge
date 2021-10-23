@@ -11,7 +11,7 @@ const yearsArr = () => {
   return arr;
 }
 
-const CreateDriverForm = ({forceClose}) => {
+const CreateDriverForm = ({forceClose = () => {}}) => {
 
   const {
     createError,

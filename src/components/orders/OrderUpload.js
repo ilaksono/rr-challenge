@@ -75,7 +75,7 @@ const OrderUpload = () => {
       modalTitle={
         <div className='flex'>Create and Update Orders - Upload CSV
           <OverlayTrigger
-              triger='hover'
+              
               placement='bottom'
               overlay={
                 <UploadInstructionPopover

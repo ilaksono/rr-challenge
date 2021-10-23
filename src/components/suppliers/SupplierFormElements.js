@@ -1,5 +1,5 @@
 import { Form, InputGroup, Col, Container, Row, Button } from 'react-bootstrap';
-const SupplierFormElements = ({ createForm, handleCreateFormChange, prefix = 'supp_' }) => {
+const SupplierFormElements = ({ createForm = {}, handleCreateFormChange = () => {}, prefix = 'supp_' }) => {
 
   return (
     <>

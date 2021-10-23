@@ -2,14 +2,13 @@
   - run `npm run test` to run test scripts
     - uses jest for mock functions
     - uses react-testing-library for render and element selectors/queries
+  - Coverage Report: run `CI=true npm test -- --env=jsdom --coverage`  
   1. Render App
-  2. Render Update components
-    - Alert
-    - ConfirmModal
-    - ErrorToast
-  3. Render OrderList with non-empty OrderListItems
+  2. Render all components
+  3. Context with children
 
-# Non-implemented Tests
+  
+# Non-implemented Tests - FE
 
 ## React render tests  
   
@@ -93,4 +92,25 @@
 ## Testing custom hooks
   11. useAppData:
     - calling addAddressesList(undefined) should have no change on the `appData.addresses.list` array
-    - calling addAddressList([validAddress]) should add the `validAddress` to the addressess list and 
+    - calling addAddressList([validAddress]) should add the `validAddress` to the addressess list
+    - all other custom hooks and functions
+
+## Non-implemented Tests: BE
+  12. Test all routes:
+    - `/api/orders`    
+    - `/api/drivers`
+    - `/api/suppliers`
+    - `/api/customers`
+    - `/api/addresses`
+    - expect response status to be 200
+  13. Test all utils:
+    - orderUtils.methodName()  
+    - driverUtils.methodName()  
+    - addressUtils.methodName()  
+    - supplierUtils.methodName()  
+    - customerUtils.methodName()
+    - use queries with mock data
+    - use methods to call queries on psql database
+    - expect database select/insert/update queries to succeed by checking database values
+  
+    

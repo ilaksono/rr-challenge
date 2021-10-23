@@ -52,7 +52,7 @@ const SupplierDisplayItem = (props) => {
 
   return (
     <OverlayTrigger
-      triger='hover'
+      
       overlay={
         <AddressPopover
           {...list[0]}

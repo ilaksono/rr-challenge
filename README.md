@@ -5,6 +5,8 @@
 # Start Instructions:
   - Start FE: `npm start`
   - Start BE: `cd server && npm start` 
+  - Test: run `npm run test`
+  - Test Coverage: run `CI=true npm test -- --env=jsdom --coverage`
 
 # Database Instructions:  
 ## install postgres on mac 

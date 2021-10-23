@@ -10,6 +10,8 @@ const ErrorToast = ({ show, handleClose, body, time }) => {
       delay={7000}
       autohide
       role="alert"
+      data-testid='error-toast'
+
     >
       <Toast.Header>
         <strong className="mr-auto">Notice</strong>

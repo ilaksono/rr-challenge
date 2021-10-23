@@ -27,7 +27,8 @@ const OrderListItem = (props) => {
     id,
     driver_id,
     start_time,
-    end_time
+    end_time,
+    description
   } = props;
 
   // const [drag, setDrag] = useState(init)
@@ -169,7 +170,14 @@ const OrderListItem = (props) => {
         onDragEndCapture={handleDragEnd}
         onDragOver={(e) => e.preventDefault()}
       >
-        <div className='order-id light-color-text'>or_{id}</div>
+        <div className='order-id light-color-text'>
+          <a
+            data-toggle='tooltip'
+            title={`description: ${description || 'none'}`}
+          >
+            or_{id}
+          </a>
+        </div>
         <a data-toggle='tooltip'
           title='Drag and assign to a driver'
           href="#"
@@ -182,7 +190,6 @@ const OrderListItem = (props) => {
           ></div>
         </a>
         <OverlayTrigger
-          triger='hover'
           overlay={
             <TimeLegendPopover
             />
@@ -198,7 +205,7 @@ const OrderListItem = (props) => {
 
           <div className='flex'>
             <OverlayTrigger
-              triger='hover'
+              
               overlay={
                 <AddressPopover
                   {...sourceAddress}
@@ -211,7 +218,7 @@ const OrderListItem = (props) => {
             </OverlayTrigger>
             &nbsp;to&nbsp;
             <OverlayTrigger
-              triger='hover'
+              
               overlay={
                 <AddressPopover
                   {...destinationAddress}
@@ -224,7 +231,7 @@ const OrderListItem = (props) => {
             </OverlayTrigger>
           </div>
           <OverlayTrigger
-            triger='hover'
+            
             overlay={
               <OrderTimePopover
                 start_time={start_time}
@@ -241,7 +248,7 @@ const OrderListItem = (props) => {
         >
           <tbody>
             <OverlayTrigger
-              triger='hover'
+              
               overlay={
                 <CompanyPopover
                   fname={appData.suppliers.hash[sourceAddress.supplier_id]?.supp_fname}
@@ -260,7 +267,7 @@ const OrderListItem = (props) => {
               </tr>
             </OverlayTrigger>
             <OverlayTrigger
-              triger='hover'
+              
               overlay={
                 <CompanyPopover
                   fname={appData.customers.hash[destinationAddress.customer_id]?.cust_fname}

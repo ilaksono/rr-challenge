@@ -5,7 +5,7 @@ const CreateFormContext = React.createContext();
 
 export const CreateFormProvider = ({ 
   children, 
-  init,
+  init = {},
   show, setShow
 }) => {
 

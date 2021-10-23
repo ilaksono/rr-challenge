@@ -5,6 +5,7 @@ import useConfirmModal from 'hooks/useConfirmModal';
 import useErrorToast from 'hooks/useErrorToast';
 import useLoadingModal from 'hooks/useLoadingModal';
 import useDropZone from 'hooks/useDropZone';
+import useAppName from 'hooks/useAppName';
 
 const AppContext = React.createContext();
 
@@ -41,6 +42,9 @@ export const AppProvider = ({ children }) => {
   } = useAlertData();
 
 
+  const {
+    appName
+  } = useAppName();
 
   const {
     conMod,
@@ -103,8 +107,10 @@ export const AppProvider = ({ children }) => {
       handleDragDropZone,
       handleDragOverZone,
       drag,
-      setDrag
+      setDrag,
 
+      // useAppName
+      appName
     }}>
       {children}
     </AppContext.Provider>

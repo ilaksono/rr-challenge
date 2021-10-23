@@ -1,13 +1,14 @@
-import '@testing-library/jest-dom';
-import { render, cleanup, fireEvent } from "@testing-library/react";
 
 import OrderList from 'components/orders/OrderList';
-import data from './data.json';
+import {testData as data} from 'utils/con';
 import { AppProvider } from 'context/AppContext';
 import { CreateFormProvider } from 'context/CreateFormContext';
+
+import '@testing-library/jest-dom';
+import { render, cleanup } from "@testing-library/react";
 afterEach(cleanup);
 
-describe('OrderList and OrderListItems', () => {
+describe('component tests - OrderList and OrderListItems', () => {
 
   it('renders unassigned order list without crashing', () => {
     console.error = () => {}
@@ -34,5 +35,4 @@ describe('OrderList and OrderListItems', () => {
     );
     expect(queryAllByText("1.00").length).toEqual(2);
   });
-
 });
