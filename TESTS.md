@@ -1,3 +1,8 @@
+# Markdowns
+ - README [(/README.md)](./README.md)
+ - FEATURES [(/FEATURES.md)](./FEATURES.md)
+ - TESTS [(/TESTS.md)](./TESTS.md)
+ 
 # Implemented Unit Tests:
   - run `npm run test` to run test scripts
     - uses jest for mock functions
