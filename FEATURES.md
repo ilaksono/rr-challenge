@@ -11,7 +11,7 @@
 
   <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/total-rev-cost.png' alt='Total Revenue and Cost' style="width:320px;"/>
 
-- [TotalRevenueCost.js](./src/components/drivers/TotalRevenueCost.js)
+- React Component File: [TotalRevenueCost.js](./src/components/drivers/TotalRevenueCost.js)
 
 ---
 
@@ -55,21 +55,21 @@
       - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/time-popover.png' alt='Time Popover' style="width:180;"/>
   - Added sort feature to `OrderList` for easier access
     - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/sort-list.png' alt='Sort Options' style="width:240px;"/>
-
+---
 4. `More details about drivers and orders can be viewed and edited. You can think what other information we might be relevant to the system`
   - Added edittable supplier address information by manual input
   - Added edittable customer address information by manual input
   - added driver insurance to driver form - can be viewed by downloading orders via csv file
     - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png' alt='Driver Form - Mobile' style="width:160px;"/>
-
+---
 5. `Orders have start and end times, and a driver can’t have two orders that overlap in time`
   - Every order is checked for overlapping start and end times for the driver before create/update of orders in the database
     - [helperFuncs.js -> isDriverBooked](./src/utils/helperFuncs.js)
-
+---
 6. `Ability to create new drivers and/or orders`
   - both are available by clicking the buttons: `Create a Driver` and `Create Order`
     - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/order-form.png' alt='Order Form' style="width:240px;"/>
-
+---
 7. `Ability to delete drivers and/or orders`
   - Both are implented, triggered by: 
     - hovering over an order and clicking the delete-icon
@@ -78,13 +78,13 @@
       - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/delete-btns.png' alt='Delete Buttons' style="width:160px;"/>
 
 
-
+---
 8. `Persist data either in a database of your choice (make sure the documentation is clear enough for us to run it)`
   - uses postgreSQL db - documentation is available in [(/README.md)](./README.md) for dev setup
-
+---
 9. `Or give us an ERD of your database model` 
    - screenshot of ERD can be found at `/docs/db-erd.png`
-
+---
 10. `Ability to download CSV data through the web interface`
   - uses react-csv library to download a csv file for all orders with column attributes:
     - order_id
@@ -105,22 +105,22 @@
     - cost
   - [OrderDownload.js](./src/components/orders/OrderDownload.js)
   - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/download-btn.png' alt='Delete Buttons' style="width:160px;"/>
-    
+  ---  
 11. `Two users of the app can see each other’s changes in real-time`
   - uses `ws` on BE for live server messages
   - uses `WebSocket` object on FE with message handlers to update all data entities
   - [livesocket.js](./server/livesocket.js)
-
+---
 12. `Deploy the app somewhere / containerize it`
   - Netlify link: https://rr-challenge-il.netlify.app/  
   - Heroku server (for api routes) idles for ~10 seconds
-  
+  ---
 13. `Ability to upload and download CSV data through the web interface`
   - trigger upload interface by clicking `Upload` button
     - [OrderUpload.js](./src/components/orders/OrderUpload.js)
     - <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/features/upload-interface.png' alt='Upload CSV Interface' style="width:400px;"/>
   - Download all orders by clicking `Download` button
-
+---
 14. `Anything else you can think of!`    
   - Added supplier, customer, address entities
     - Enables relationship between supplier <> addresses and customer <> addresses 

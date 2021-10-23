@@ -4,6 +4,7 @@
  - TESTS [(/TESTS.md)](./TESTS.md)
  
 # Implemented Unit Tests:
+  - Test Modules: [/src/components/__tests__](./src/components/__tests__)
   - run `npm run test` to run test scripts
     - uses jest for mock functions
     - uses react-testing-library for render and element selectors/queries
