@@ -46,8 +46,8 @@
 # Dev Envrionment Instructions
   - If you don't have node installed, [instructions here](https://www.pluralsight.com/guides/getting-started-with-nodejs)
    - Or you can install node version manager: [instructions here](https://github.com/nvm-sh/nvm)
-  - copy the contents `.env.example` file in folder `/server` in the repo 
-  - paste the contents in a new file and save it as `.env` inside `/server`
+  - copy the contents of both `.env.example` files in folders `/` & `/server` in the repo 
+  - paste the contents in a new file and save it as `.env` inside `/` & `/server`
   - in the command line, change directory to `/server` and run `npm start`
   - open a new command line tab and cd to the root of the project - run `npm start`
   - if you are not using a PORT=8000, you must go into the root/package.json and modify the proxy value to `localhost:[PORT]` to match the port you provided
