@@ -31,4 +31,4 @@ jobs:
 
       # Runs install and build scripts
       - name: Run a multi-line script
-        run: "npm i && npm run build\n"
+        run: "npm i && CI= npm run build\n"
