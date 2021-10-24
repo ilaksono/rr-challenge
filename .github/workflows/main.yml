@@ -32,3 +32,7 @@ jobs:
       # Runs install and build scripts
       - name: Run a multi-line script
         run: "npm i && CI= npm run build\n"
+      
+      # Runs tests and succeeds
+      - name: Run a test script
+        run: "npm run test\n"
