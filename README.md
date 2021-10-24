@@ -99,13 +99,10 @@
 
 ----
 
-<!-- !["Main View - Desktop"](https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png)   -->
-
 <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/main-view.png' alt='Main View - Desktop' style="width:80%;"/>
 
 ----
 
-<!-- !["Driver Form - Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png)   -->
 <img src='https://github.com/ilaksono/rr-challenge/blob/main/docs/driver-form.png' alt='Driver Form - Mobile' style="width:200px;"/>
 
 # Custom Hooks 

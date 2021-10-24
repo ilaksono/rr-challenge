@@ -2,6 +2,7 @@ import { Form } from 'react-bootstrap';
 import * as sortModes from 'hooks/useSortMode';
 
 
+// sort options
 const modes = [
   sortModes.CREATED_AT,
   sortModes.SORT_ID,
@@ -13,6 +14,8 @@ const modes = [
   sortModes.DESTINATION,
   sortModes.REV_COST
 ]
+
+
 const SortOrders = (props) => {
 
   const {
