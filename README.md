@@ -92,6 +92,10 @@
   - CSV Uploading: 
     - will add/modify orders; but a bug where order start and end conflicting times can be added to a driver - can be fixed with time validation when parsing the data before the insert is run
 
+After Review:
+  - Need to add mobile drag and drop support
+  - add `/src/utils/helperFuncs` tests
+  
 
 # Screenshots and Video Demos
   !["Demo on Mobile"](https://github.com/ilaksono/rr-challenge/blob/main/docs/rr-video-demo.mov)
